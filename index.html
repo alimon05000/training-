@@ -1,0 +1,1204 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фотоэлектрические преобразователи | Абубакаров Умар</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #7b00ff;
+            --accent: #ff00c8;
+            --dark: #0a0a16;
+            --light: #f0f8ff;
+            --transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--light);
+            overflow: hidden;
+            height: 100vh;
+            perspective: 1000px;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .presentation-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slides {
+            height: 100%;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 5% 10%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            opacity: 0;
+            transform: translateX(100%) rotateY(20deg) scale(0.9);
+            transition: var(--transition);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0) rotateY(0) scale(1);
+            z-index: 2;
+        }
+
+        .slide.prev {
+            transform: translateX(-100%) rotateY(-20deg) scale(0.9);
+            z-index: 1;
+        }
+
+        .slide-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: -1;
+            filter: blur(2px);
+        }
+
+        .slide-number {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(0, 240, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .slide-title {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(50px);
+            opacity: 0;
+            transition: var(--transition);
+            position: relative;
+            display: inline-block;
+        }
+
+        .slide-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100px;
+            height: 5px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 5px;
+        }
+
+        .slide-content {
+            font-size: 1.5rem;
+            line-height: 1.7;
+            max-width: 80%;
+            transform: translateY(50px);
+            opacity: 0;
+            transition: var(--transition);
+            transition-delay: 0.2s;
+        }
+
+        .slide-content ul {
+            list-style-type: none;
+            margin-left: 20px;
+        }
+
+        .slide-content li {
+            margin-bottom: 1rem;
+            position: relative;
+            padding-left: 40px;
+            transform: translateX(-20px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .slide-content li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .slide.active .slide-title,
+        .slide.active .slide-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide.active .slide-content li {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .slide.active .slide-content li:nth-child(1) { transition-delay: 0.3s; }
+        .slide.active .slide-content li:nth-child(2) { transition-delay: 0.4s; }
+        .slide.active .slide-content li:nth-child(3) { transition-delay: 0.5s; }
+        .slide.active .slide-content li:nth-child(4) { transition-delay: 0.6s; }
+        .slide.active .slide-content li:nth-child(5) { transition-delay: 0.7s; }
+
+        .controls {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+        }
+
+        .control-btn {
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:hover {
+            background: rgba(0, 240, 255, 0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .fullscreen-btn {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 100;
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 100;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            width: 10%;
+            transition: width 0.5s ease;
+        }
+
+        .slide-indicators {
+            position: fixed;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .indicator.active {
+            background: var(--primary);
+            transform: scale(1.3);
+            box-shadow: 0 0 15px var(--primary);
+        }
+
+        .author {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            font-size: 1rem;
+            opacity: 0.7;
+            z-index: 100;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 8px 15px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.1;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            100% { transform: translateY(-1000px) rotate(360deg); }
+        }
+
+        .tech-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .accent {
+            color: var(--accent);
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            width: 100%;
+        }
+
+        .grid-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .slide.active .grid-item {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide.active .grid-item:nth-child(1) { transition-delay: 0.3s; }
+        .slide.active .grid-item:nth-child(2) { transition-delay: 0.5s; }
+        .slide.active .grid-item:nth-child(3) { transition-delay: 0.7s; }
+        .slide.active .grid-item:nth-child(4) { transition-delay: 0.9s; }
+
+        .pros-cons {
+            display: flex;
+            gap: 40px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .pros, .cons {
+            flex: 1;
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .pros {
+            background: rgba(0, 255, 128, 0.05);
+            border-color: rgba(0, 255, 128, 0.2);
+        }
+
+        .cons {
+            background: rgba(255, 50, 50, 0.05);
+            border-color: rgba(255, 50, 50, 0.2);
+        }
+
+        .slide.active .pros, .slide.active .cons {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .slide.active .pros { transition-delay: 0.3s; }
+        .slide.active .cons { transition-delay: 0.5s; }
+
+        .note {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid var(--primary);
+            transform: translateY(30px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .slide.active .note {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 0.8s;
+        }
+
+        /* Стили для 3D модели */
+        .model-container {
+            width: 100%;
+            height: 70vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .model-wrapper {
+            width: 400px;
+            height: 400px;
+            position: relative;
+            perspective: 1000px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .slide.active .model-wrapper {
+            transform: translateY(0);
+            opacity: 1;
+            transition-delay: 0.3s;
+        }
+
+        .photodiode-model {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        .part {
+            position: absolute;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .part:hover {
+            filter: brightness(1.2);
+            transform: translateZ(10px);
+        }
+
+        .part-info {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            width: 200px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 10;
+        }
+
+        .part:hover .part-info {
+            opacity: 1;
+        }
+
+        .case {
+            width: 200px;
+            height: 100px;
+            background: linear-gradient(45deg, #555, #888);
+            transform: translateZ(0px);
+            top: 150px;
+            left: 100px;
+        }
+
+        .lens {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle at 30% 30%, #aaffff, #00aaff);
+            border-radius: 50%;
+            transform: translateZ(50px);
+            top: 160px;
+            left: 160px;
+        }
+
+        .lens .part-info {
+            top: -80px;
+            left: 0;
+        }
+
+        .anode {
+            width: 20px;
+            height: 120px;
+            background: linear-gradient(to bottom, #ff4444, #cc0000);
+            transform: translateZ(0px);
+            top: 140px;
+            left: 80px;
+        }
+
+        .anode .part-info {
+            top: -60px;
+            left: 30px;
+        }
+
+        .cathode {
+            width: 20px;
+            height: 120px;
+            background: linear-gradient(to bottom, #4444ff, #0000cc);
+            transform: translateZ(0px);
+            top: 140px;
+            left: 300px;
+        }
+
+        .cathode .part-info {
+            top: -60px;
+            right: 30px;
+        }
+
+        .pn-junction {
+            width: 120px;
+            height: 60px;
+            background: linear-gradient(to right, #ff4444, #4444ff);
+            transform: translateZ(25px);
+            top: 170px;
+            left: 140px;
+        }
+
+        .pn-junction .part-info {
+            bottom: -70px;
+            left: 0;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1200px) {
+            .slide-title {
+                font-size: 3.5rem;
+            }
+            
+            .slide-content {
+                font-size: 1.4rem;
+                max-width: 85%;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .slide-title {
+                font-size: 3rem;
+            }
+            
+            .slide-content {
+                font-size: 1.3rem;
+                max-width: 90%;
+            }
+            
+            .grid-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .pros-cons {
+                flex-direction: column;
+            }
+            
+            .model-wrapper {
+                width: 350px;
+                height: 350px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                padding: 15% 5%;
+            }
+            
+            .slide-title {
+                font-size: 2.5rem;
+                margin-bottom: 1.5rem;
+            }
+            
+            .slide-content {
+                font-size: 1.2rem;
+                max-width: 95%;
+                line-height: 1.6;
+            }
+            
+            .slide-content li {
+                padding-left: 30px;
+                margin-bottom: 0.8rem;
+            }
+            
+            .controls {
+                bottom: 20px;
+            }
+            
+            .control-btn {
+                width: 50px;
+                height: 50px;
+                font-size: 1.3rem;
+            }
+            
+            .slide-indicators {
+                bottom: 90px;
+            }
+            
+            .slide-number {
+                top: 20px;
+                right: 20px;
+                font-size: 1.2rem;
+                padding: 8px 16px;
+            }
+            
+            .fullscreen-btn {
+                top: 20px;
+                right: 20px;
+            }
+            
+            .author {
+                bottom: 20px;
+                left: 20px;
+                font-size: 0.9rem;
+            }
+            
+            .grid-item, .pros, .cons {
+                padding: 20px;
+            }
+            
+            .model-wrapper {
+                width: 300px;
+                height: 300px;
+            }
+            
+            .case {
+                width: 180px;
+                height: 90px;
+                top: 135px;
+                left: 60px;
+            }
+            
+            .lens {
+                width: 70px;
+                height: 70px;
+                top: 145px;
+                left: 125px;
+            }
+            
+            .anode, .cathode {
+                height: 110px;
+                top: 125px;
+            }
+            
+            .anode {
+                left: 50px;
+            }
+            
+            .cathode {
+                left: 260px;
+            }
+            
+            .pn-junction {
+                width: 110px;
+                height: 50px;
+                top: 155px;
+                left: 95px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .slide-title {
+                font-size: 2rem;
+            }
+            
+            .slide-content {
+                font-size: 1.1rem;
+            }
+            
+            .slide-content li {
+                padding-left: 25px;
+            }
+            
+            .slide-content li::before {
+                font-size: 1.5rem;
+            }
+            
+            .control-btn {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .slide-indicators {
+                bottom: 80px;
+            }
+            
+            .indicator {
+                width: 12px;
+                height: 12px;
+            }
+            
+            .model-wrapper {
+                width: 250px;
+                height: 250px;
+            }
+            
+            .case {
+                width: 150px;
+                height: 75px;
+                top: 112px;
+                left: 50px;
+            }
+            
+            .lens {
+                width: 60px;
+                height: 60px;
+                top: 122px;
+                left: 95px;
+            }
+            
+            .anode, .cathode {
+                height: 95px;
+                top: 102px;
+            }
+            
+            .anode {
+                left: 30px;
+            }
+            
+            .cathode {
+                left: 220px;
+            }
+            
+            .pn-junction {
+                width: 90px;
+                height: 45px;
+                top: 132px;
+                left: 80px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .slide {
+                padding: 3% 5%;
+            }
+            
+            .slide-title {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+            }
+            
+            .slide-content {
+                font-size: 1.1rem;
+                max-height: 60vh;
+                overflow-y: auto;
+            }
+            
+            .slide-content li {
+                margin-bottom: 0.5rem;
+            }
+            
+            .controls {
+                bottom: 15px;
+            }
+            
+            .slide-indicators {
+                bottom: 70px;
+            }
+            
+            .model-container {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="particles-js"></div>
+    
+    <div class="presentation-container">
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        
+        <button class="control-btn fullscreen-btn" id="fullscreen-btn">
+            <i class="fas fa-expand"></i>
+        </button>
+        
+        <div class="slides" id="slides">
+            <!-- Слайд 1 -->
+            <div class="slide active">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">1/11</div>
+                <h1 class="slide-title">Введение</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li>Фотоэлектрические преобразователи (ФЭП) — устройства, преобразующие <span class="highlight">световую энергию в электрическую</span>.</li>
+                        <li>Основаны на фотоэлектрическом эффекте, открытом <span class="highlight">А. Эйнштейном в 1905 г.</span></li>
+                        <li>Используются для измерений, автоматизации, энергетики, медицины и оборонных технологий.</li>
+                        <li>Главная особенность: <span class="highlight">высокая чувствительность к свету</span> и возможность прямого преобразования без промежуточных механических звеньев.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 2 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">2/11</div>
+                <h1 class="slide-title">Классификация ФЭП</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li><span class="highlight">Фотопроводники</span> – изменяют электрическое сопротивление под действием света (CdS, PbS).</li>
+                        <li><span class="highlight">Фотодиоды</span> – создают ток при освещении, работают в прямом и обратном включении.</li>
+                        <li><span class="highlight">Фототранзисторы</span> – усиливают сигнал, обладают высокой чувствительностью.</li>
+                        <li><span class="highlight">Фотоэлементы (фотоэмиссионные)</span> – основаны на выбивании электронов с поверхности катода.</li>
+                        <li><span class="highlight">Солнечные элементы</span> – специализированные полупроводниковые структуры для получения электроэнергии.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 3 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">3/11</div>
+                <h1 class="slide-title">Основные характеристики ФЭП</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li><span class="highlight">Чувствительность</span> (отношение выходного сигнала к освещённости).</li>
+                        <li><span class="highlight">Спектральная характеристика</span> (зависимость от длины волны света).</li>
+                        <li><span class="highlight">Время отклика</span> (важно для высокочастотных процессов).</li>
+                        <li><span class="highlight">Темновой ток</span> (ток при отсутствии освещения).</li>
+                        <li><span class="highlight">Квантовый выход</span> (число электронов на один фотон).</li>
+                    </ul>
+                    <p style="margin-top: 20px;">Эти параметры определяют выбор прибора для конкретных задач.</p>
+                </div>
+            </div>
+            
+            <!-- Слайд 4 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">4/11</div>
+                <h1 class="slide-title">Области применения</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li><span class="highlight">Энергетика:</span> солнечные панели и батареи.</li>
+                        <li><span class="highlight">Автоматика и промышленность:</span> датчики освещённости, сигнализация, системы управления.</li>
+                        <li><span class="highlight">Наука и медицина:</span> спектрофотометры, лазерные установки, томографы.</li>
+                        <li><span class="highlight">Военная техника:</span> приборы ночного видения, системы наведения.</li>
+                        <li><span class="highlight">Бытовая техника:</span> пульты ДУ, датчики освещения в телефонах, камеры.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 5 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af24?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">5/11</div>
+                <h1 class="slide-title">Фотодиоды и фототранзисторы</h1>
+                <div class="slide-content">
+                    <h3 style="margin-top: 10px; color: var(--primary);">Фотодиод</h3>
+                    <ul>
+                        <li>Малые размеры, быстрый отклик.</li>
+                        <li>Используется в волоконной оптике, измерительных системах, бытовой электронике.</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 20px; color: var(--primary);">Фототранзистор</h3>
+                    <ul>
+                        <li>Усиление фототока.</li>
+                        <li>Применяется в датчиках движения, сканерах, оптических парах.</li>
+                    </ul>
+                    
+                    <div class="note">
+                        <strong>📌 Важно:</strong> фототранзисторы медленнее фотодиодов, но дают более мощный сигнал.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 6 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1581094794329-c8112a89af24?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">6/11</div>
+                <h1 class="slide-title">Фотоэлементы и фотопроводники</h1>
+                <div class="slide-content">
+                    <h3 style="margin-top: 10px; color: var(--primary);">Фотоэлементы (вакуумные/газонаполненные):</h3>
+                    <ul>
+                        <li>Первые промышленные ФЭП.</li>
+                        <li>Используются в осветительных автоматах, приборах регистрации излучения.</li>
+                    </ul>
+                    
+                    <h3 style="margin-top: 20px; color: var(--primary);">Фотопроводники:</h3>
+                    <ul>
+                        <li>Изменяют сопротивление при освещении.</li>
+                        <li>CdS – в датчиках освещённости (фото-реле).</li>
+                        <li>PbS – в инфракрасных приёмниках (тепловизоры, сигнализация).</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 7 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1509391366360-2e959784a276?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">7/11</div>
+                <h1 class="slide-title">Солнечные элементы</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li>Представляют собой <span class="highlight">p-n-переход из кремния или арсенида галлия</span>.</li>
+                        <li>КПД современных образцов: <span class="highlight">15–25%</span>.</li>
+                        <li>Используются:
+                            <ul>
+                                <li>в космической энергетике,</li>
+                                <li>автономных источниках питания,</li>
+                                <li>портативной электронике.</li>
+                            </ul>
+                        </li>
+                        <li>Перспективы: органические солнечные элементы, перовскиты (<span class="highlight">КПД выше 30%</span>).</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 8 - Новый слайд с 3D моделью -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">8/11</div>
+                <h1 class="slide-title">3D Модель фотодиода</h1>
+                <div class="slide-content">
+                    <p>Изучите устройство фотодиода с помощью интерактивной 3D модели. Наведите курсор на элементы, чтобы узнать больше.</p>
+                    
+                    <div class="model-container">
+                        <div class="model-wrapper">
+                            <div class="photodiode-model" id="photodiode-model">
+                                <div class="part case">
+                                    Корпус
+                                    <div class="part-info">
+                                        Защищает внутренние компоненты от внешних воздействий и обеспечивает механическую прочность.
+                                    </div>
+                                </div>
+                                <div class="part lens">
+                                    Линза
+                                    <div class="part-info">
+                                        Фокусирует свет на p-n переход для увеличения эффективности преобразования.
+                                    </div>
+                                </div>
+                                <div class="part anode">
+                                    Анод (+)
+                                    <div class="part-info">
+                                        Положительный электрод, через который ток выходит из фотодиода.
+                                    </div>
+                                </div>
+                                <div class="part cathode">
+                                    Катод (-)
+                                    <div class="part-info">
+                                        Отрицательный электрод, через который ток входит в фотодиод.
+                                    </div>
+                                </div>
+                                <div class="part pn-junction">
+                                    p-n переход
+                                    <div class="part-info">
+                                        Область, где происходит генерация электронно-дырочных пар под действием света.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="instructions">
+                        <i class="fas fa-mouse-pointer"></i> Вращайте модель мышью | <i class="fas fa-search"></i> Наводите на элементы для информации
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 9 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">9/11</div>
+                <h1 class="slide-title">Преимущества и недостатки ФЭП</h1>
+                <div class="slide-content">
+                    <div class="pros-cons">
+                        <div class="pros">
+                            <h3 style="color: #00ff80;">✅ Преимущества:</h3>
+                            <ul>
+                                <li>отсутствие механического износа;</li>
+                                <li>высокая чувствительность;</li>
+                                <li>быстрый отклик;</li>
+                                <li>широкий спектр применения.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="cons">
+                            <h3 style="color: #ff3232;">❌ Недостатки:</h3>
+                            <ul>
+                                <li>зависимость от освещённости;</li>
+                                <li>температурная нестабильность;</li>
+                                <li>ограниченный срок службы (для органических и тонкоплёночных).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Слайд 10 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">10/11</div>
+                <h1 class="slide-title">Перспективы развития</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li><span class="highlight">Новые материалы:</span> графен, перовскиты, наноструктуры.</li>
+                        <li><span class="highlight">Интеграция с электроникой:</span> "умные" датчики, IoT, робототехника.</li>
+                        <li><span class="highlight">Повышение КПД солнечных батарей:</span> многослойные структуры.</li>
+                        <li><span class="highlight">Биомедицинские приложения:</span> имплантаты с фотоэлементами, нейроинтерфейсы.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Слайд 11 -->
+            <div class="slide">
+                <div class="slide-bg" style="background-image: url('https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2100&q=80')"></div>
+                <div class="slide-number">11/11</div>
+                <h1 class="slide-title">Заключение</h1>
+                <div class="slide-content">
+                    <ul>
+                        <li>Фотоэлектрические преобразователи стали <span class="highlight">ключевой технологией XXI века</span>.</li>
+                        <li>От простых датчиков до космических батарей – они присутствуют везде.</li>
+                        <li>Перспективы: повышение эффективности, удешевление и расширение сфер применения.</li>
+                        <li>Развитие ФЭП тесно связано с прогрессом в микро- и наноэлектронике.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="slide-indicators" id="indicators"></div>
+        
+        <div class="controls">
+            <button class="control-btn" id="prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="control-btn" id="next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+        
+        <div class="author">Выполнил: Абубакаров Умар</div>
+        
+        <div class="floating-elements">
+            <div class="floating-element" style="top: 10%; left: 5%;"><i class="fas fa-solar-panel fa-3x"></i></div>
+            <div class="floating-element" style="top: 20%; right: 10%;"><i class="fas fa-bolt fa-2x"></i></div>
+            <div class="floating-element" style="top: 60%; left: 8%;"><i class="fas fa-lightbulb fa-2x"></i></div>
+            <div class="floating-element" style="top: 40%; right: 5%;"><i class="fas fa-atom fa-3x"></i></div>
+            <div class="floating-element" style="top: 80%; right: 15%;"><i class="fas fa-microchip fa-2x"></i></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Инициализация частиц
+            particlesJS('particles-js', {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#00f0ff" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#7b00ff",
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: { enable: true, speed: 2, direction: "none", random: true, straight: false, out_mode: "out" }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                }
+            });
+
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const fullscreenBtn = document.getElementById('fullscreen-btn');
+            const progress = document.getElementById('progress');
+            const indicatorsContainer = document.getElementById('indicators');
+            
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+            
+            // Создание индикаторов
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('div');
+                indicator.classList.add('indicator');
+                if (i === 0) indicator.classList.add('active');
+                indicator.addEventListener('click', () => goToSlide(i));
+                indicatorsContainer.appendChild(indicator);
+            }
+            
+            // Функция перехода к слайду
+            function goToSlide(slideIndex) {
+                if (slideIndex < 0 || slideIndex >= totalSlides) return;
+                
+                // Обновление классов для анимации
+                slides[currentSlide].classList.remove('active');
+                slides[currentSlide].classList.add('prev');
+                
+                currentSlide = slideIndex;
+                
+                slides[currentSlide].classList.remove('prev');
+                slides[currentSlide].classList.add('active');
+                
+                progress.style.width = `${(currentSlide + 1) * (100 / totalSlides)}%`;
+                
+                // Обновление индикаторов
+                document.querySelectorAll('.indicator').forEach((ind, index) => {
+                    ind.classList.toggle('active', index === currentSlide);
+                });
+                
+                // Обновление номера слайда
+                document.querySelectorAll('.slide-number').forEach((num, index) => {
+                    num.textContent = `${index + 1}/${totalSlides}`;
+                });
+            }
+            
+            // Обработчики кнопок
+            prevBtn.addEventListener('click', () => goToSlide(currentSlide - 1));
+            nextBtn.addEventListener('click', () => goToSlide(currentSlide + 1));
+            
+            // Полноэкранный режим
+            fullscreenBtn.addEventListener('click', toggleFullscreen);
+            
+            function toggleFullscreen() {
+                if (!document.fullscreenElement) {
+                    document.documentElement.requestFullscreen().catch(err => {
+                        console.error(`Ошибка при включении полноэкранного режима: ${err.message}`);
+                    });
+                    fullscreenBtn.innerHTML = '<i class="fas fa-compress"></i>';
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                        fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                    }
+                }
+            }
+            
+            // Обработка клавиатуры
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') goToSlide(currentSlide - 1);
+                if (e.key === 'ArrowRight') goToSlide(currentSlide + 1);
+                if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+                if (e.key === 'Escape' && document.fullscreenElement) {
+                    document.exitFullscreen();
+                    fullscreenBtn.innerHTML = '<i class="fas fa-expand"></i>';
+                }
+            });
+            
+            // Инициализация 3D модели фотодиода
+            const model = document.getElementById('photodiode-model');
+            let isDragging = false;
+            let previousMousePosition = { x: 0, y: 0 };
+            let rotation = { x: 0, y: 0 };
+            
+            model.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+            
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - previousMousePosition.x;
+                const deltaY = e.clientY - previousMousePosition.y;
+                
+                rotation.y += deltaX * 0.5;
+                rotation.x += deltaY * 0.5;
+                
+                model.style.transform = `rotateY(${rotation.y}deg) rotateX(${rotation.x}deg)`;
+                
+                previousMousePosition = { x: e.clientX, y: e.clientY };
+            });
+            
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+            
+            // Сброс вращения при двойном клике
+            model.addEventListener('dblclick', () => {
+                rotation = { x: 0, y: 0 };
+                model.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+            
+            // Инициализация
+            goToSlide(0);
+        });
+    </script>
+</body>
+</html>
