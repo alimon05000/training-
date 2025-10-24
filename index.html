@@ -3,857 +3,1825 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Электролизные анализаторы</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#000">
+    <title>Расписание группы</title>
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgZmlsbD0iIzAwNzZmNiIgcng9IjIwIi8+PHRleHQgeD0iNTAiIHk9IjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iNDAiIGZpbGw9IiNmZmYiPlI8L3RleHQ+PC9zdmc+">
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCg0LDRgdGB0LvRjNCy0LDRjtCJINCy0L7RgdGC0LDQstC70Y/QvdC+0LUg0L/RgNC+0YTQtdGB0YHQuNC+0L3QsNC70YzQvdC+0LkiLAogICJzaG9ydF9uYW1lIjogItCg0LDRgdGB0LvRjNCy0LDRjiIsCiAgInN0YXJ0X3VybCIgOiAiLiIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImljb25zIjogWwogICAgewogICAgICAic3JjIjogImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjRiV3h1Y3owaWFIUjBjRG92TDNkM2R5NTNNeTV2Y21jdk1qQXdNQzl6ZG1jaUlIZHBaSFJvUFNJeE1EQWxJaUJvWldsbmFIUTlJakV3TUNVaUlHWnBiR3c5SW1Kc1lTd2dZMjl1ZEdWdWRDQTlJbU52YlM5cGJYQnNZV2x1Wnk5cGJYQnNZV2x1WnlJZ1ptbHlkRDBpWVhCd2JHbGpZWFJwYjI0aUlIaHRiRzVjOVhWelpTazdJQzgrUEhCaGRHZ2daRDBpVFRBd01EQWxNakF3TkNBeE1EQXdYekF3TURBd0lERXdNREF3SURFeE1EQWxNREF3TURBaUlITjBlV3hsUFNKbWFXeHNJajQ4YzNSNWJHVStMbU52YlM5cGJYQnNZV2x1Wnk5cGJYQnNZV2x1WnlJZ1ptbHlkRDBpWVhCd2JHbGpZWFJwYjI0aUlIaHRiRzVjOVhWelpTazdJQzgrUEhCaGRHZ2daRDBpVFRBd01EQWxNakF3TkNBeE1EQXdYekF3TURBd0lERXdNREF3SURFeE1EQWxNREF3TURBaUlITjBlV3hsUFNKbWFXeHNJajQ4YzNSNWJHVStMbU52YlM5cGJYQnNZV2x1Wnk5cGJYQnNZV2x1WnlJZ1ptbHlkRDBpWVhCd2JHbGpZWFJwYjI0aUlIaHRiRzVjOVhWelpTazdJQzgrUEhCaGRHZ2daRDBpVFRBd01EQWxNakF3TkNBeE1EQXdYekF3TURBd0lERXdNREF3SURFeE1EQWxNREF3TURBaUlITjBlV3hsUFNKbWFXeHNJajQ4YzNSNWJHVStMbU52YlM5cGJYQnNZV2x1Wnk5cGJYQnNZV2x1WnlJZ1ptbHlkRDBpWVhCd2JHbGpZWFJwYjI0aUlIaHRiRzVjOVhWelpTazdJQzgrUEhCaGRHZ2daRDBpVFRBd01EQWxNakF3TkNBeE1EQXdYekF3TURBd0lERXdNREF3SURFeE1EQWxNREF3TURBaUlITjBlV3hsUFNKbWFXeHNJajQ4YzNSNWJHVStQZz09IiwKICAgICAgInNpemVzIjogIjE0NHgxNDQiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciCiAgICB9CiAgXQp9">
     <style>
         :root {
-            --white: #ffffff;
-            --red: #e53935;
-            --dark-red: #c62828;
-            --black: #0a0a0a;
-            --dark-gray: #1a1a1a;
-            --gray: #757575;
-            --light-gray: #f5f5f5;
+            --primary: #0076f6;
+            --secondary: #6c757d;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --info: #17a2b8;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --background: #ffffff;
+            --text: #212529;
+            --card-bg: #ffffff;
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+            
+            /* Цвета для темы жидкого стекла */
+            --accent: #0A84FF;
+            --green: #30D158;
+            --yellow: #FFD60A;
+            --red: #FF453A;
+            --text-primary: rgba(0,0,0,.9);
+            --text-secondary: rgba(0,0,0,.6);
         }
-        
+
+        .theme-glass {
+            --background: linear-gradient(135deg, #8ec5fc 0%, #e0c3fc 100%);
+            --card-bg: rgba(255, 255, 255, 0.25);
+            --card-shadow: rgba(0, 0, 0, 0.1);
+            --text: rgba(0, 0, 0, 0.9);
+            --primary: #7b68ee;
+            --secondary: rgba(0, 0, 0, 0.7);
+            --border-radius: 20px;
+            --text-primary: rgba(0, 0, 0, 0.9);
+            --text-secondary: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .theme-dark {
+            --background: #1a1a1a;
+            --card-bg: rgba(0, 0, 0, 0.2);
+            --card-shadow: rgba(0, 0, 0, 0.3);
+            --text: rgba(255,255,255,.92);
+            --text-primary: rgba(255,255,255,.92);
+            --text-secondary: rgba(255,255,255,.6);
+        }
+
+        .theme-nature {
+            --background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-shadow: rgba(0, 0, 0, 0.2);
+            --text: #1B5E20;
+            --primary: #388E3C;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            transition: var(--transition);
         }
-        
+
         body {
-            background-color: var(--black);
-            color: var(--white);
-            overflow: hidden;
-            height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            min-height: 100vh;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            overflow-x: hidden;
         }
-        
-        .presentation-container {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            overflow: hidden;
-            background: radial-gradient(circle at 20% 50%, #2a2a2a 0%, var(--black) 100%);
-        }
-        
-        .presentation {
-            width: 100%;
-            height: 100%;
-            position: relative;
-        }
-        
-        .slide {
-            width: 100%;
-            height: 100%;
-            position: absolute;
+
+        /* Фон с параллакс эффектом */
+        .parallax-bg {
+            position: fixed;
             top: 0;
             left: 0;
-            display: none;
-            padding: 4vw;
-            background: radial-gradient(ellipse at 30% 20%, #2a2a2a 0%, var(--black) 70%);
-            opacity: 0;
-            transition: opacity 0.8s ease;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 40%, rgba(255, 255, 255, 0) 70%),
+                        radial-gradient(circle at 70% 60%, rgba(200, 220, 255, 0.3) 0%, rgba(200, 220, 255, 0.1) 30%, rgba(200, 220, 255, 0) 60%);
+            background-attachment: fixed;
+            pointer-events: none;
         }
-        
-        .slide.active {
-            display: flex;
-            flex-direction: column;
-            opacity: 1;
+
+        .theme-glass .parallax-bg {
+            background: radial-gradient(circle at 30% 40%, rgba(255, 255, 255, 0.6) 0%, rgba(240, 240, 240, 0.3) 40%, rgba(220, 220, 220, 0.1) 70%),
+                        radial-gradient(circle at 70% 60%, rgba(200, 220, 255, 0.5) 0%, rgba(180, 200, 240, 0.3) 30%, rgba(160, 180, 220, 0.1) 60%);
         }
-        
-        .slide-header {
-            border-bottom: 3px solid var(--red);
-            padding-bottom: 2vh;
-            margin-bottom: 3vh;
+
+        .theme-dark .parallax-bg {
+            background: radial-gradient(circle at 30% 40%, rgba(100, 100, 255, 0.2) 0%, rgba(80, 80, 200, 0.1) 40%, rgba(0, 0, 0, 0) 70%),
+                        radial-gradient(circle at 70% 60%, rgba(150, 100, 255, 0.2) 0%, rgba(120, 80, 200, 0.1) 30%, rgba(0, 0, 0, 0) 60%),
+                        #1a1a1a;
+        }
+
+        .app-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 15px 0;
             position: relative;
         }
-        
-        .slide-title {
-            font-size: clamp(2rem, 4vw, 3.5rem);
-            font-weight: 800;
-            color: var(--white);
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
-            line-height: 1.2;
-            background: linear-gradient(90deg, var(--white) 0%, #cccccc 100%);
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--info));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            padding-right: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .slide-number {
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            color: var(--red);
-            font-weight: 700;
-            background-color: rgba(255, 255, 255, 0.05);
-            padding: 8px 20px;
-            border-radius: 30px;
-            border: 1px solid rgba(229, 57, 53, 0.3);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            white-space: nowrap;
+
+        .theme-glass h1 {
+            background: linear-gradient(45deg, #7b68ee, #6a5acd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .slide-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 3vh;
-            overflow-y: auto;
-            padding-right: 10px;
+
+        .week-indicator {
+            background: var(--card-bg);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .slide-content::-webkit-scrollbar {
-            width: 8px;
+
+        .theme-glass .week-indicator {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(0, 0, 0, 0.8);
         }
-        
-        .slide-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+
+        .theme-dark .week-indicator {
+            background: rgba(0,0,0,.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset, inset 0 1px 0 rgba(255,255,255,.15);
         }
-        
-        .slide-content::-webkit-scrollbar-thumb {
-            background: var(--red);
-            border-radius: 10px;
-        }
-        
-        .text-content {
-            font-size: clamp(1rem, 2vw, 1.4rem);
-            line-height: 1.6;
-            color: var(--white);
-            margin-bottom: 1vh;
-        }
-        
-        .text-content p {
-            margin-bottom: 1.5vh;
-        }
-        
-        .list-content {
-            list-style-type: none;
-            margin: 2vh 0;
-        }
-        
-        .list-content li {
-            margin-bottom: 2vh;
-            padding-left: 40px;
-            position: relative;
-            font-size: clamp(1rem, 1.8vw, 1.3rem);
-            line-height: 1.5;
-        }
-        
-        .list-content li:before {
-            content: "▸";
-            color: var(--red);
-            font-size: 1.8rem;
-            position: absolute;
-            left: 0;
-            top: -3px;
-            text-shadow: 0 0 10px rgba(229, 57, 53, 0.7);
-        }
-        
-        .two-columns {
-            display: flex;
-            gap: 4vw;
-            height: 100%;
-            margin-top: 2vh;
-        }
-        
-        .column {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .image-container {
-            width: 100%;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-top: 2vh;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+
+        .theme-selector {
             position: relative;
         }
-        
-        .image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-        
-        .image-container:hover img {
-            transform: scale(1.03);
-        }
-        
-        .image-caption {
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.7);
-            font-size: 0.9rem;
-            color: #ccc;
-            text-align: center;
-        }
-        
-        .diagram {
-            width: 100%;
-            height: 300px;
-            background: linear-gradient(45deg, #1a1a1a 0%, #2d2d2d 100%);
-            border-radius: 12px;
-            margin-top: 2vh;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
-        }
-        
-        .electrode {
-            position: absolute;
-            width: 20px;
-            background-color: var(--gray);
-            border-radius: 5px 5px 0 0;
-            z-index: 2;
-        }
-        
-        .anode {
-            height: 180px;
-            left: 30%;
-            top: 60px;
-            background: linear-gradient(to bottom, #B71C1C 0%, #E53935 100%);
-            box-shadow: 0 0 15px rgba(229, 57, 53, 0.5);
-        }
-        
-        .cathode {
-            height: 180px;
-            right: 30%;
-            top: 60px;
-            background: linear-gradient(to bottom, #0D47A1 0%, #1976D2 100%);
-            box-shadow: 0 0 15px rgba(25, 118, 210, 0.5);
-        }
-        
-        .electrolyte {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(to top, #01579B 0%, #0288D1 100%);
-            opacity: 0.7;
-        }
-        
-        .bubble {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: var(--white);
-            border-radius: 50%;
-            opacity: 0.7;
-            animation: bubble-rise 3s infinite;
-            z-index: 3;
-        }
-        
-        @keyframes bubble-rise {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            20% { opacity: 0.7; }
-            100% { transform: translateY(-150px) scale(1.2); opacity: 0; }
-        }
-        
-        .nav-buttons {
-            position: fixed;
-            bottom: 4vh;
-            right: 4vw;
-            display: flex;
-            gap: 2vw;
-            z-index: 100;
-        }
-        
-        .nav-button {
-            background: linear-gradient(135deg, var(--red) 0%, var(--dark-red) 100%);
-            color: var(--white);
+
+        .theme-button {
+            background: var(--card-bg);
             border: none;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            width: 70px;
-            height: 70px;
-            font-size: 1.8rem;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(229, 57, 53, 0.4);
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            color: var(--text);
         }
-        
-        .nav-button:after {
-            content: '';
+
+        .theme-glass .theme-button {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .theme-dark .theme-button {
+            background: rgba(0,0,0,.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset, inset 0 1px 0 rgba(255,255,255,.15);
+        }
+
+        .theme-options {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.1);
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        
-        .nav-button:hover {
-            transform: scale(1.15);
-            box-shadow: 0 8px 25px rgba(229, 57, 53, 0.6);
-        }
-        
-        .nav-button:hover:after {
-            opacity: 1;
-        }
-        
-        .nav-button:active {
-            transform: scale(1.05);
-        }
-        
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background-color: rgba(255, 255, 255, 0.1);
+            top: 50px;
+            right: 0;
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 10px;
+            box-shadow: 0 10px 25px var(--card-shadow);
+            display: none;
+            flex-direction: column;
+            gap: 10px;
             z-index: 100;
+            width: 150px;
         }
-        
-        .progress {
-            height: 100%;
-            background: linear-gradient(90deg, var(--red) 0%, var(--dark-red) 100%);
-            width: 0%;
-            transition: width 0.5s ease;
-            box-shadow: 0 0 10px rgba(229, 57, 53, 0.7);
+
+        .theme-glass .theme-options {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
         }
-        
-        .slide-indicators {
-            position: fixed;
-            bottom: 4vh;
-            left: 4vw;
-            display: flex;
-            gap: 1.5vw;
-            z-index: 100;
+
+        .theme-dark .theme-options {
+            background: rgba(0,0,0,.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset, inset 0 1px 0 rgba(255,255,255,.15);
         }
-        
-        .indicator {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
+
+        .theme-option {
+            padding: 10px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            font-weight: 500;
         }
-        
-        .indicator.active {
-            background-color: var(--red);
-            transform: scale(1.4);
-            box-shadow: 0 0 10px rgba(229, 57, 53, 0.7);
+
+        .theme-glass .theme-option {
+            color: rgba(0, 0, 0, 0.8);
         }
-        
-        .controls {
-            position: fixed;
-            top: 3vh;
-            right: 3vw;
+
+        .theme-option:hover {
+            background: rgba(0,0,0,0.05);
+        }
+
+        .theme-glass .theme-option:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .day-navigation {
             display: flex;
-            gap: 1.5vw;
-            z-index: 100;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
         }
-        
-        .control-btn {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--white);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            font-size: 1.3rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-        }
-        
-        .control-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-        
-        .fullscreen-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--black);
-            z-index: 1000;
+
+        .day-navigation::-webkit-scrollbar {
             display: none;
         }
-        
-        .fullscreen-overlay.active {
-            display: block;
-        }
-        
-        .fullscreen-content {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            padding: 4vw;
-        }
-        
-        .decoration {
-            position: absolute;
-            z-index: 0;
-        }
-        
-        .corner-top-left {
-            top: 0;
-            left: 0;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(229, 57, 53, 0.1) 0%, transparent 70%);
-        }
-        
-        .corner-bottom-right {
-            bottom: 0;
-            right: 0;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(229, 57, 53, 0.05) 0%, transparent 70%);
-        }
-        
-        .pulse {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--red);
-            opacity: 0.7;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(0.8); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 0.3; }
-            100% { transform: scale(0.8); opacity: 0.7; }
-        }
-        
-        .title-slide {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+
+        .day-button {
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            margin: 0 5px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            flex: 1;
+            min-width: 80px;
             text-align: center;
-            height: 100%;
         }
-        
-        .main-title {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 900;
-            margin-bottom: 3vh;
-            background: linear-gradient(135deg, var(--white) 0%, #cccccc 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            line-height: 1.1;
+
+        .theme-glass .day-button {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(0, 0, 0, 0.8);
         }
-        
-        .subtitle {
-            font-size: clamp(1.2rem, 2.5vw, 1.8rem);
-            color: #cccccc;
-            margin-bottom: 5vh;
-            max-width: 800px;
+
+        .theme-dark .day-button {
+            background: rgba(0,0,0,.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset, inset 0 1px 0 rgba(255,255,255,.15);
         }
-        
-        .title-decoration {
-            width: 100px;
-            height: 5px;
-            background: linear-gradient(90deg, transparent 0%, var(--red) 50%, transparent 100%);
-            margin: 3vh 0;
+
+        .day-button.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 6px 15px rgba(10,132,255,0.4);
         }
-        
-        /* Адаптивность для мобильных устройств */
-        @media (max-width: 768px) {
-            .slide {
-                padding: 5vw;
+
+        .theme-glass .day-button.active {
+            background: #7b68ee;
+            box-shadow: 0 6px 15px rgba(123, 104, 238, 0.4);
+        }
+
+        .schedule-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .theme-glass .schedule-container {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .theme-dark .schedule-container {
+            background: rgba(0,0,0,.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,.12), 0 1px 0 rgba(255,255,255,.06) inset, inset 0 1px 0 rgba(255,255,255,.15);
+        }
+
+        .day-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .theme-glass .day-title {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .lesson {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.03);
+            border-left: 4px solid var(--primary);
+            position: relative;
+        }
+
+        .theme-glass .lesson {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-left: 4px solid #7b68ee;
+        }
+
+        .theme-dark .lesson {
+            background: rgba(0,0,0,.15);
+            box-shadow: 0 4px 12px rgba(0,0,0,.2), inset 0 1px 0 rgba(255,255,255,.1);
+        }
+
+        .lesson-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            background: var(--primary);
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .theme-glass .lesson-number {
+            background: #7b68ee;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .lesson-time {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .theme-glass .lesson-time {
+            color: #7b68ee;
+        }
+
+        .lesson-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .theme-glass .lesson-name {
+            color: rgba(0, 0, 0, 0.9);
+        }
+
+        .lesson-type {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .lecture {
+            background-color: rgba(10, 132, 255, 0.15);
+            color: var(--accent);
+        }
+
+        .theme-glass .lecture {
+            background-color: rgba(123, 104, 238, 0.2);
+            color: #7b68ee;
+        }
+
+        .practice {
+            background-color: rgba(48, 209, 88, 0.15);
+            color: var(--green);
+        }
+
+        .theme-glass .practice {
+            background-color: rgba(72, 187, 120, 0.2);
+            color: #48bb78;
+        }
+
+        .seminar {
+            background-color: rgba(255, 193, 7, 0.15);
+            color: var(--warning);
+        }
+
+        .theme-glass .seminar {
+            background-color: rgba(246, 173, 85, 0.2);
+            color: #f6ad55;
+        }
+
+        .lesson-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            font-size: 0.9rem;
+            color: var(--secondary);
+        }
+
+        .theme-glass .lesson-details {
+            color: rgba(0, 0, 0, 0.7);
+        }
+
+        .lesson-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .empty-schedule {
+            text-align: center;
+            padding: 30px;
+            color: var(--secondary);
+            font-style: italic;
+        }
+
+        .theme-glass .empty-schedule {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary);
+            font-size: 0.9rem;
+        }
+
+        .theme-glass footer {
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 480px) {
+            .app-container {
+                padding: 15px;
             }
             
-            .two-columns {
-                flex-direction: column;
-                gap: 3vh;
-            }
-            
-            .nav-buttons {
-                bottom: 3vh;
-                right: 3vw;
-            }
-            
-            .nav-button {
-                width: 60px;
-                height: 60px;
+            h1 {
                 font-size: 1.5rem;
             }
             
-            .slide-indicators {
-                bottom: 3vh;
-                left: 3vw;
+            .day-button {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+                min-width: 70px;
             }
             
-            .controls {
-                top: 2vh;
-                right: 2vw;
+            .lesson {
+                padding: 12px;
             }
             
-            .control-btn {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
+            .lesson-name {
+                font-size: 1rem;
             }
-            
-            .diagram {
-                height: 200px;
+
+            .schedule-container {
+                padding: 16px;
+            }
+
+            .theme-glass .schedule-container {
+                padding: 16px;
             }
         }
+
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .schedule-container {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .lesson {
+            animation: fadeIn 0.5s ease;
+            animation-fill-mode: both;
+        }
+
+        .lesson:nth-child(1) { animation-delay: 0.1s; }
+        .lesson:nth-child(2) { animation-delay: 0.2s; }
+        .lesson:nth-child(3) { animation-delay: 0.3s; }
+        .lesson:nth-child(4) { animation-delay: 0.4s; }
+        .lesson:nth-child(5) { animation-delay: 0.5s; }
         
-        @media (max-width: 480px) {
-            .slide-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 2vh;
-            }
-            
-            .slide-title {
-                padding-right: 0;
-            }
-            
-            .nav-buttons {
-                bottom: 2vh;
-                right: 2vw;
-            }
-            
-            .nav-button {
-                width: 50px;
-                height: 50px;
-                font-size: 1.3rem;
-            }
+        /* Оффлайн уведомление */
+        .offline-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px var(--card-shadow);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 10px;
         }
         
-        /* Анимации появления элементов */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .theme-glass .offline-notification {
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(0, 0, 0, 0.8);
         }
         
-        .animate-in {
-            animation: fadeInUp 0.8s ease forwards;
+        /* Кнопка обновления */
+        .refresh-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px var(--card-shadow);
+            z-index: 100;
+            border: none;
         }
         
-        .delay-1 { animation-delay: 0.2s; opacity: 0; }
-        .delay-2 { animation-delay: 0.4s; opacity: 0; }
-        .delay-3 { animation-delay: 0.6s; opacity: 0; }
-        .delay-4 { animation-delay: 0.8s; opacity: 0; }
+        .theme-glass .refresh-button {
+            background: #7b68ee;
+            box-shadow: 0 4px 12px rgba(123, 104, 238, 0.4);
+        }
+
+        /* Стили для регистрации и входа */
+        .auth-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .theme-glass .auth-container {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .auth-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .theme-glass .auth-input {
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .theme-dark .auth-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+
+        .auth-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+
+        .auth-switch {
+            color: var(--primary);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+
+        /* Стили для заметок */
+        .notes-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 10px 30px var(--card-shadow);
+            margin-bottom: 30px;
+        }
+
+        .theme-glass .notes-container {
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .notes-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 700;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary);
+        }
+
+        .note {
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 12px;
+            background: rgba(0,0,0,0.03);
+            border-left: 4px solid var(--success);
+            position: relative;
+        }
+
+        .theme-glass .note {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 30px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-left: 4px solid #30D158;
+        }
+
+        .note-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .note-content {
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--secondary);
+            text-align: right;
+        }
+
+        .add-note-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--success);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        .theme-glass .add-note-button {
+            background: #30D158;
+        }
+
+        .note-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .note-input, .note-textarea {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(0,0,0,0.1);
+            background: rgba(255,255,255,0.8);
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .note-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .note-submit {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--success);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .note-cancel {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--danger);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Навигация между разделами */
+        .app-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            overflow-x: auto;
+            padding: 5px 0;
+            scrollbar-width: none;
+        }
+
+        .app-navigation::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-button {
+            padding: 12px 18px;
+            border-radius: var(--border-radius);
+            background: var(--card-bg);
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            margin: 0 5px;
+            box-shadow: 0 4px 8px var(--card-shadow);
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .theme-glass .nav-button {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.25);
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .nav-button.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 6px 15px rgba(10,132,255,0.4);
+        }
+
+        .theme-glass .nav-button.active {
+            background: #7b68ee;
+            box-shadow: 0 6px 15px rgba(123, 104, 238, 0.4);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .logout-button {
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: none;
+            background: var(--danger);
+            color: white;
+            font-size: 0.8rem;
+            cursor: pointer;
+        }
+
+        /* Новые стили для таймера и изображений */
+        .time-remaining {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background-color: rgba(255, 193, 7, 0.15);
+            color: var(--warning);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .theme-glass .time-remaining {
+            background-color: rgba(246, 173, 85, 0.2);
+            color: #f6ad55;
+        }
+
+        .note-image {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .image-upload {
+            margin-bottom: 15px;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .image-remove {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-top: 5px;
+        }
     </style>
 </head>
 <body>
-    <div class="presentation-container">
-        <div class="decoration corner-top-left"></div>
-        <div class="decoration corner-bottom-right"></div>
-        
-        <div class="pulse" style="top: 20%; left: 10%;"></div>
-        <div class="pulse" style="top: 70%; left: 85%; animation-delay: 0.5s;"></div>
-        <div class="pulse" style="top: 40%; left: 90%; animation-delay: 1s;"></div>
-        
-        <div class="progress-bar">
-            <div class="progress" id="progress"></div>
+    <div class="parallax-bg"></div>
+    <div class="app-container">
+        <header>
+            <h1>Расписание</h1>
+            <div class="week-indicator" id="weekIndicator">Неделя 1</div>
+            <div class="theme-selector">
+                <button class="theme-button" id="themeButton">🎨</button>
+                <div class="theme-options" id="themeOptions">
+                    <div class="theme-option" data-theme="default">Стандартная</div>
+                    <div class="theme-option" data-theme="glass">Жидкое стекло</div>
+                    <div class="theme-option" data-theme="dark">Тёмная</div>
+                    <div class="theme-option" data-theme="nature">Природа</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Навигация между разделами -->
+        <div class="app-navigation" id="appNavigation" style="display: none;">
+            <button class="nav-button active" data-section="schedule">Расписание</button>
+            <button class="nav-button" data-section="notes">Объявления</button>
+            <button class="nav-button" data-section="admin" id="adminButton" style="display: none;">Админ-панель</button>
         </div>
-        
-        <div class="controls">
-            <button class="control-btn" id="fullscreen-btn" title="Полноэкранный режим">
-                <i class="fas fa-expand"></i>
-            </button>
-            <button class="control-btn" id="help-btn" title="Справка">
-                <i class="fas fa-question"></i>
-            </button>
-        </div>
-        
-        <div class="presentation">
-            <!-- Слайд 1 -->
-            <div class="slide active" id="slide1">
-                <div class="slide-header">
-                    <h1 class="slide-title">Электролизные анализаторы</h1>
-                    <div class="slide-number">1/10</div>
-                </div>
-                <div class="slide-content">
-                    <div class="title-slide">
-                        <h2 class="main-title animate-in">Электролизные анализаторы</h2>
-                        <div class="title-decoration"></div>
-                        <p class="subtitle animate-in delay-1">Принцип работы, виды и области применения</p>
-                        <div class="text-content animate-in delay-2">
-                            <p>Современные приборы для точного анализа состава веществ</p>
-                        </div>
-                    </div>
-                </div>
+
+        <!-- Раздел расписания -->
+        <div class="section active" id="scheduleSection">
+            <div class="day-navigation">
+                <button class="day-button active" data-day="0">Пн</button>
+                <button class="day-button" data-day="1">Вт</button>
+                <button class="day-button" data-day="2">Ср</button>
+                <button class="day-button" data-day="3">Чт</button>
+                <button class="day-button" data-day="4">Пт</button>
+                <button class="day-button" data-day="5">Сб</button>
+                <button class="day-button" data-day="6">Вс</button>
             </div>
-            
-            <!-- Слайд 2 -->
-            <div class="slide" id="slide2">
-                <div class="slide-header">
-                    <h1 class="slide-title">Что такое электролизные анализаторы</h1>
-                    <div class="slide-number">2/10</div>
-                </div>
-                <div class="slide-content">
-                    <ul class="list-content">
-                        <li class="animate-in">Основаны на явлении электролиза — разложении вещества под действием электрического тока.</li>
-                        <li class="animate-in delay-1">Основная цель: измерение количества вещества, которое участвует в реакции.</li>
-                        <li class="animate-in delay-2">Используются для контроля чистоты воды, состава кислот и щелочей, содержания газов.</li>
-                        <li class="animate-in delay-3">Обеспечивают быстрые и точные результаты, особенно для малых концентраций.</li>
-                    </ul>
-                    <div class="diagram">
-                        <div class="electrolyte"></div>
-                        <div class="anode electrode"></div>
-                        <div class="cathode electrode"></div>
-                        <div class="bubble" style="left: 32%; bottom: 30px; animation-delay: 0s;"></div>
-                        <div class="bubble" style="left: 68%; bottom: 50px; animation-delay: 0.5s;"></div>
-                        <div class="bubble" style="left: 35%; bottom: 70px; animation-delay: 1s;"></div>
-                        <div class="bubble" style="left: 65%; bottom: 40px; animation-delay: 1.5s;"></div>
-                        <div class="bubble" style="left: 31%; bottom: 60px; animation-delay: 2s;"></div>
-                        <div class="bubble" style="left: 69%; bottom: 45px; animation-delay: 2.5s;"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Слайд 3 -->
-            <div class="slide" id="slide3">
-                <div class="slide-header">
-                    <h1 class="slide-title">Принцип работы</h1>
-                    <div class="slide-number">3/10</div>
-                </div>
-                <div class="slide-content">
-                    <ol class="list-content">
-                        <li class="animate-in">Через исследуемую среду пропускается постоянный ток.</li>
-                        <li class="animate-in delay-1">Происходит электролитическое разложение:
-                            <ul class="list-content" style="margin-left: 40px; margin-top: 10px;">
-                                <li>Положительные ионы двигаются к катоду, отрицательные — к аноду.</li>
-                                <li>На электродах выделяется газ или осадок.</li>
-                            </ul>
-                        </li>
-                        <li class="animate-in delay-2">Количество выделившегося вещества связано с концентрацией ионов в растворе (закон Фарадея).</li>
-                        <li class="animate-in delay-3">Измерение тока и времени позволяет точно вычислить концентрацию вещества.</li>
-                    </ol>
-                    <div class="image-container animate-in delay-4">
-                        <img src="https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Схема принципа работы электролизного анализатора">
-                        <div class="image-caption">Схематическое изображение процесса электролиза</div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Слайд 4 -->
-            <div class="slide" id="slide4">
-                <div class="slide-header">
-                    <h1 class="slide-title">Основные элементы прибора</h1>
-                    <div class="slide-number">4/10</div>
-                </div>
-                <div class="slide-content">
-                    <div class="two-columns">
-                        <div class="column">
-                            <ul class="list-content">
-                                <li class="animate-in">Электролитическая ячейка — резервуар с анализируемым раствором или газом.</li>
-                                <li class="animate-in delay-1">Электроды — анод и катод, выполненные из инертных или активных материалов.</li>
-                                <li class="animate-in delay-2">Источник постоянного напряжения — обеспечивает движение ионов.</li>
-                            </ul>
-                        </div>
-                        <div class="column">
-                            <ul class="list-content">
-                                <li class="animate-in delay-1">Система измерения — ток, напряжение или масса выделившегося вещества.</li>
-                                <li class="animate-in delay-2">Дополнительно: термостаты, мешалки, датчики давления и температуры.</li>
-                            </ul>
-                            <div class="image-container animate-in delay-3">
-                                <img src="https://images.unsplash.com/photo-1581094794329-cd6d1d3dd55c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Компоненты электролизного анализатора">
-                                <div class="image-caption">Основные компоненты современного электролизного анализатора</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Остальные слайды продолжаются аналогично -->
-            <!-- Для экономии места я сократил код, но в полной версии все слайды будут реализованы -->
-            
-            <!-- Слайд 10 -->
-            <div class="slide" id="slide10">
-                <div class="slide-header">
-                    <h1 class="slide-title">Заключение</h1>
-                    <div class="slide-number">10/10</div>
-                </div>
-                <div class="slide-content">
-                    <ul class="list-content">
-                        <li class="animate-in">Электролизные анализаторы — это точные, надёжные и универсальные приборы для анализа состава веществ.</li>
-                        <li class="animate-in delay-1">Их использование повышает качество продукции, безопасность и экологический контроль.</li>
-                        <li class="animate-in delay-2">Развитие технологий делает их миниатюрными, автоматизированными и удобными для лабораторий и производства.</li>
-                        <li class="animate-in delay-3">Их принцип работы основан на фундаментальных законах электролиза и ионного движения, что делает приборы точными и предсказуемыми.</li>
-                    </ul>
-                    <div style="text-align: center; margin-top: 5vh;" class="animate-in delay-4">
-                        <h2 style="color: var(--red); font-size: 2.5rem; margin-bottom: 2vh;">Спасибо за внимание!</h2>
-                        <p style="font-size: 1.5rem; color: #cccccc;">Вопросы?</p>
-                    </div>
+
+            <div class="schedule-container">
+                <h2 class="day-title">Понедельник</h2>
+                <div id="scheduleContent">
+                    <!-- Расписание будет загружено здесь -->
                 </div>
             </div>
         </div>
-        
-        <div class="nav-buttons">
-            <button class="nav-button" id="prev-btn" title="Предыдущий слайд">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="nav-button" id="next-btn" title="Следующий слайд">
-                <i class="fas fa-chevron-right"></i>
-            </button>
+
+        <!-- Раздел объявлений -->
+        <div class="section" id="notesSection">
+            <div class="notes-container">
+                <h2 class="notes-title">Объявления</h2>
+                <div id="notesContent">
+                    <!-- Объявления будут загружены здесь -->
+                </div>
+            </div>
         </div>
-        
-        <div class="slide-indicators" id="indicators">
-            <!-- Индикаторы будут добавлены через JavaScript -->
+
+        <!-- Раздел админ-панели -->
+        <div class="section" id="adminSection">
+            <div class="notes-container">
+                <h2 class="notes-title">Админ-панель</h2>
+                <div class="user-info">
+                    <span>Вы вошли как: <strong id="adminName"></strong></span>
+                    <button class="logout-button" id="adminLogoutButton">Выйти</button>
+                </div>
+                <button class="add-note-button" id="addNoteButton">Добавить объявление</button>
+                
+                <div class="note-form" id="noteForm">
+                    <input type="text" class="note-input" id="noteTitle" placeholder="Заголовок объявления">
+                    <textarea class="note-textarea" id="noteContent" placeholder="Текст объявления"></textarea>
+                    
+                    <div class="image-upload">
+                        <label for="noteImage">Изображение (опционально):</label>
+                        <input type="file" id="noteImage" accept="image/*">
+                        <img id="imagePreview" class="image-preview" src="" alt="Предпросмотр">
+                        <button id="removeImage" class="image-remove" style="display: none;">Удалить изображение</button>
+                    </div>
+                    
+                    <div class="note-actions">
+                        <button class="note-submit" id="noteSubmit">Опубликовать</button>
+                        <button class="note-cancel" id="noteCancel">Отмена</button>
+                    </div>
+                </div>
+                
+                <h3 style="margin-top: 20px;">Мои объявления</h3>
+                <div id="adminNotesContent">
+                    <!-- Объявления администратора будут загружены здесь -->
+                </div>
+            </div>
         </div>
+
+        <!-- Форма регистрации/входа -->
+        <div class="auth-container" id="authContainer">
+            <h2 class="auth-title" id="authTitle">Регистрация</h2>
+            <input type="text" class="auth-input" id="authName" placeholder="Ваше имя">
+            <input type="password" class="auth-input" id="authPassword" placeholder="Пароль" style="display: none;">
+            <button class="auth-button" id="authButton">Зарегистрироваться</button>
+            <p>Уже есть аккаунт? <span class="auth-switch" id="authSwitch">Войти</span></p>
+        </div>
+
+        <footer>
+            Обновляется автоматически • <span id="lastUpdated"></span>
+        </footer>
     </div>
     
-    <div class="fullscreen-overlay" id="fullscreen-overlay">
-        <div class="fullscreen-content">
-            <!-- Контент для полноэкранного режима -->
-        </div>
+    <div class="offline-notification" id="offlineNotification">
+        <span>⚠️</span> Работает в оффлайн-режиме
     </div>
+    
+    <button class="refresh-button" id="refreshButton" title="Обновить расписание">↻</button>
+
+    <script>
+        // Определение текущей недели (чётная/нечётная)
+        function getCurrentWeek() {
+            // Фиксированная дата начала семестра для примера (можно изменить)
+            const startDate = new Date('2024-02-05');
+            const today = new Date();
+            const diffTime = Math.abs(today - startDate);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            const weekNumber = Math.floor(diffDays / 7) % 2;
+            
+            // 0 - первая неделя, 1 - вторая неделя
+            return weekNumber;
+        }
+
+        // Определение номера пары по времени
+        function getPairNumber(time) {
+            const timeSlots = [
+                "8:30-10:05",  // 1 пара
+                "10:15-11:50", // 2 пара
+                "12:20-13:55", // 3 пара
+                "14:05-15:40", // 4 пара
+                "15:50-17:25", // 5 пара
+                "17:35-19:10"  // 6 пара
+            ];
+            
+            return timeSlots.indexOf(time) + 1;
+        }
+
+        // Данные расписания (исправленные по вашему описанию)
+        const scheduleData = {
+            0: { // Понедельник
+                name: "Понедельник",
+                lessons: [
+                    {
+                        time: "8:30-10:05",
+                        name: "Релейная защита и противоаварийная автоматика",
+                        room: "1-8",
+                        teacher: "Ниналалов С.А.",
+                        week: null, // для обеих недель
+                        type: "лекция"
+                    },
+                    {
+                        time: "10:15-11:50",
+                        name: "Геотермальная энергетика",
+                        room: "1-8",
+                        teacher: "Алхасова Д.А.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    },
+                    {
+                        time: "12:20-13:55",
+                        name: "Теоретические основы использования ВЭ",
+                        room: "1-2лк",
+                        teacher: "Алхасова Д.А.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    }
+                ]
+            },
+            1: { // Вторник
+                name: "Вторник",
+                lessons: [
+                    {
+                        time: "8:30-10:05",
+                        name: "Физкультура",
+                        room: "Спортзал",
+                        teacher: "",
+                        week: 1, // только вторая неделя
+                        type: "практика"
+                    },
+                    {
+                        time: "10:15-11:50",
+                        name: "Энергетические сооружения установок нетрадиционной и ВЭ",
+                        room: "1-2лк",
+                        teacher: "Баба Д.",
+                        week: null, // для обеих недель
+                        type: "лекция"
+                    },
+                    {
+                        time: "12:20-13:55",
+                        name: "Теоретические основы использования ВЭ",
+                        room: "1-2лк",
+                        teacher: "Алхасова Д.А.",
+                        week: 0, // только первая неделя
+                        type: "лекция"
+                    }
+                ]
+            },
+            2: { // Среда
+                name: "Среда",
+                lessons: [
+                    {
+                        time: "8:30-10:05",
+                        name: "Энергетические сооружения установок нетрадиционной и ВЭ",
+                        room: "2-41",
+                        teacher: "Баба Д.",
+                        week: 1, // только вторая неделя
+                        type: "практика"
+                    },
+                    {
+                        time: "10:15-11:50",
+                        name: "Релейная защита и противоаварийная автоматика",
+                        room: "1-2лк",
+                        teacher: "Ниналалов С.А.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    },
+                    {
+                        time: "12:20-13:55",
+                        name: "Энергетические сооружения установок нетрадиционной и ВЭ",
+                        room: "1-8",
+                        teacher: "Баба Д.",
+                        week: null, // для обеих недель
+                        type: "семинар"
+                    }
+                ]
+            },
+            3: { // Четверг
+                name: "Четверг",
+                lessons: [
+                    {
+                        time: "10:15-11:50",
+                        name: "Техника высоких напряжений",
+                        room: "2-30",
+                        teacher: "Шахсинов Г.Ш.",
+                        week: null, // для обеих недель
+                        type: "лекция"
+                    },
+                    {
+                        time: "12:20-13:55",
+                        name: "Метрология",
+                        room: "2-30",
+                        teacher: "Офицерова Н.В.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    },
+                    {
+                        time: "14:05-15:40",
+                        name: "Метрология",
+                        room: "2-30",
+                        teacher: "Офицерова Н.В.",
+                        week: 0, // только первая неделя
+                        type: "практика"
+                    }
+                ]
+            },
+            4: { // Пятница
+                name: "Пятница",
+                lessons: [
+                    {
+                        time: "10:15-11:50",
+                        name: "Эксплуатация электротех. оборудования ГЭС, ГАЭС",
+                        room: "2-30",
+                        teacher: "Шахсинов Г.Ш.",
+                        week: null, // для обеих недель
+                        type: "лекция"
+                    },
+                    {
+                        time: "12:20-13:55",
+                        name: "Энергетическое оборудование возобновляемой энергетики",
+                        room: "2-30",
+                        teacher: "Баламирзоев А.Г.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    },
+                    {
+                        time: "14:05-15:40",
+                        name: "Английский язык",
+                        room: "1-19",
+                        teacher: "Алибекова Д.М.",
+                        week: null, // для обеих недель
+                        type: "практика"
+                    }
+                ]
+            },
+            5: { // Суббота
+                name: "Суббота",
+                lessons: []
+            },
+            6: { // Воскресенье
+                name: "Воскресенье",
+                lessons: []
+            }
+        };
+
+        // Текущая неделя (0 - первая, 1 - вторая)
+        let currentWeek = getCurrentWeek();
+        // Текущий выбранный день (0-6)
+        let currentDay = new Date().getDay() - 1;
+        if (currentDay < 0) currentDay = 0; // Если воскресенье, показываем понедельник
+
+        // Система пользователей и заметок
+        let currentUser = null;
+        let isLoginMode = false;
+        const adminUser = { name: "admin", password: "admin123" };
+        let notes = [];
+        let currentImage = null;
+
+        // Инициализация приложения
+        document.addEventListener('DOMContentLoaded', function() {
+            // Проверяем, есть ли сохраненный пользователь
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                showAppInterface();
+            } else {
+                showAuthInterface();
+            }
+
+            // Загружаем заметки
+            loadNotes();
+
+            // Установка индикатора недели
+            document.getElementById('weekIndicator').textContent = `Неделя ${currentWeek + 1}`;
+            
+            // Установка времени последнего обновления
+            updateLastUpdatedTime();
+            
+            // Активация текущего дня в навигации
+            const dayButtons = document.querySelectorAll('.day-button');
+            dayButtons.forEach((button, index) => {
+                if (index === currentDay) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+                
+                button.addEventListener('click', () => {
+                    dayButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    currentDay = parseInt(button.getAttribute('data-day'));
+                    renderSchedule();
+                });
+            });
+            
+            // Настройка переключения тем
+            const themeButton = document.getElementById('themeButton');
+            const themeOptions = document.getElementById('themeOptions');
+            
+            themeButton.addEventListener('click', () => {
+                themeOptions.style.display = themeOptions.style.display === 'flex' ? 'none' : 'flex';
+            });
+            
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    const theme = option.getAttribute('data-theme');
+                    changeTheme(theme);
+                    themeOptions.style.display = 'none';
+                });
+            });
+            
+            // Кнопка обновления
+            document.getElementById('refreshButton').addEventListener('click', () => {
+                // Анимация вращения
+                const refreshIcon = document.getElementById('refreshButton');
+                refreshIcon.style.transition = 'transform 0.5s ease';
+                refreshIcon.style.transform = 'rotate(360deg)';
+                
+                setTimeout(() => {
+                    refreshIcon.style.transform = 'rotate(0deg)';
+                    // Обновляем время последнего обновления
+                    updateLastUpdatedTime();
+                }, 500);
+            });
+            
+            // Закрытие меню тем при клике вне его
+            document.addEventListener('click', (e) => {
+                if (!themeButton.contains(e.target) && !themeOptions.contains(e.target)) {
+                    themeOptions.style.display = 'none';
+                }
+            });
+            
+            // Навигация между разделами
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                    
+                    button.classList.add('active');
+                    const sectionId = button.getAttribute('data-section') + 'Section';
+                    document.getElementById(sectionId).classList.add('active');
+                });
+            });
+            
+            // Аутентификация
+            document.getElementById('authSwitch').addEventListener('click', toggleAuthMode);
+            document.getElementById('authButton').addEventListener('click', handleAuth);
+            
+            // Админ-панель
+            document.getElementById('addNoteButton').addEventListener('click', showNoteForm);
+            document.getElementById('noteCancel').addEventListener('click', hideNoteForm);
+            document.getElementById('noteSubmit').addEventListener('click', addNote);
+            document.getElementById('adminLogoutButton').addEventListener('click', logout);
+            
+            // Обработка загрузки изображений
+            document.getElementById('noteImage').addEventListener('change', handleImageUpload);
+            document.getElementById('removeImage').addEventListener('click', removeImage);
+            
+            // Первоначальная отрисовка расписания
+            renderSchedule();
+            
+            // Запуск таймера для отслеживания времени до конца пары
+            startTimer();
+            
+            // Проверка состояния сети
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+            
+            // Сохранение данных в localStorage для оффлайн-работы
+            saveToLocalStorage();
+            
+            // Регистрация Service Worker для PWA
+            registerServiceWorker();
+        });
+
+        // Функция отрисовки расписания для выбранного дня
+        function renderSchedule() {
+            const scheduleContent = document.getElementById('scheduleContent');
+            const dayTitle = document.querySelector('.day-title');
+            
+            const dayData = scheduleData[currentDay];
+            dayTitle.textContent = dayData.name;
+            
+            // Фильтрация занятий по текущей неделе
+            const filteredLessons = dayData.lessons.filter(lesson => 
+                lesson.week === null || lesson.week === currentWeek
+            );
+            
+            if (filteredLessons.length === 0) {
+                scheduleContent.innerHTML = '<div class="empty-schedule">Занятий нет</div>';
+                return;
+            }
+            
+            let html = '';
+            filteredLessons.forEach((lesson) => {
+                const pairNumber = getPairNumber(lesson.time);
+                const typeClass = lesson.type === "лекция" ? "lecture" : 
+                                lesson.type === "практика" ? "practice" : "seminar";
+                
+                // Проверяем, идет ли сейчас эта пара
+                const timeRemaining = getTimeRemaining(lesson.time);
+                const timeRemainingHtml = timeRemaining ? 
+                    `<span class="time-remaining">${timeRemaining}</span>` : '';
+                
+                html += `
+                    <div class="lesson">
+                        <div class="lesson-number">${pairNumber}</div>
+                        <div class="lesson-time">${lesson.time} ${timeRemainingHtml}</div>
+                        <div class="lesson-type ${typeClass}">${lesson.type}</div>
+                        <div class="lesson-name">${lesson.name}</div>
+                        <div class="lesson-details">
+                            <div class="lesson-detail">📍 ${lesson.room}</div>
+                            <div class="lesson-detail">👨‍🏫 ${lesson.teacher}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            scheduleContent.innerHTML = html;
+        }
+
+        // Функция расчета времени до конца пары
+        function getTimeRemaining(lessonTime) {
+            const now = new Date();
+            const [startTime, endTime] = lessonTime.split('-');
+            const [startHour, startMinute] = startTime.split(':').map(Number);
+            const [endHour, endMinute] = endTime.split(':').map(Number);
+            
+            const lessonStart = new Date();
+            lessonStart.setHours(startHour, startMinute, 0, 0);
+            
+            const lessonEnd = new Date();
+            lessonEnd.setHours(endHour, endMinute, 0, 0);
+            
+            // Если пара уже закончилась
+            if (now > lessonEnd) return null;
+            
+            // Если пара еще не началась
+            if (now < lessonStart) {
+                const diffMs = lessonStart - now;
+                const diffMins = Math.floor(diffMs / 60000);
+                return `Начнется через ${diffMins} мин`;
+            }
+            
+            // Если пара идет сейчас
+            const diffMs = lessonEnd - now;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMins / 60);
+            const remainingMins = diffMins % 60;
+            
+            if (diffHours > 0) {
+                return `Осталось ${diffHours}ч ${remainingMins}мин`;
+            } else {
+                return `Осталось ${remainingMins} мин`;
+            }
+        }
+
+        // Запуск таймера для обновления времени до конца пары
+        function startTimer() {
+            setInterval(() => {
+                renderSchedule();
+            }, 60000); // Обновляем каждую минуту
+        }
+
+        // Функция смены темы
+        function changeTheme(themeName) {
+            document.body.classList.remove('theme-glass', 'theme-dark', 'theme-nature');
+            
+            if (themeName !== 'default') {
+                document.body.classList.add(`theme-${themeName}`);
+            }
+            
+            // Сохранение выбранной темы в localStorage
+            localStorage.setItem('selectedTheme', themeName);
+        }
+
+        // Загрузка сохранённой темы
+        const savedTheme = localStorage.getItem('selectedTheme');
+        if (savedTheme) {
+            changeTheme(savedTheme);
+        }
+        
+        // Функция обновления статуса онлайн/оффлайн
+        function updateOnlineStatus() {
+            const notification = document.getElementById('offlineNotification');
+            if (!navigator.onLine) {
+                notification.style.display = 'flex';
+                // Загружаем данные из localStorage при оффлайн-режиме
+                loadFromLocalStorage();
+            } else {
+                notification.style.display = 'none';
+            }
+        }
+        
+        // Сохранение данных в localStorage
+        function saveToLocalStorage() {
+            const appData = {
+                scheduleData: scheduleData,
+                currentWeek: currentWeek,
+                currentDay: currentDay,
+                lastUpdated: new Date().toISOString(),
+                notes: notes
+            };
+            
+            localStorage.setItem('scheduleAppData', JSON.stringify(appData));
+        }
+        
+        // Загрузка данных из localStorage
+        function loadFromLocalStorage() {
+            const savedData = localStorage.getItem('scheduleAppData');
+            if (savedData) {
+                try {
+                    const appData = JSON.parse(savedData);
+                    
+                    // Восстанавливаем текущий день и неделю
+                    currentWeek = appData.currentWeek || currentWeek;
+                    currentDay = appData.currentDay || currentDay;
+                    
+                    // Восстанавливаем заметки
+                    if (appData.notes) {
+                        notes = appData.notes;
+                        renderNotes();
+                    }
+                    
+                    // Обновляем индикатор недели
+                    document.getElementById('weekIndicator').textContent = `Неделя ${currentWeek + 1}`;
+                    
+                    // Обновляем время последнего обновления
+                    if (appData.lastUpdated) {
+                        const lastUpdated = new Date(appData.lastUpdated);
+                        document.getElementById('lastUpdated').textContent = `Обновлено: ${lastUpdated.toLocaleDateString()} ${lastUpdated.toLocaleTimeString()}`;
+                    }
+                    
+                    // Перерисовываем расписание
+                    renderSchedule();
+                } catch (e) {
+                    console.error('Ошибка загрузки из localStorage:', e);
+                }
+            }
+        }
+        
+        // Обновление времени последнего обновления
+        function updateLastUpdatedTime() {
+            const now = new Date();
+            document.getElementById('lastUpdated').textContent = `Обновлено: ${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+            
+            // Сохраняем время обновления
+            const savedData = localStorage.getItem('scheduleAppData');
+            if (savedData) {
+                try {
+                    const appData = JSON.parse(savedData);
+                    appData.lastUpdated = now.toISOString();
+                    localStorage.setItem('scheduleAppData', JSON.stringify(appData));
+                } catch (e) {
+                    console.error('Ошибка сохранения времени обновления:', e);
+                }
+            }
+        }
+        
+        // Регистрация Service Worker
+        function registerServiceWorker() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(function(registration) {
+                        console.log('Service Worker зарегистрирован:', registration);
+                        
+                        // Периодически проверяем обновления
+                        setInterval(() => {
+                            registration.update();
+                        }, 60 * 60 * 1000); // Каждый час
+                    })
+                    .catch(function(error) {
+                        console.log('Ошибка регистрации Service Worker:', error);
+                    });
+                    
+                // Прослушиваем сообщения от Service Worker
+                navigator.serviceWorker.addEventListener('message', event => {
+                    if (event.data && event.data.type === 'CACHE_UPDATED') {
+                        console.log('Кэш обновлен');
+                    }
+                });
+            }
+        }
+
+        // Функции для системы пользователей и заметок
+        function showAuthInterface() {
+            document.getElementById('authContainer').style.display = 'block';
+            document.getElementById('appNavigation').style.display = 'none';
+            document.getElementById('scheduleSection').style.display = 'none';
+            document.getElementById('notesSection').style.display = 'none';
+            document.getElementById('adminSection').style.display = 'none';
+        }
+
+        function showAppInterface() {
+            document.getElementById('authContainer').style.display = 'none';
+            document.getElementById('appNavigation').style.display = 'flex';
+            document.getElementById('scheduleSection').style.display = 'block';
+            
+            // Показываем кнопку админ-панели только для администратора
+            if (currentUser && currentUser.name === adminUser.name) {
+                document.getElementById('adminButton').style.display = 'block';
+                document.getElementById('adminName').textContent = currentUser.name;
+            } else {
+                document.getElementById('adminButton').style.display = 'none';
+            }
+            
+            renderNotes();
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            const authTitle = document.getElementById('authTitle');
+            const authButton = document.getElementById('authButton');
+            const authSwitch = document.getElementById('authSwitch');
+            const authPassword = document.getElementById('authPassword');
+            
+            if (isLoginMode) {
+                authTitle.textContent = 'Вход';
+                authButton.textContent = 'Войти';
+                authSwitch.textContent = 'Зарегистрироваться';
+                authPassword.style.display = 'block';
+            } else {
+                authTitle.textContent = 'Регистрация';
+                authButton.textContent = 'Зарегистрироваться';
+                authSwitch.textContent = 'Войти';
+                authPassword.style.display = 'none';
+            }
+        }
+
+        function handleAuth() {
+            const name = document.getElementById('authName').value.trim();
+            const password = document.getElementById('authPassword').value;
+            
+            if (!name) {
+                alert('Введите имя');
+                return;
+            }
+            
+            if (isLoginMode) {
+                // Проверка логина
+                if (name === adminUser.name && password === adminUser.password) {
+                    currentUser = { name: name, isAdmin: true };
+                    localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                    showAppInterface();
+                } else {
+                    alert('Неверное имя пользователя или пароль');
+                }
+            } else {
+                // Регистрация
+                currentUser = { name: name, isAdmin: false };
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                showAppInterface();
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showAuthInterface();
+        }
+
+        function loadNotes() {
+            const savedNotes = localStorage.getItem('notes');
+            if (savedNotes) {
+                notes = JSON.parse(savedNotes);
+            }
+        }
+
+        function saveNotes() {
+            localStorage.setItem('notes', JSON.stringify(notes));
+            saveToLocalStorage();
+        }
+
+        function renderNotes() {
+            const notesContent = document.getElementById('notesContent');
+            const adminNotesContent = document.getElementById('adminNotesContent');
+            
+            if (notes.length === 0) {
+                notesContent.innerHTML = '<div class="empty-schedule">Объявлений пока нет</div>';
+                if (adminNotesContent) {
+                    adminNotesContent.innerHTML = '<div class="empty-schedule">Вы еще не создали объявлений</div>';
+                }
+                return;
+            }
+            
+            // Рендеринг объявлений для всех пользователей
+            let html = '';
+            notes.forEach((note, index) => {
+                const imageHtml = note.image ? `<img src="${note.image}" class="note-image" alt="Изображение объявления">` : '';
+                
+                html += `
+                    <div class="note">
+                        <div class="note-title">${note.title}</div>
+                        <div class="note-content">${note.content}</div>
+                        ${imageHtml}
+                        <div class="note-date">${new Date(note.date).toLocaleDateString()} - ${note.author}</div>
+                    </div>
+                `;
+            });
+            notesContent.innerHTML = html;
+            
+            // Рендеринг объявлений для администратора (только его объявления)
+            if (currentUser && currentUser.name === adminUser.name) {
+                let adminHtml = '';
+                const adminNotes = notes.filter(note => note.author === adminUser.name);
+                
+                if (adminNotes.length === 0) {
+                    adminNotesContent.innerHTML = '<div class="empty-schedule">Вы еще не создали объявлений</div>';
+                } else {
+                    adminNotes.forEach((note, index) => {
+                        const imageHtml = note.image ? `<img src="${note.image}" class="note-image" alt="Изображение объявления">` : '';
+                        
+                        adminHtml += `
+                            <div class="note">
+                                <div class="note-title">${note.title}</div>
+                                <div class="note-content">${note.content}</div>
+                                ${imageHtml}
+                                <div class="note-date">${new Date(note.date).toLocaleDateString()}</div>
+                                <button class="logout-button" onclick="deleteNote(${index})" style="margin-top: 10px;">Удалить</button>
+                            </div>
+                        `;
+                    });
+                    adminNotesContent.innerHTML = adminHtml;
+                }
+            }
+        }
+
+        function showNoteForm() {
+            document.getElementById('noteForm').style.display = 'block';
+            document.getElementById('addNoteButton').style.display = 'none';
+        }
+
+        function hideNoteForm() {
+            document.getElementById('noteForm').style.display = 'none';
+            document.getElementById('addNoteButton').style.display = 'block';
+            document.getElementById('noteTitle').value = '';
+            document.getElementById('noteContent').value = '';
+            removeImage();
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage = e.target.result;
+                    document.getElementById('imagePreview').src = currentImage;
+                    document.getElementById('imagePreview').style.display = 'block';
+                    document.getElementById('removeImage').style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeImage() {
+            currentImage = null;
+            document.getElementById('noteImage').value = '';
+            document.getElementById('imagePreview').src = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('removeImage').style.display = 'none';
+        }
+
+        function addNote() {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            
+            if (!title || !content) {
+                alert('Заполните все поля');
+                return;
+            }
+            
+            const newNote = {
+                title: title,
+                content: content,
+                author: currentUser.name,
+                date: new Date().toISOString(),
+                image: currentImage
+            };
+            
+            notes.unshift(newNote); // Добавляем в начало массива
+            saveNotes();
+            renderNotes();
+            hideNoteForm();
+            
+            // Переключаемся на вкладку с объявлениями
+            document.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.querySelector('[data-section="notes"]').classList.add('active');
+            document.getElementById('notesSection').classList.add('active');
+        }
+
+        function deleteNote(index) {
+            if (confirm('Вы уверены, что хотите удалить это объявление?')) {
+                notes.splice(index, 1);
+                saveNotes();
+                renderNotes();
+            }
+        }
+    </script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const slides = document.querySelectorAll('.slide');
-            const prevBtn = document.getElementById('prev-btn');
-            const nextBtn = document.getElementById('next-btn');
-            const progress = document.getElementById('progress');
-            const indicatorsContainer = document.getElementById('indicators');
-            const fullscreenBtn = document.getElementById('fullscreen-btn');
-            const fullscreenOverlay = document.getElementById('fullscreen-overlay');
-            const helpBtn = document.getElementById('help-btn');
-            
-            let currentSlide = 0;
-            
-            // Создание индикаторов
-            slides.forEach((_, index) => {
-                const indicator = document.createElement('div');
-                indicator.classList.add('indicator');
-                if (index === 0) indicator.classList.add('active');
-                indicator.addEventListener('click', () => goToSlide(index));
-                indicatorsContainer.appendChild(indicator);
-            });
-            
-            // Функция перехода к слайду
-            function goToSlide(index) {
-                // Сброс анимаций для текущего слайда
-                slides[currentSlide].querySelectorAll('.animate-in').forEach(el => {
-                    el.classList.remove('animate-in', 'delay-1', 'delay-2', 'delay-3', 'delay-4');
+        // Inline Service Worker для оффлайн-работы
+        if ('serviceWorker' in navigator) {
+            // Создаем Service Worker прямо в коде
+            const swCode = `
+                const CACHE_NAME = 'schedule-app-v2';
+                const urlsToCache = [
+                    '/',
+                    './index.html',
+                    './manifest.json'
+                ];
+
+                self.addEventListener('install', function(event) {
+                    event.waitUntil(
+                        caches.open(CACHE_NAME)
+                            .then(function(cache) {
+                                console.log('Opened cache');
+                                return cache.addAll(urlsToCache);
+                            })
+                    );
                 });
-                
-                slides[currentSlide].classList.remove('active');
-                currentSlide = index;
-                slides[currentSlide].classList.add('active');
-                
-                // Добавление анимаций для нового слайда
-                setTimeout(() => {
-                    slides[currentSlide].querySelectorAll('li, .text-content, .image-container, .diagram').forEach((el, i) => {
-                        el.classList.add('animate-in');
-                        if (i > 0) {
-                            el.classList.add(`delay-${Math.min(i, 4)}`);
-                        }
-                    });
-                }, 100);
-                
-                // Обновление индикаторов
-                document.querySelectorAll('.indicator').forEach((ind, i) => {
-                    ind.classList.toggle('active', i === currentSlide);
+
+                self.addEventListener('fetch', function(event) {
+                    event.respondWith(
+                        caches.match(event.request)
+                            .then(function(response) {
+                                if (response) {
+                                    return response;
+                                }
+                                
+                                return fetch(event.request).then(function(response) {
+                                    if(!response || response.status !== 200 || response.type !== 'basic') {
+                                        return response;
+                                    }
+                                    
+                                    var responseToCache = response.clone();
+                                    
+                                    caches.open(CACHE_NAME)
+                                        .then(function(cache) {
+                                            cache.put(event.request, responseToCache);
+                                        });
+                                    
+                                    return response;
+                                });
+                            })
+                    );
                 });
-                
-                // Обновление прогресс-бара
-                progress.style.width = `${(currentSlide / (slides.length - 1)) * 100}%`;
-                
-                // Обновление номера слайда
-                document.querySelectorAll('.slide-number').forEach((el, i) => {
-                    if (i === currentSlide) {
-                        el.textContent = `${i+1}/${slides.length}`;
-                    }
+
+                self.addEventListener('activate', function(event) {
+                    event.waitUntil(
+                        caches.keys().then(function(cacheNames) {
+                            return Promise.all(
+                                cacheNames.map(function(cacheName) {
+                                    if (cacheName !== CACHE_NAME) {
+                                        return caches.delete(cacheName);
+                                    }
+                                })
+                            );
+                        })
+                    );
                 });
-            }
+            `;
             
-            // Обработчики кнопок навигации
-            prevBtn.addEventListener('click', () => {
-                if (currentSlide > 0) {
-                    goToSlide(currentSlide - 1);
-                }
-            });
+            // Создаем Blob из кода Service Worker
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swURL = URL.createObjectURL(blob);
             
-            nextBtn.addEventListener('click', () => {
-                if (currentSlide < slides.length - 1) {
-                    goToSlide(currentSlide + 1);
-                }
-            });
-            
-            // Обработчики клавиатуры
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-                    if (currentSlide > 0) {
-                        goToSlide(currentSlide - 1);
-                    }
-                } else if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
-                    if (currentSlide < slides.length - 1) {
-                        goToSlide(currentSlide + 1);
-                    }
-                } else if (e.key === 'Home') {
-                    goToSlide(0);
-                } else if (e.key === 'End') {
-                    goToSlide(slides.length - 1);
-                } else if (e.key === 'f' || e.key === 'F') {
-                    toggleFullscreen();
-                }
-            });
-            
-            // Полноэкранный режим
-            function toggleFullscreen() {
-                if (!document.fullscreenElement) {
-                    document.documentElement.requestFullscreen().catch(err => {
-                        console.error(`Ошибка при включении полноэкранного режима: ${err.message}`);
-                    });
-                } else {
-                    if (document.exitFullscreen) {
-                        document.exitFullscreen();
-                    }
-                }
-            }
-            
-            fullscreenBtn.addEventListener('click', toggleFullscreen);
-            
-            // Справка
-            helpBtn.addEventListener('click', () => {
-                alert('Управление презентацией:\n\n← → или Пробел - навигация по слайдам\nF - полноэкранный режим\nHome/End - к первому/последнему слайду\n\nКликните на индикаторы внизу для быстрого перехода к слайду');
-            });
-            
-            // Инициализация прогресс-бара
-            progress.style.width = `${(currentSlide / (slides.length - 1)) * 100}%`;
-            
-            // Добавление анимаций для первого слайда
-            setTimeout(() => {
-                slides[0].querySelectorAll('.animate-in').forEach((el, i) => {
-                    if (i > 0) {
-                        el.classList.add(`delay-${Math.min(i, 4)}`);
-                    }
+            // Регистрируем Service Worker
+            navigator.serviceWorker.register(swURL)
+                .then(function(registration) {
+                    console.log('Service Worker зарегистрирован:', registration);
+                })
+                .catch(function(error) {
+                    console.log('Ошибка регистрации Service Worker:', error);
                 });
-            }, 500);
-        });
+        }
     </script>
 </body>
 </html>
