@@ -5185,10 +5185,11 @@ async function openSurah(surahNumber) {
         // === ИСПРАВЛЕННЫЕ АУДИО ФУНКЦИИ С НОВЫМ API ===
 
         // ИСПРАВЛЕННАЯ ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ АЯТА
-        async function playAyah(ayahNumber, surahNumber = currentSurah) {
-            if (!audioInitialized) {
+         function playAyah(ayahNumber, surahNumber = currentSurah) {
+            // ИСПРАВЛЕНИЕ: Проверяем, было ли взаимодействие пользователя
+            if (!userInteracted) {
                 showToast('Нажмите на аят еще раз для воспроизведения', 'warning');
-                initializeAudio();
+                userInteracted = true;
                 return;
             }
             
@@ -5200,84 +5201,68 @@ async function openSurah(surahNumber) {
             stopAudio();
             currentAyah = ayahNumber;
             
-            try {
-                // Формируем URL для нового API
-                const audioUrl = getAyahAudioUrl(surahNumber, ayahNumber);
-                
-                if (!audioUrl) {
-                    throw new Error('Не удалось сформировать URL для аудио');
-                }
-                
-                // Создаем аудио элемент
-                currentAudio = new Audio();
-                currentAudio.src = audioUrl;
-                
-                // Добавляем обработчики для PWA
-                currentAudio.setAttribute('playsinline', '');
-                currentAudio.setAttribute('webkit-playsinline', '');
-                currentAudio.preload = 'auto';
-                
-                // Пытаемся воспроизвести
-                const playPromise = currentAudio.play();
-                
-                if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        // Обновляем UI
-                        const playBtn = document.getElementById('play-btn');
-                        if (playBtn) {
-                            playBtn.classList.add('playing');
-                            playBtn.textContent = '⏸️';
-                        }
-                        isPlaying = true;
-                        
-                        // Подсвечиваем текущий аят
-                        highlightCurrentAyah(ayahNumber);
-                        
-                        showToast('Воспроизведение аята...', 'success');
-                    }).catch(error => {
-                        console.error('Ошибка воспроизведения:', error);
-                        showToast('Ошибка воспроизведения. Проверьте подключение к интернету', 'error');
-                        stopAudio();
-                    });
-                }
-                
-                // Обработчики событий аудио
-                currentAudio.addEventListener('ended', function() {
-                    stopAudio();
-                    showToast('Воспроизведение завершено', 'success');
+            // Создаем аудио элемент
+            currentAudio = new Audio();
+            
+            // ИСПРАВЛЕНИЕ: Формируем правильный URL для API Al Quran Cloud
+            // Используем правильный формат для выбранного чтеца
+            let audioUrl;
+            
+            // Формируем URL в зависимости от выбранного чтеца
+            switch(currentReciter) {
+                case 'ar.alafasy':
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber}/${ayahNumber}.mp3`;
+                    break;
+                case 'ar.husary':
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.husary/${surahNumber}/${ayahNumber}.mp3`;
+                    break;
+                case 'ar.hudhaify':
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.hudhaify/${surahNumber}/${ayahNumber}.mp3`;
+                    break;
+                case 'ar.abdulbasit':
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.abdulbasit/${surahNumber}/${ayahNumber}.mp3`;
+                    break;
+                case 'ar.mahermuaiqly':
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.mahermuaiqly/${surahNumber}/${ayahNumber}.mp3`;
+                    break;
+                default:
+                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber}/${ayahNumber}.mp3`;
+            }
+            
+            // Загружаем и воспроизводим аудио
+            currentAudio.src = audioUrl;
+            
+            // ИСПРАВЛЕНИЕ: Добавляем обработчик для PWA
+            currentAudio.setAttribute('playsinline', '');
+            currentAudio.setAttribute('webkit-playsinline', '');
+            
+            // Пытаемся воспроизвести
+            const playPromise = currentAudio.play();
+            
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Обновляем UI
+                    document.getElementById('play-btn').classList.add('playing');
+                    document.getElementById('play-btn').textContent = '⏸️';
+                    isPlaying = true;
+                    
+                    // Подсвечиваем текущий аят
+                    highlightCurrentAyah(ayahNumber);
+                }).catch(error => {
+                    console.error('Ошибка воспроизведения:', error);
+                    showToast('Нажмите на аят еще раз для воспроизведения', 'warning');
                 });
-                
-                currentAudio.addEventListener('error', function(e) {
-                    console.error('Ошибка аудио:', e);
-                    showToast('Ошибка загрузки аудио. Попробуйте другого чтеца', 'error');
-                    stopAudio();
-                });
-                
-                currentAudio.addEventListener('canplaythrough', function() {
-                    console.log('Аудио готово к воспроизведению');
-                });
-                
-            } catch (error) {
-                console.error('Ошибка при воспроизведении аята:', error);
+            }
+            
+            // Обработчики событий аудио
+            currentAudio.addEventListener('ended', function() {
+                stopAudio();
+            });
+            
+            currentAudio.addEventListener('error', function() {
                 showToast('Ошибка воспроизведения аята', 'error');
                 stopAudio();
-            }
-        }
-
-        // Функция для формирования URL аудио
-        function getAyahAudioUrl(surahNumber, ayahNumber) {
-            const reciter = RECITERS[currentReciter];
-            if (!reciter) {
-                console.error('Чтец не найден:', currentReciter);
-                return null;
-            }
-            
-            // Форматируем номера для URL (добавляем ведущие нули)
-            const formattedSurah = surahNumber.toString().padStart(3, '0');
-            const formattedAyah = ayahNumber.toString().padStart(3, '0');
-            
-            // Формируем URL в зависимости от чтеца
-            return `${reciter.baseUrl}/${formattedSurah}${formattedAyah}.mp3`;
+            });
         }
 
         function playSurahAudio(surahNumber) {
@@ -5302,11 +5287,8 @@ async function openSurah(surahNumber) {
             }
             
             isPlaying = false;
-            const playBtn = document.getElementById('play-btn');
-            if (playBtn) {
-                playBtn.classList.remove('playing');
-                playBtn.textContent = '▶️';
-            }
+            document.getElementById('play-btn').classList.remove('playing');
+            document.getElementById('play-btn').textContent = '▶️';
             
             // Убираем подсветку с текущего аята
             removeAyahHighlight();
