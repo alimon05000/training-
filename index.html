@@ -2208,8 +2208,6 @@
             display: flex;
             align-items: center;
             gap: 0.25rem;
-            cursor: pointer;
-            transition: var(--transition);
         }
 
         body.dark-theme .requirement {
@@ -2219,11 +2217,6 @@
         .requirement.completed {
             background: var(--success);
             color: white;
-        }
-
-        .requirement:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-sm);
         }
 
         .level-progress {
@@ -2427,88 +2420,6 @@
         body.dark-theme .level-10 .level-card {
             background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(124, 58, 237, 0.2));
         }
-
-        /* Стили для заблокированных уровней */
-        .level-card.locked {
-            opacity: 0.6;
-            filter: grayscale(0.7);
-        }
-
-        .level-card.locked .level-requirements {
-            display: none;
-        }
-
-        .level-card.locked .level-progress {
-            display: none;
-        }
-
-        .locked-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            border-radius: var(--radius-md);
-        }
-
-        /* Стили для отметки страниц в режиме чтения */
-        .page-mark-button {
-            background: var(--accent-gold);
-            color: white;
-            border: none;
-            border-radius: var(--radius-md);
-            padding: 0.5rem 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .page-mark-button:hover {
-            background: #e6a429;
-        }
-
-        .page-mark-button.marked {
-            background: var(--success);
-        }
-
-        /* Анимация разблокировки уровня */
-        @keyframes confetti {
-            0% { transform: translateY(0) rotate(0); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        .confetti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: var(--accent-gold);
-            opacity: 0;
-            z-index: 4000;
-            animation: confetti 2s ease-out forwards;
-        }
-
-        /* Уникальные темы для каждого уровня */
-        .level-theme-1 { --primary-main: #10B981; --primary-dark: #059669; }
-        .level-theme-2 { --primary-main: #0EA5E9; --primary-dark: #0284C7; }
-        .level-theme-3 { --primary-main: #8B5CF6; --primary-dark: #7C3AED; }
-        .level-theme-4 { --primary-main: #F59E0B; --primary-dark: #D97706; }
-        .level-theme-5 { --primary-main: #EF4444; --primary-dark: #DC2626; }
-        .level-theme-6 { --primary-main: #EC4899; --primary-dark: #DB2777; }
-        .level-theme-7 { --primary-main: #06B6D4; --primary-dark: #0891B2; }
-        .level-theme-8 { --primary-main: #84CC16; --primary-dark: #65A30D; }
-        .level-theme-9 { --primary-main: #F97316; --primary-dark: #EA580C; }
-        .level-theme-10 { --primary-main: #8B5CF6; --primary-dark: #7C3AED; }
     </style>
 </head>
 <body>
@@ -2937,7 +2848,6 @@
                         <option value="ar.husary">Махмуд Халиль Аль-Хусари</option>
                         <option value="ar.hudhaify">Али ибн Абдуррахман Аль-Хузейфи</option>
                         <option value="ar.abdulbasit">Абдульбасит Абдуссамад</option>
-                        <option value="ar.mahermuaiqly">Муайкли</option>
                     </select>
                 </div>
                 <span id="current-reciter">Выберите чтеца</span>
@@ -2985,9 +2895,6 @@
                     <!-- Содержимое страницы будет загружено здесь -->
                 </div>
                 <div class="page-number" id="page-number">Страница 1</div>
-                <button class="page-mark-button" id="page-mark-button" onclick="togglePageMark()">
-                    <span>📌</span> Отметить страницу
-                </button>
             </div>
         </div>
     </div>
@@ -3254,7 +3161,7 @@
                     source: "Бухари 6363"
                 },
                 {
-                    arabic: "اللَّهُمَّ إِنِّi أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ وَأَعُوذُ بِكَ مِنْ شَرِّ هَذِهِ اللَّيْلَةِ",
+                    arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ وَأَعُوذُ بِكَ مِنْ شَرِّ هَذِهِ اللَّيْلَةِ",
                     translation: "О Аллах, я прошу у Тебя блага этой ночи и прибегаю к Тебе от зла этой ночи",
                     source: "Абу Дауд 5046"
                 }
@@ -3328,7 +3235,7 @@
                 requirements: [
                     { type: "pages", target: 50, completed: false, description: "Прочитать 50 страниц Корана" },
                     { type: "surah", target: 3, completed: false, description: "Выучить 3 короткие суры" },
-                    { type: "prayer", target: 21, completed: false, description: "Прочитать биографию одного из сподвижников" },
+                    { type: "prayer", target: 21, completed: false, description: "Совершить 21 намаз вовремя" },
                     { type: "hadith", target: 5, completed: false, description: "Изучить 5 достоверных хадисов" }
                 ],
                 dua: "О Аллах, прибавь мне знания и сделай его полезным",
@@ -3357,7 +3264,7 @@
                     { type: "pages", target: 300, completed: false, description: "Прочитать 300 страниц Корана" },
                     { type: "juz", target: 1, completed: false, description: "Завершить чтение 1 джуза" },
                     { type: "companions", target: 10, completed: false, description: "Изучить о 10 сподвижниках" },
-                    { type: "tajweed", target: 1, completed: false, description: "Изучить основы таджвида" }
+                    { type: "tajweed", target: 1, completed: false, description: "Изучить основы тажвида" }
                 ],
                 dua: "О Аллах, укрась меня благородным нравом и полезным знанием",
                 unlocked: false
@@ -3371,7 +3278,7 @@
                     { type: "pages", target: 500, completed: false, description: "Прочитать 500 страниц Корана" },
                     { type: "juz", target: 3, completed: false, description: "Завершить чтение 3 джузов" },
                     { type: "sunnah", target: 15, completed: false, description: "Внедрить 15 сунн в жизнь" },
-                    { type: "community", target: 5, completed: false, description: "Выучить битву при Ухуде" }
+                    { type: "community", target: 5, completed: false, description: "Помочь 5 людям в религии" }
                 ],
                 dua: "О Аллах, сделай меня искренним в словах и делах",
                 unlocked: false
@@ -3384,16 +3291,16 @@
                 requirements: [
                     { type: "pages", target: 800, completed: false, description: "Прочитать 800 страниц Корана" },
                     { type: "juz", target: 6, completed: false, description: "Завершить чтение 6 джузов" },
-                    { type: "teaching", target: 3, completed: false, description: "Выучить битву при Бадре" },
-                    { type: "article", target: 1, completed: false, description: "Изучить биографию всех четырех праведных халифов" }
+                    { type: "teaching", target: 3, completed: false, description: "Обучить 3 человека основам" },
+                    { type: "article", target: 1, completed: false, description: "Написать статью о исламе" }
                 ],
-                dua: "О Аллах, укрепи меня на прямом пути",
+                dua: "О Аллах, сделай меня причиной guidance для других",
                 unlocked: false
             },
             {
                 id: 7,
-                name: "Стремящийся к знанию",
-                description: "Стремящийся к пониманию Корана и Сунны",
+                name: "Глубоко знающий",
+                description: "Вы понимаете глубины Корана и Сунны",
                 icon: "🔍",
                 requirements: [
                     { type: "pages", target: 1200, completed: false, description: "Прочитать 1200 страниц Корана" },
@@ -3413,7 +3320,7 @@
                     { type: "pages", target: 2000, completed: false, description: "Прочитать 2000 страниц Корана" },
                     { type: "juz", target: 15, completed: false, description: "Завершить чтение 15 джузов" },
                     { type: "character", target: 10, completed: false, description: "Улучшить 10 качеств характера" },
-                    { type: "service", target: 10, completed: false, description: "Совершить три дня подряд духа намаз" }
+                    { type: "service", target: 10, completed: false, description: "Совершить 10 услуг обществу" }
                 ],
                 dua: "О Аллах, сделай меня среди праведных рабов Твоих",
                 unlocked: false
@@ -3421,13 +3328,13 @@
             {
                 id: 9,
                 name: "Продвинутый",
-                description: "Вы продвинулись в понимании и старании. Продолжайте",
+                description: "Вы достигли высокого уровня понимания и практики",
                 icon: "🚀",
                 requirements: [
                     { type: "pages", target: 3500, completed: false, description: "Прочитать 3500 страниц Корана" },
                     { type: "juz", target: 25, completed: false, description: "Завершить чтение 25 джузов" },
                     { type: "memorization", target: 2, completed: false, description: "Запомнить 2 джуза Корана" },
-                    { type: "leadership", target: 5, completed: false, description: "Выучить биографию любого из сподвижников" }
+                    { type: "leadership", target: 5, completed: false, description: "Возглавить 5 религиозных мероприятий" }
                 ],
                 dua: "О Аллах, укрепи меня на прямом пути до конца жизни",
                 unlocked: false
@@ -3435,13 +3342,13 @@
             {
                 id: 10,
                 name: "Мастер",
-                description: "Вы освоили важные основы понимания. Просите Аллаха укрепить и приумножить это благо",
+                description: "Вы достигли вершины духовного развития",
                 icon: "👑",
                 requirements: [
                     { type: "pages", target: 6040, completed: false, description: "Прочитать весь Коран (6040 страниц)" },
                     { type: "quran", target: 1, completed: false, description: "Завершить чтение всего Корана" },
-                    { type: "ramadan", target: 1, completed: false, description: "Подготовиться и пройти Рамадан наилучшим образом" },
-                    { type: "legacy", target: 1, completed: false, description: "Выучить биографию Пророка" }
+                    { type: "ramadan", target: 1, completed: false, description: "Подготовиться и пройти Рамадан" },
+                    { type: "legacy", target: 1, completed: false, description: "Оставить наследие в общине" }
                 ],
                 dua: "О Аллах, прими мои скромные старания и сделай меня из числа обитателей Рая",
                 unlocked: false
@@ -3471,14 +3378,8 @@
             eventsLed: 0,
             quranCompleted: false,
             ramadanCompleted: false,
-            legacyLeft: false,
-            // Добавляем хранение состояния отдельных требований
-            levelRequirements: {}
+            legacyLeft: false
         };
-
-        // Переменные для отметки страниц
-        let markedPages = JSON.parse(localStorage.getItem('markedPages')) || [];
-        let currentPageMarked = false;
 
         // === ОСНОВНЫЕ ФУНКЦИИ НАВИГАЦИИ ===
 
@@ -3515,9 +3416,6 @@
             if (tabId === 'levels-tab' || tabId === 'profile-tab') {
                 loadLevels();
             }
-            
-            // Применяем тему текущего уровня
-            applyLevelTheme();
         }
 
         function showToast(message, type = 'success') {
@@ -3592,7 +3490,6 @@
             updateDailyVerse();
             loadLevels();
             setupBookMode();
-            applyLevelTheme();
             
             // ИСПРАВЛЕНИЕ: Добавляем обработчик для отслеживания взаимодействия пользователя
             document.addEventListener('click', function() {
@@ -4417,9 +4314,6 @@
                     // Применяем сохраненный размер шрифта
                     applyBookFontSize();
                     
-                    // Обновляем состояние кнопки отметки страницы
-                    updatePageMarkButton();
-                    
                 } else {
                     throw new Error('Не удалось загрузить страницу Корана');
                 }
@@ -4465,72 +4359,6 @@
             }
         }
 
-        // === ФУНКЦИИ ДЛЯ ОТМЕТКИ СТРАНИЦ ===
-
-        function togglePageMark() {
-            const pageMarkButton = document.getElementById('page-mark-button');
-            
-            if (currentPageMarked) {
-                // Убираем отметку
-                markedPages = markedPages.filter(page => page !== currentPage);
-                pageMarkButton.classList.remove('marked');
-                pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
-                showToast('Страница удалена из отмеченных', 'warning');
-            } else {
-                // Добавляем отметку
-                if (!markedPages.includes(currentPage)) {
-                    markedPages.push(currentPage);
-                }
-                pageMarkButton.classList.add('marked');
-                pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
-                showToast('Страница отмечена!', 'success');
-                
-                // ИСПРАВЛЕНИЕ: Автоматически отмечаем предыдущие страницы
-                markPreviousPages(currentPage);
-                
-                // Обновляем статистику прочитанных страниц
-                updateReadingProgressAfterPage();
-            }
-            
-            currentPageMarked = !currentPageMarked;
-            localStorage.setItem('markedPages', JSON.stringify(markedPages));
-        }
-
-        // ИСПРАВЛЕНИЕ: Функция для автоматической отметки предыдущих страниц
-        function markPreviousPages(currentPage) {
-            for (let i = 1; i < currentPage; i++) {
-                if (!markedPages.includes(i)) {
-                    markedPages.push(i);
-                }
-            }
-            localStorage.setItem('markedPages', JSON.stringify(markedPages));
-            
-            // Обновляем статистику прочитанных страниц
-            userProgress.pagesRead = markedPages.length;
-            localStorage.setItem('userProgress', JSON.stringify(userProgress));
-            
-            // Обновляем отображение прогресса
-            updateQuranProgressDisplay();
-            
-            // Проверяем требования уровней
-            checkLevelRequirements();
-            
-            showToast(`Отмечены страницы 1-${currentPage}`, 'success');
-        }
-
-        function updatePageMarkButton() {
-            const pageMarkButton = document.getElementById('page-mark-button');
-            currentPageMarked = markedPages.includes(currentPage);
-            
-            if (currentPageMarked) {
-                pageMarkButton.classList.add('marked');
-                pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
-            } else {
-                pageMarkButton.classList.remove('marked');
-                pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
-            }
-        }
-
         // === АУДИО ФУНКЦИИ ===
 
         function playAyah(ayahNumber, surahNumber = currentSurah) {
@@ -4552,65 +4380,55 @@
             // Создаем аудио элемент
             currentAudio = new Audio();
             
-            // ИСПРАВЛЕНИЕ: Формируем правильный URL для API Al Quran Cloud
-            // Используем правильный формат для выбранного чтеца
-            let audioUrl;
+            // Формируем URL для API Al Quran Cloud
+            const audioUrl = `https://api.alquran.cloud/v1/ayah/${surahNumber}:${ayahNumber}/${currentReciter}`;
             
-            // Формируем URL в зависимости от выбранного чтеца
-            switch(currentReciter) {
-                case 'ar.alafasy':
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber}/${ayahNumber}.mp3`;
-                    break;
-                case 'ar.husary':
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.husary/${surahNumber}/${ayahNumber}.mp3`;
-                    break;
-                case 'ar.hudhaify':
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.hudhaify/${surahNumber}/${ayahNumber}.mp3`;
-                    break;
-                case 'ar.abdulbasit':
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.abdulbasit/${surahNumber}/${ayahNumber}.mp3`;
-                    break;
-                case 'ar.mahermuaiqly':
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.mahermuaiqly/${surahNumber}/${ayahNumber}.mp3`;
-                    break;
-                default:
-                    audioUrl = `https://cdn.islamic.network/quran/audio/128/ar.alafasy/${surahNumber}/${ayahNumber}.mp3`;
-            }
-            
-            // Загружаем и воспроизводим аудио
-            currentAudio.src = audioUrl;
-            
-            // ИСПРАВЛЕНИЕ: Добавляем обработчик для PWA
-            currentAudio.setAttribute('playsinline', '');
-            currentAudio.setAttribute('webkit-playsinline', '');
-            
-            // Пытаемся воспроизвести
-            const playPromise = currentAudio.play();
-            
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Обновляем UI
-                    document.getElementById('play-btn').classList.add('playing');
-                    document.getElementById('play-btn').textContent = '⏸️';
-                    isPlaying = true;
-                    
-                    // Подсвечиваем текущий аят
-                    highlightCurrentAyah(ayahNumber);
-                }).catch(error => {
-                    console.error('Ошибка воспроизведения:', error);
-                    showToast('Нажмите на аят еще раз для воспроизведения', 'warning');
+            // Загружаем информацию об аяте для получения аудио URL
+            fetch(audioUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200 && data.data.audio) {
+                        currentAudio.src = data.data.audio;
+                        
+                        // ИСПРАВЛЕНИЕ: Добавляем обработчик для PWA
+                        currentAudio.setAttribute('playsinline', '');
+                        currentAudio.setAttribute('webkit-playsinline', '');
+                        
+                        // Пытаемся воспроизвести
+                        const playPromise = currentAudio.play();
+                        
+                        if (playPromise !== undefined) {
+                            playPromise.then(() => {
+                                // Обновляем UI
+                                document.getElementById('play-btn').classList.add('playing');
+                                document.getElementById('play-btn').textContent = '⏸️';
+                                isPlaying = true;
+                                
+                                // Подсвечиваем текущий аят
+                                highlightCurrentAyah(ayahNumber);
+                            }).catch(error => {
+                                console.error('Ошибка воспроизведения:', error);
+                                showToast('Нажмите на аят еще раз для воспроизведения', 'warning');
+                            });
+                        }
+                        
+                        // Обработчики событий аудио
+                        currentAudio.addEventListener('ended', function() {
+                            stopAudio();
+                        });
+                        
+                        currentAudio.addEventListener('error', function() {
+                            showToast('Ошибка воспроизведения аята', 'error');
+                            stopAudio();
+                        });
+                    } else {
+                        throw new Error('Аудио не найдено');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки аудио:', error);
+                    showToast('Ошибка загрузки аудио', 'error');
                 });
-            }
-            
-            // Обработчики событий аудио
-            currentAudio.addEventListener('ended', function() {
-                stopAudio();
-            });
-            
-            currentAudio.addEventListener('error', function() {
-                showToast('Ошибка воспроизведения аята', 'error');
-                stopAudio();
-            });
         }
 
         function playSurahAudio(surahNumber) {
@@ -4823,7 +4641,7 @@
 
         function createLevelCard(level) {
             const levelCard = document.createElement('div');
-            levelCard.className = `level-card level-${level.id} ${level.id === userProgress.currentLevel ? 'current' : ''} ${level.id > userProgress.currentLevel ? 'locked' : ''}`;
+            levelCard.className = `level-card level-${level.id} ${level.id === userProgress.currentLevel ? 'current' : ''}`;
             
             // Проверяем выполнение требований для этого уровня
             const requirementsStatus = checkLevelRequirementsStatus(level);
@@ -4835,147 +4653,99 @@
                     <div class="level-badge">Уровень ${level.id}</div>
                 </div>
                 <div class="level-description">${level.description}</div>
-                ${level.id <= userProgress.currentLevel ? `
-                    <div class="level-requirements">
-                        ${level.requirements.map(req => {
-                            const isCompleted = requirementsStatus.find(r => r.description === req.description)?.completed || false;
-                            return `
-                                <div class="requirement ${isCompleted ? 'completed' : ''}" 
-                                     onclick="toggleLevelRequirement(${level.id}, '${req.description}')">
-                                    ${isCompleted ? '✓' : '○'} ${req.description}
-                                </div>
-                            `;
-                        }).join('')}
-                    </div>
-                    <div class="level-progress">
-                        <div class="level-progress-fill" style="width: ${progress}%"></div>
-                    </div>
-                    ${level.id === userProgress.currentLevel && progress === 100 ? 
-                        `<button class="nav-button" style="margin-top: 1rem; width: 100%;" onclick="unlockNextLevel(${level.id})">
-                            Разблокировать следующий уровень
-                        </button>` : ''}
-                ` : `
-                    <div class="locked-overlay">
-                        🔒 Уровень заблокирован
-                    </div>
-                `}
+                <div class="level-requirements">
+                    ${level.requirements.map(req => {
+                        const isCompleted = requirementsStatus.find(r => r.description === req.description)?.completed || false;
+                        return `
+                            <div class="requirement ${isCompleted ? 'completed' : ''}">
+                                ${isCompleted ? '✓' : '○'} ${req.description}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+                <div class="level-progress">
+                    <div class="level-progress-fill" style="width: ${progress}%"></div>
+                </div>
+                ${level.id === userProgress.currentLevel && progress === 100 ? 
+                    `<button class="nav-button" style="margin-top: 1rem; width: 100%;" onclick="unlockNextLevel(${level.id})">
+                        Разблокировать следующий уровень
+                    </button>` : ''}
             `;
             
             return levelCard;
-        }
-
-        // ИСПРАВЛЕНИЕ: Функция для отметки выполнения отдельных требований уровня
-        function toggleLevelRequirement(levelId, requirementDescription) {
-            // Инициализируем хранилище требований, если его нет
-            if (!userProgress.levelRequirements) {
-                userProgress.levelRequirements = {};
-            }
-            
-            // Инициализируем требования для уровня, если их нет
-            if (!userProgress.levelRequirements[levelId]) {
-                userProgress.levelRequirements[levelId] = {};
-            }
-            
-            // Переключаем состояние требования
-            const currentState = userProgress.levelRequirements[levelId][requirementDescription] || false;
-            userProgress.levelRequirements[levelId][requirementDescription] = !currentState;
-            
-            // Сохраняем прогресс
-            localStorage.setItem('userProgress', JSON.stringify(userProgress));
-            
-            // Обновляем отображение уровней
-            loadLevels();
-            
-            // Показываем уведомление
-            if (!currentState) {
-                showToast('Требование выполнено!', 'success');
-            } else {
-                showToast('Требование отменено', 'warning');
-            }
-            
-            // Проверяем, можно ли разблокировать следующий уровень
-            checkLevelRequirements();
         }
 
         function checkLevelRequirementsStatus(level) {
             return level.requirements.map(req => {
                 let completed = false;
                 
-                // Сначала проверяем ручную отметку требования
-                if (userProgress.levelRequirements && 
-                    userProgress.levelRequirements[level.id] && 
-                    userProgress.levelRequirements[level.id][req.description]) {
-                    completed = true;
-                } else {
-                    // Затем проверяем автоматическое выполнение
-                    switch(req.type) {
-                        case 'pages':
-                            completed = userProgress.pagesRead >= req.target;
-                            break;
-                        case 'tasks':
-                            completed = userProgress.tasksCompleted >= req.target;
-                            break;
-                        case 'azkar':
-                            completed = userProgress.azkarMemorized >= req.target;
-                            break;
-                        case 'surah':
-                            completed = userProgress.surahsMemorized >= req.target;
-                            break;
-                        case 'prayer':
-                            completed = userProgress.prayersOnTime >= req.target;
-                            break;
-                        case 'fasting':
-                            completed = userProgress.fastingDays >= req.target;
-                            break;
-                        case 'charity':
-                            completed = userProgress.charityActs >= req.target;
-                            break;
-                        case 'companions':
-                            completed = userProgress.companionsStudied >= req.target;
-                            break;
-                        case 'tajweed':
-                            completed = userProgress.tajweedLearned;
-                            break;
-                        case 'sunnah':
-                            completed = userProgress.sunnahImplemented >= req.target;
-                            break;
-                        case 'community':
-                            completed = userProgress.communityHelped >= req.target;
-                            break;
-                        case 'teaching':
-                            completed = userProgress.peopleTaught >= req.target;
-                            break;
-                        case 'article':
-                            completed = userProgress.articlesWritten >= req.target;
-                            break;
-                        case 'tafsir':
-                            completed = userProgress.tafsirStudied >= req.target;
-                            break;
-                        case 'fiqh':
-                            completed = userProgress.fiqhLearned;
-                            break;
-                        case 'character':
-                            completed = userProgress.characterImproved >= req.target;
-                            break;
-                        case 'service':
-                            completed = userProgress.communityService >= req.target;
-                            break;
-                        case 'juz':
-                            completed = userProgress.juzMemorized >= req.target;
-                            break;
-                        case 'leadership':
-                            completed = userProgress.eventsLed >= req.target;
-                            break;
-                        case 'quran':
-                            completed = userProgress.quranCompleted;
-                            break;
-                        case 'ramadan':
-                            completed = userProgress.ramadanCompleted;
-                            break;
-                        case 'legacy':
-                            completed = userProgress.legacyLeft;
-                            break;
-                    }
+                switch(req.type) {
+                    case 'pages':
+                        completed = userProgress.pagesRead >= req.target;
+                        break;
+                    case 'tasks':
+                        completed = userProgress.tasksCompleted >= req.target;
+                        break;
+                    case 'azkar':
+                        completed = userProgress.azkarMemorized >= req.target;
+                        break;
+                    case 'surah':
+                        completed = userProgress.surahsMemorized >= req.target;
+                        break;
+                    case 'prayer':
+                        completed = userProgress.prayersOnTime >= req.target;
+                        break;
+                    case 'fasting':
+                        completed = userProgress.fastingDays >= req.target;
+                        break;
+                    case 'charity':
+                        completed = userProgress.charityActs >= req.target;
+                        break;
+                    case 'companions':
+                        completed = userProgress.companionsStudied >= req.target;
+                        break;
+                    case 'tajweed':
+                        completed = userProgress.tajweedLearned;
+                        break;
+                    case 'sunnah':
+                        completed = userProgress.sunnahImplemented >= req.target;
+                        break;
+                    case 'community':
+                        completed = userProgress.communityHelped >= req.target;
+                        break;
+                    case 'teaching':
+                        completed = userProgress.peopleTaught >= req.target;
+                        break;
+                    case 'article':
+                        completed = userProgress.articlesWritten >= req.target;
+                        break;
+                    case 'tafsir':
+                        completed = userProgress.tafsirStudied >= req.target;
+                        break;
+                    case 'fiqh':
+                        completed = userProgress.fiqhLearned;
+                        break;
+                    case 'character':
+                        completed = userProgress.characterImproved >= req.target;
+                        break;
+                    case 'service':
+                        completed = userProgress.communityService >= req.target;
+                        break;
+                    case 'juz':
+                        completed = userProgress.juzMemorized >= req.target;
+                        break;
+                    case 'leadership':
+                        completed = userProgress.eventsLed >= req.target;
+                        break;
+                    case 'quran':
+                        completed = userProgress.quranCompleted;
+                        break;
+                    case 'ramadan':
+                        completed = userProgress.ramadanCompleted;
+                        break;
+                    case 'legacy':
+                        completed = userProgress.legacyLeft;
+                        break;
                 }
                 
                 return {
@@ -5020,9 +4790,6 @@
             
             // Обновляем отображение
             loadLevels();
-            
-            // Применяем новую тему уровня
-            applyLevelTheme();
         }
 
         function showLevelUnlockAnimation(level) {
@@ -5036,32 +4803,10 @@
             levelDua.textContent = level.dua;
             
             animation.classList.add('active');
-            
-            // Создаем конфетти
-            createConfetti();
         }
 
         function closeLevelUnlock() {
             document.getElementById('level-unlock-animation').classList.remove('active');
-        }
-
-        function createConfetti() {
-            const colors = ['#10B981', '#0EA5E9', '#8B5CF6', '#F59E0B', '#EF4444', '#EC4899', '#06B6D4', '#84CC16', '#F97316'];
-            
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti';
-                confetti.style.left = Math.random() * 100 + 'vw';
-                confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 2 + 's';
-                
-                document.body.appendChild(confetti);
-                
-                // Удаляем конфетти после анимации
-                setTimeout(() => {
-                    confetti.remove();
-                }, 3000);
-            }
         }
 
         function updateCurrentLevelDisplay() {
@@ -5080,20 +4825,6 @@
 
         function showAchievements() {
             showToast('Раздел "Достижения" находится в разработке!', 'warning');
-        }
-
-        // === ФУНКЦИИ ДЛЯ ТЕМ УРОВНЕЙ ===
-
-        function applyLevelTheme() {
-            const currentLevel = userProgress.currentLevel;
-            const themeClass = `level-theme-${currentLevel}`;
-            
-            // Удаляем предыдущие темы
-            document.body.classList.remove('level-theme-1', 'level-theme-2', 'level-theme-3', 'level-theme-4', 'level-theme-5', 
-                                         'level-theme-6', 'level-theme-7', 'level-theme-8', 'level-theme-9', 'level-theme-10');
-            
-            // Применяем новую тему
-            document.body.classList.add(themeClass);
         }
 
         async function setupServiceWorker() {
