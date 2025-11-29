@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+вот мой код. Все отлично только сделай так чтоб выбрав суру в режиме чтения, страницу открывало обязательно правильно! и скинь полноценный код без единой обрезки и вырезки. Обязательно <!DOCTYPE html>
 <html lang="ru" dir="ltr">
 <head>
     <meta charset="UTF-8">
@@ -51,29 +51,6 @@
             /* Quran font sizes */
             --arabic-font-size: 2rem;
             --translation-font-size: 1rem;
-
-            /* Glass effect variables */
-            --c-glass: #bbbbbc;
-            --c-light: #fff;
-            --c-dark: #000;
-            --c-content: #224;
-            --c-action: #0052f5;
-            --c-bg: #E8E8E9;
-            --glass-reflex-dark: 1;
-            --glass-reflex-light: 1;
-            --saturation: 150%;
-        }
-
-        body.dark-theme {
-            --c-glass: #bbbbbc;
-            --c-light: #fff;
-            --c-dark: #000;
-            --c-content: #e1e1e1;
-            --c-action: #03d5ff;
-            --c-bg: #1b1b1d;
-            --glass-reflex-dark: 2;
-            --glass-reflex-light: 0.3;
-            --saturation: 150%;
         }
 
         /* === Base Styles === */
@@ -126,62 +103,6 @@
 
         body.dark-theme .app-container {
             background: var(--bg-dark);
-        }
-
-        /* === Glass Effect Components === */
-        .glass-container {
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-
-        .glass-filter {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: inherit;
-            z-index: 1;
-        }
-
-        .glass-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                135deg,
-                color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent) 0%,
-                color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 5%), transparent) 100%
-            );
-            z-index: 2;
-            pointer-events: none;
-        }
-
-        .glass-specular {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(
-                135deg,
-                transparent 0%,
-                color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 15%), transparent) 50%,
-                transparent 100%
-            );
-            z-index: 3;
-            pointer-events: none;
-        }
-
-        .glass-content {
-            position: relative;
-            z-index: 4;
         }
 
         /* === Tab Content === */
@@ -308,23 +229,14 @@
         /* === Progress Section === */
         .progress-section {
             padding: 1.5rem 1.25rem;
+            background: var(--bg-card-light);
             margin: 0.75rem;
             border-radius: var(--radius-lg);
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .progress-section {
+            background: var(--bg-card-dark);
         }
 
         .progress-header {
@@ -394,25 +306,21 @@
 
         /* === Today's Task === */
         .task-card {
+            background: var(--bg-card-light);
             margin: 0.75rem;
             border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
             overflow: hidden;
             transition: var(--transition);
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .task-card {
+            background: var(--bg-card-dark);
+        }
+
+        .task-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
         }
 
         .task-header {
@@ -573,6 +481,7 @@
         }
 
         .action-button {
+            background: var(--bg-card-light);
             border: none;
             border-radius: var(--radius-lg);
             padding: 1.25rem 0.5rem;
@@ -583,26 +492,17 @@
             flex-direction: column;
             align-items: center;
             gap: 0.75rem;
+            box-shadow: var(--shadow-sm);
             touch-action: manipulation;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .action-button {
+            background: var(--bg-card-dark);
         }
 
         .action-button:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .action-button.active {
@@ -648,21 +548,7 @@
             padding: 1.5rem;
             position: relative;
             overflow: hidden;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
         }
 
         body.dark-theme .verse-card {
@@ -755,25 +641,16 @@
         }
 
         .week-card {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
             border-left: 4px solid var(--primary-main);
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .week-card {
+            background: var(--bg-card-dark);
         }
 
         .week-header {
@@ -879,9 +756,11 @@
         }
 
         .surah-card {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.25rem;
             margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
             gap: 1rem;
@@ -889,24 +768,15 @@
             cursor: pointer;
             touch-action: manipulation;
             position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .surah-card {
+            background: var(--bg-card-dark);
         }
 
         .surah-card:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .surah-number {
@@ -975,24 +845,15 @@
         }
 
         .prayer-times {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 1rem;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .prayer-times {
+            background: var(--bg-card-dark);
         }
 
         .prayer-header {
@@ -1073,24 +934,15 @@
         }
 
         .community-card {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 1rem;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .community-card {
+            background: var(--bg-card-dark);
         }
 
         .community-title {
@@ -1192,29 +1044,21 @@
         }
 
         .dua-card {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.25rem;
             margin-bottom: 0.75rem;
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .dua-card {
+            background: var(--bg-card-dark);
         }
 
         .dua-card:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .dua-arabic {
@@ -1252,25 +1096,16 @@
         }
 
         .profile-card {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
             margin-bottom: 1rem;
+            box-shadow: var(--shadow-sm);
             text-align: center;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .profile-card {
+            background: var(--bg-card-dark);
         }
 
         .profile-avatar {
@@ -1333,23 +1168,14 @@
         }
 
         .settings-section {
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             padding: 1.5rem;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .settings-section {
+            background: var(--bg-card-dark);
         }
 
         .settings-title {
@@ -1434,27 +1260,20 @@
             bottom: 0;
             left: 0;
             right: 0;
+            background: var(--bg-card-light);
             display: flex;
             justify-content: space-around;
             padding: 0.75rem 0;
+            border-top: 1px solid var(--border-light);
             backdrop-filter: blur(10px);
             z-index: 1000;
             max-width: 480px;
             margin: 0 auto;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+        }
+
+        body.dark-theme .bottom-nav {
+            background: var(--bg-card-dark);
+            border-top-color: var(--border-dark);
         }
 
         .nav-item {
@@ -2282,23 +2101,14 @@
         /* === Стили для системы уровней === */
         .levels-section {
             padding: 1.5rem;
+            background: var(--bg-card-light);
             border-radius: var(--radius-lg);
             margin: 1rem 0.75rem;
-            position: relative;
-            background-color: color-mix(in srgb, var(--c-glass) 12%, transparent);
-            backdrop-filter: blur(8px) saturate(var(--saturation));
-            -webkit-backdrop-filter: blur(8px) saturate(var(--saturation));
-            box-shadow: 
-                inset 0 0 0 1px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 10%), transparent),
-                inset 1.8px 3px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 90%), transparent), 
-                inset -2px -2px 0px -2px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 80%), transparent), 
-                inset -3px -8px 1px -6px color-mix(in srgb, var(--c-light) calc(var(--glass-reflex-light) * 60%), transparent), 
-                inset -0.3px -1px 4px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 12%), transparent), 
-                inset -1.5px 2.5px 0px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 0px 3px 4px -2px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 20%), transparent), 
-                inset 2px -6.5px 1px -4px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 1px 5px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 10%), transparent), 
-                0px 6px 16px 0px color-mix(in srgb, var(--c-dark) calc(var(--glass-reflex-dark) * 8%), transparent);
+            box-shadow: var(--shadow-sm);
+        }
+
+        body.dark-theme .levels-section {
+            background: var(--bg-card-dark);
         }
 
         .levels-title {
@@ -2332,6 +2142,7 @@
             background: linear-gradient(135deg, rgba(11, 91, 63, 0.1), rgba(217, 180, 74, 0.05));
             border-left-color: var(--accent-gold);
             transform: scale(1.02);
+            box-shadow: var(--shadow-md);
         }
 
         .level-card.level-1 { border-left-color: #10B981; }
@@ -2412,6 +2223,7 @@
 
         .requirement:hover {
             transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
         }
 
         .level-progress {
@@ -2594,6 +2406,7 @@
         .level-9 .level-icon { background: linear-gradient(135deg, #F97316, #EA580C); }
         .level-10 .level-icon { 
             background: linear-gradient(135deg, #8B5CF6, #7C3AED, #6D28D9);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
         }
 
         .level-1 .level-card { border-left-color: #10B981; }
@@ -2703,9 +2516,9 @@
         }
         
         @keyframes unlockPulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1.02); }
+            0% { transform: scale(1); box-shadow: var(--shadow-sm); }
+            50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(217, 180, 74, 0.7); }
+            100% { transform: scale(1.02); box-shadow: var(--shadow-md); }
         }
         
         .level-glow {
@@ -2772,35 +2585,6 @@
         @keyframes progressFill {
             0% { width: 0%; }
             100% { width: var(--target-width); }
-        }
-
-        /* === ИСПРАВЛЕНИЯ ДЛЯ КЛИКАБЕЛЬНОСТИ === */
-        button, .nav-item, .action-button, .task-checkbox, .task-item, .surah-card, .surah-action-btn, .community-button, .profile-action-btn, .requirement, .ayah-arabic {
-            cursor: pointer !important;
-            -webkit-user-select: none !important;
-            user-select: none !important;
-            -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
-            touch-action: manipulation !important;
-        }
-
-        /* Улучшение отзывчивости для мобильных устройств */
-        @media (max-width: 768px) {
-            button, .nav-item, .action-button, .task-checkbox, .task-item, .surah-card, .surah-action-btn, .community-button, .profile-action-btn, .requirement, .ayah-arabic {
-                min-height: 44px !important;
-                min-width: 44px !important;
-            }
-        }
-
-        /* Улучшение визуальной обратной связи при нажатии */
-        button:active, .nav-item:active, .action-button:active, .task-checkbox:active, .task-item:active, .surah-card:active, .surah-action-btn:active, .community-button:active, .profile-action-btn:active, .requirement:active {
-            transform: scale(0.98) !important;
-            transition: transform 0.1s ease !important;
-        }
-
-        /* Убедимся, что все интерактивные элементы видны и доступны */
-        .theme-toggle, .verse-bookmark, .modal-close, .font-size-btn, .warm-light-toggle, .book-mode-toggle, .theme-toggle-quran, .play-btn, .nav-button, .page-mark-button {
-            position: relative !important;
-            z-index: 10 !important;
         }
     </style>
 </head>
@@ -3180,19 +2964,6 @@
                             <span class="slider"></span>
                         </label>
                     </div>
-
-                    <!-- Управление кэшем -->
-                    <div class="setting-item">
-                        <span class="setting-label">Управление кэшем</span>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="nav-button" onclick="forceRefreshCache()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                Очистить кэш
-                            </button>
-                            <button class="nav-button" onclick="showCacheInfo()" style="font-size: 0.8rem; padding: 0.5rem 1rem;">
-                                Информация
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -3243,7 +3014,7 @@
                         <option value="ar.husary">Махмуд Халиль Аль-Хусари</option>
                         <option value="ar.hudhaify">Али ибн Абдуррахман Аль-Хузейфи</option>
                         <option value="ar.abdulbasit">Абдульбасит Абдуссамад</option>
-                        <option value="ar.mahermuaiqly">Магер Аль-Муайкли</option>
+                        <option value="ar.mahermuaiqly">Муайкли</option>
                     </select>
                 </div>
                 <span id="current-reciter">Выберите чтеца</span>
@@ -3319,14 +3090,6 @@
         const RAMADAN_2026 = new Date('2026-02-18T00:00:00+03:00');
         const TOTAL_DAYS = 88;
 
-        // === ИСПРАВЛЕННЫЕ ПЕРЕМЕННЫЕ ДЛЯ КЭШИРОВАНИЯ ===
-        let cache = {
-            quranData: JSON.parse(localStorage.getItem('quranCache')) || {},
-            prayerTimes: JSON.parse(localStorage.getItem('prayerCache')) || {},
-            dailyVerse: JSON.parse(localStorage.getItem('dailyVerseCache')) || null,
-            lastUpdate: JSON.parse(localStorage.getItem('cacheLastUpdate')) || {}
-        };
-
         // Глобальные переменные
         let currentProgress = 0;
         let completedTasks = 0;
@@ -3348,37 +3111,12 @@
         let dailyVerse = JSON.parse(localStorage.getItem('dailyVerse')) || null;
         let dailyVerseDate = localStorage.getItem('dailyVerseDate') || null;
         
-        // Audio variables - ИСПРАВЛЕННЫЕ
+        // Audio variables
         let currentAudio = null;
         let isPlaying = false;
         let currentAyah = null;
         let currentReciter = 'ar.alafasy';
-        let audioInitialized = false;
-
-        // === ИСПРАВЛЕННЫЕ АУДИО API ===
-        const AUDIO_API_BASE = 'https://cdn.islamic.network/quran/audio/128';
-        const RECITERS = {
-            'ar.alafasy': {
-                name: 'Мишари Рашид Аль-Афаси',
-                baseUrl: `${AUDIO_API_BASE}/ar.alafasy`
-            },
-            'ar.husary': {
-                name: 'Махмуд Халиль Аль-Хусари', 
-                baseUrl: `${AUDIO_API_BASE}/ar.husary`
-            },
-            'ar.hudhaify': {
-                name: 'Али ибн Абдуррахман Аль-Хузейфи',
-                baseUrl: `${AUDIO_API_BASE}/ar.hudhaify`
-            },
-            'ar.abdulbasit': {
-                name: 'Абдульбасит Абдуссамад',
-                baseUrl: `${AUDIO_API_BASE}/ar.abdulbasit`
-            },
-            'ar.mahermuaiqly': {
-                name: 'Магер Аль-Муайкли',
-                baseUrl: `${AUDIO_API_BASE}/ar.mahermuaiqly`
-            }
-        };
+        let userInteracted = false;
 
         // Данные для подготовки
         const preparationData = [
@@ -3430,7 +3168,7 @@
                 theme: "Сосредоточенность и регулярность",
                 tasks: [
                     "Совершать все намазы вовремя",
-                    "Готовиться к намаз за 5 минут",
+                    "Готовиться к намазу за 5 минут",
                     "Читать дополнительные суннат-намазы",
                     "Улучшать концентрацию в намазе",
                     "Изучать значения читаемого в намазе",
@@ -3578,7 +3316,7 @@
             ],
             evening: [
                 {
-                    arabic: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ",
+                    arabic: "أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْdُ لِلَّهِ، لا إِلَهَ إِلاَّ اللَّهُ وَحْدَهُ لا شَرِيكَ لَهُ",
                     translation: "Мы дожили до вечера, и власть принадлежит Аллаху, хвала Аллаху, нет божества, кроме Аллаха, и нет у Него сотоварища",
                     source: "Муслим 2723"
                 },
@@ -3593,7 +3331,7 @@
                     source: "Бухари 6363"
                 },
                 {
-                    arabic: "اللَّهُمَّ إِنِّي أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ وَأَعُوذُ بِكَ مِنْ شَرِّ هَذِهِ اللَّيْلَةِ",
+                    arabic: "اللَّهُمَّ إِنِّi أَسْأَلُكَ خَيْرَ هَذِهِ اللَّيْلَةِ وَأَعُوذُ بِكَ مِنْ شَرِّ هَذِهِ اللَّيْلَةِ",
                     translation: "О Аллах, я прошу у Тебя блага этой ночи и прибегаю к Тебе от зла этой ночи",
                     source: "Абу Дауд 5046"
                 }
@@ -3819,133 +3557,6 @@
         let markedPages = JSON.parse(localStorage.getItem('markedPages')) || [];
         let currentPageMarked = false;
 
-        // === ФУНКЦИИ ДЛЯ УПРАВЛЕНИЯ КЭШЕМ ===
-
-        // Функция для проверки устаревания кэша
-        function isCacheValid(cacheKey, maxAgeMinutes = 60) {
-            if (!cache.lastUpdate[cacheKey]) return false;
-            
-            const lastUpdate = new Date(cache.lastUpdate[cacheKey]);
-            const now = new Date();
-            const diffMinutes = (now - lastUpdate) / (1000 * 60);
-            
-            return diffMinutes < maxAgeMinutes;
-        }
-
-        function loadPreparationData() {
-    const weekSection = document.getElementById('week-section');
-    if (!weekSection) return;
-    
-    weekSection.innerHTML = preparationData.map((week, index) => {
-        const completedCount = weeklyTasks[week.week] ? 
-            weeklyTasks[week.week].filter(task => task).length : 0;
-        
-        return `
-            <div class="week-card">
-                <div class="week-header">
-                    <h3 class="week-title">Неделя ${week.week}: ${week.title}</h3>
-                    <span class="week-progress">${completedCount}/7 выполнено</span>
-                </div>
-                <p class="week-theme">${week.theme}</p>
-                <div class="tasks-list">
-                    ${week.tasks.map((task, taskIndex) => {
-                        const isCompleted = weeklyTasks[week.week] && weeklyTasks[week.week][taskIndex];
-                        return `
-                            <div class="task-item ${isCompleted ? 'completed' : ''}" 
-                                 onclick="toggleTask(this, ${week.week}, ${taskIndex})">
-                                <div class="task-item-checkbox"></div>
-                                <span class="task-item-text">${task}</span>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-        
-        // Функция для обновления кэша
-        function updateCache(cacheKey, data) {
-            cache[cacheKey] = data;
-            cache.lastUpdate[cacheKey] = new Date().toISOString();
-            
-            // Сохраняем в localStorage
-            localStorage.setItem('quranCache', JSON.stringify(cache.quranData));
-            localStorage.setItem('prayerCache', JSON.stringify(cache.prayerTimes));
-            localStorage.setItem('dailyVerseCache', JSON.stringify(cache.dailyVerse));
-            localStorage.setItem('cacheLastUpdate', JSON.stringify(cache.lastUpdate));
-        }
-
-        // Функция для очистки устаревшего кэша
-        function clearExpiredCache() {
-            const now = new Date();
-            Object.keys(cache.lastUpdate).forEach(key => {
-                const lastUpdate = new Date(cache.lastUpdate[key]);
-                const diffHours = (now - lastUpdate) / (1000 * 60 * 60);
-                
-                // Очищаем кэш старше 24 часов
-                if (diffHours > 24) {
-                    delete cache[key];
-                    delete cache.lastUpdate[key];
-                }
-            });
-            
-            // Сохраняем обновленный кэш
-            localStorage.setItem('quranCache', JSON.stringify(cache.quranData));
-            localStorage.setItem('prayerCache', JSON.stringify(cache.prayerTimes));
-            localStorage.setItem('dailyVerseCache', JSON.stringify(cache.dailyVerse));
-            localStorage.setItem('cacheLastUpdate', JSON.stringify(cache.lastUpdate));
-        }
-
-        // Функция для принудительного обновления кэша
-        function forceRefreshCache() {
-            // Очищаем весь кэш
-            cache = {
-                quranData: {},
-                prayerTimes: {},
-                dailyVerse: null,
-                lastUpdate: {}
-            };
-            
-            localStorage.removeItem('quranCache');
-            localStorage.removeItem('prayerCache');
-            localStorage.removeItem('dailyVerseCache');
-            localStorage.removeItem('cacheLastUpdate');
-            
-            showToast('Кэш очищен. Данные будут загружены заново.', 'success');
-            
-            // Перезагружаем данные
-            setTimeout(() => {
-                loadQuranData();
-                loadPrayerTimes();
-                updateDailyVerse();
-            }, 1000);
-        }
-
-        // Функция для показа информации о кэше
-        function showCacheInfo() {
-            const cacheSize = getCacheSize();
-            const cacheEntries = Object.keys(cache.lastUpdate).length;
-            
-            showToast(`Кэш: ${cacheSize}, записей: ${cacheEntries}`, 'info');
-        }
-
-        // Функция для проверки размера кэша
-        function getCacheSize() {
-            let totalSize = 0;
-            
-            try {
-                totalSize += JSON.stringify(cache.quranData).length;
-                totalSize += JSON.stringify(cache.prayerTimes).length;
-                totalSize += JSON.stringify(cache.dailyVerse).length;
-                totalSize += JSON.stringify(cache.lastUpdate).length;
-                
-                return (totalSize / 1024).toFixed(2) + ' KB';
-            } catch (error) {
-                return 'Неизвестно';
-            }
-        }
-
         // === ОСНОВНЫЕ ФУНКЦИИ НАВИГАЦИИ ===
 
         function showTab(tabId) {
@@ -3955,20 +3566,14 @@
             });
             
             // Показать выбранную вкладку
-            const targetTab = document.getElementById(tabId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
+            document.getElementById(tabId).classList.add('active');
             
             // Обновить навигацию
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            const activeNavItem = document.querySelector(`[data-tab="${tabId}"]`);
-            if (activeNavItem) {
-                activeNavItem.classList.add('active');
-            }
+            document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
             
             // Сброс прокрутки для PWA
             setTimeout(() => {
@@ -4043,9 +3648,6 @@
         });
 
         function initApp() {
-            // Очищаем устаревший кэш при запуске
-            clearExpiredCache();
-            
             setupTheme();
             setupCountdown();
             setupEventListeners();
@@ -4069,8 +3671,10 @@
             setupBookMode();
             applyLevelTheme();
             
-            // ИСПРАВЛЕНИЕ: Инициализируем аудио при первом взаимодействии
-            document.addEventListener('click', initializeAudio, { once: true });
+            // ИСПРАВЛЕНИЕ: Добавляем обработчик для отслеживания взаимодействия пользователя
+            document.addEventListener('click', function() {
+                userInteracted = true;
+            }, { once: true });
         }
 
         function setupTheme() {
@@ -4119,10 +3723,7 @@
             });
 
             // Отметка задачи как выполненной
-            const taskCheckbox = document.getElementById('taskCheckbox');
-            if (taskCheckbox) {
-                taskCheckbox.addEventListener('click', toggleMainTask);
-            }
+            document.getElementById('taskCheckbox').addEventListener('click', toggleMainTask);
 
             // Переключение тёмной темы через switch
             const darkThemeSwitch = document.getElementById('darkThemeSwitch');
@@ -4165,109 +3766,54 @@
             }, { passive: false });
 
             // ИСПРАВЛЕНИЕ: Закрытие модального окна при клике вне его
-            const surahModal = document.getElementById('surah-modal');
-            if (surahModal) {
-                surahModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeSurahModal();
-                    }
-                });
-            }
+            document.getElementById('surah-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSurahModal();
+                }
+            });
 
             // Закрытие модального окна при клике на пустое место
-            const modalContent = document.getElementById('modal-content');
-            if (modalContent) {
-                modalContent.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            }
+            document.getElementById('modal-content').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
             
             // Переключение темы чтения Корана
-            const quranThemeToggle = document.getElementById('quranThemeToggle');
-            if (quranThemeToggle) {
-                quranThemeToggle.addEventListener('click', toggleQuranReadingTheme);
-            }
+            document.getElementById('quranThemeToggle').addEventListener('click', toggleQuranReadingTheme);
             
             // Переключение книжного режима
-            const bookModeToggle = document.getElementById('bookModeToggle');
-            if (bookModeToggle) {
-                bookModeToggle.addEventListener('click', toggleBookMode);
-            }
+            document.getElementById('bookModeToggle').addEventListener('click', toggleBookMode);
             
             // ИСПРАВЛЕНИЕ: Добавляем обработчик для кнопки закрытия
-            const modalClose = document.querySelector('.modal-close');
-            if (modalClose) {
-                modalClose.addEventListener('click', closeSurahModal);
-            }
+            document.querySelector('.modal-close').addEventListener('click', closeSurahModal);
             
             // Обработчики для книжного режима
-            const bookModeModal = document.getElementById('book-mode-modal');
-            if (bookModeModal) {
-                bookModeModal.addEventListener('click', function(e) {
-                    if (e.target === this) {
-                        closeBookModeModal();
-                    }
-                });
-            }
+            document.getElementById('book-mode-modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeBookModeModal();
+                }
+            });
             
-            const bookModalContent = document.getElementById('book-modal-content');
-            if (bookModalContent) {
-                bookModalContent.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
-            }
+            document.getElementById('book-modal-content').addEventListener('click', function(e) {
+                e.stopPropagation();
+            });
             
-            const bookThemeToggle = document.getElementById('bookThemeToggle');
-            if (bookThemeToggle) {
-                bookThemeToggle.addEventListener('click', toggleBookTheme);
-            }
-            
-            const exitBookMode = document.getElementById('exitBookMode');
-            if (exitBookMode) {
-                exitBookMode.addEventListener('click', closeBookModeModal);
-            }
+            document.getElementById('bookThemeToggle').addEventListener('click', toggleBookTheme);
+            document.getElementById('exitBookMode').addEventListener('click', closeBookModeModal);
         }
 
         function setupAudioControls() {
             const playBtn = document.getElementById('play-btn');
             const reciterSelect = document.getElementById('reciter-select');
             
-            if (playBtn) {
-                playBtn.addEventListener('click', toggleAudio);
-            }
-            
-            if (reciterSelect) {
-                reciterSelect.addEventListener('change', function() {
-                    currentReciter = this.value;
-                    const currentReciterSpan = document.getElementById('current-reciter');
-                    if (currentReciterSpan) {
-                        currentReciterSpan.textContent = this.options[this.selectedIndex].text;
-                    }
-                    if (isPlaying) {
-                        stopAudio();
-                        playAyah(currentAyah);
-                    }
-                });
-            }
-        }
-
-        // ИСПРАВЛЕНИЕ: Функция для инициализации аудио
-        function initializeAudio() {
-            audioInitialized = true;
-            // Создаем и сразу останавливаем пустой аудио элемент
-            const silentAudio = new Audio();
-            silentAudio.src = 'data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmUgBjiN1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmUgBjiN1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmUgBjiN1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmUgBjiN1/LMeSw=';
-            silentAudio.volume = 0.01;
-            
-            const playPromise = silentAudio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    silentAudio.pause();
-                    silentAudio.currentTime = 0;
-                }).catch(error => {
-                    console.log('Аудио инициализация завершена');
-                });
-            }
+            playBtn.addEventListener('click', toggleAudio);
+            reciterSelect.addEventListener('change', function() {
+                currentReciter = this.value;
+                document.getElementById('current-reciter').textContent = this.options[this.selectedIndex].text;
+                if (isPlaying) {
+                    stopAudio();
+                    playAyah(currentAyah);
+                }
+            });
         }
 
         function toggleTheme() {
@@ -4280,33 +3826,29 @@
             const modalContent = document.getElementById('modal-content');
             const toggleButton = document.getElementById('quranThemeToggle');
             
-            if (modalContent && toggleButton) {
-                if (quranReadingTheme === 'default') {
-                    modalContent.classList.add('quran-reading-theme');
-                    toggleButton.textContent = 'Обычная тема';
-                    quranReadingTheme = 'pleasant';
-                } else {
-                    modalContent.classList.remove('quran-reading-theme');
-                    toggleButton.textContent = 'Приятная тема';
-                    quranReadingTheme = 'default';
-                }
-                
-                localStorage.setItem('quranReadingTheme', quranReadingTheme);
+            if (quranReadingTheme === 'default') {
+                modalContent.classList.add('quran-reading-theme');
+                toggleButton.textContent = 'Обычная тема';
+                quranReadingTheme = 'pleasant';
+            } else {
+                modalContent.classList.remove('quran-reading-theme');
+                toggleButton.textContent = 'Приятная тема';
+                quranReadingTheme = 'default';
             }
+            
+            localStorage.setItem('quranReadingTheme', quranReadingTheme);
         }
 
         function toggleBookTheme() {
             const modalContent = document.getElementById('book-modal-content');
             const toggleButton = document.getElementById('bookThemeToggle');
             
-            if (modalContent && toggleButton) {
-                if (modalContent.classList.contains('quran-reading-theme')) {
-                    modalContent.classList.remove('quran-reading-theme');
-                    toggleButton.textContent = 'Приятная тема';
-                } else {
-                    modalContent.classList.add('quran-reading-theme');
-                    toggleButton.textContent = 'Обычная тема';
-                }
+            if (modalContent.classList.contains('quran-reading-theme')) {
+                modalContent.classList.remove('quran-reading-theme');
+                toggleButton.textContent = 'Приятная тема';
+            } else {
+                modalContent.classList.add('quran-reading-theme');
+                toggleButton.textContent = 'Обычная тема';
             }
         }
 
@@ -4316,24 +3858,22 @@
             const audioPlayer = document.getElementById('audio-player');
             const surahNavigation = document.querySelector('.surah-navigation');
             
-            if (modalContent && toggleButton) {
-                bookModeEnabled = !bookModeEnabled;
-                localStorage.setItem('bookModeEnabled', bookModeEnabled);
-                
-                if (bookModeEnabled) {
-                    modalContent.classList.add('book-mode');
-                    toggleButton.textContent = 'Обычный режим';
-                    if (audioPlayer) audioPlayer.style.display = 'none';
-                    if (surahNavigation) surahNavigation.style.display = 'none';
-                } else {
-                    modalContent.classList.remove('book-mode');
-                    toggleButton.textContent = 'Книжный режим';
-                    if (audioPlayer) audioPlayer.style.display = 'flex';
-                    if (surahNavigation) surahNavigation.style.display = 'flex';
-                }
-                
-                showToast(bookModeEnabled ? 'Книжный режим включен' : 'Книжный режим выключен');
+            bookModeEnabled = !bookModeEnabled;
+            localStorage.setItem('bookModeEnabled', bookModeEnabled);
+            
+            if (bookModeEnabled) {
+                modalContent.classList.add('book-mode');
+                toggleButton.textContent = 'Обычный режим';
+                audioPlayer.style.display = 'none';
+                surahNavigation.style.display = 'none';
+            } else {
+                modalContent.classList.remove('book-mode');
+                toggleButton.textContent = 'Книжный режим';
+                audioPlayer.style.display = 'flex';
+                surahNavigation.style.display = 'flex';
             }
+            
+            showToast(bookModeEnabled ? 'Книжный режим включен' : 'Книжный режим выключен');
         }
 
         function toggleWarmLight() {
@@ -4343,19 +3883,17 @@
             const quranTab = document.getElementById('quran-tab');
             const toggleButton = document.querySelector('.warm-light-toggle');
             
-            if (quranTab && toggleButton) {
-                if (warmLightEnabled) {
-                    quranTab.classList.add('quran-reading-theme');
-                    toggleButton.textContent = 'Обычный свет';
-                    toggleButton.style.background = '#1C7A5C';
-                } else {
-                    quranTab.classList.remove('quran-reading-theme');
-                    toggleButton.textContent = 'Теплый свет';
-                    toggleButton.style.background = '';
-                }
-                
-                showToast(warmLightEnabled ? 'Теплый свет включен' : 'Теплый свет выключен');
+            if (warmLightEnabled) {
+                quranTab.classList.add('quran-reading-theme');
+                toggleButton.textContent = 'Обычный свет';
+                toggleButton.style.background = '#1C7A5C';
+            } else {
+                quranTab.classList.remove('quran-reading-theme');
+                toggleButton.textContent = 'Теплый свет';
+                toggleButton.style.background = '';
             }
+            
+            showToast(warmLightEnabled ? 'Теплый свет включен' : 'Теплый свет выключен');
         }
 
         function changeArabicFontSize(delta) {
@@ -4396,16 +3934,8 @@
             applyBookFontSize();
         }
 
-        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ОБНОВЛЕНИЯ АЯТА ДНЯ ===
         function updateDailyVerse() {
             const today = new Date().toDateString();
-            
-            // Проверяем кэш
-            if (cache.dailyVerse && cache.dailyVerse.date === today && isCacheValid('dailyVerse', 24 * 60)) {
-                console.log('Загружаем аят дня из кэша');
-                displayDailyVerse(cache.dailyVerse);
-                return;
-            }
             
             // Если аят дня не обновлялся сегодня или не существует
             if (!dailyVerse || dailyVerseDate !== today) {
@@ -4414,24 +3944,20 @@
                 dailyVerse = dailyVerses[randomIndex];
                 dailyVerseDate = today;
                 
-                // Обновляем кэш
-                updateCache('dailyVerse', { ...dailyVerse, date: today });
-                
-                displayDailyVerse(dailyVerse);
-            } else {
-                displayDailyVerse(dailyVerse);
+                // Сохраняем в localStorage
+                localStorage.setItem('dailyVerse', JSON.stringify(dailyVerse));
+                localStorage.setItem('dailyVerseDate', dailyVerseDate);
             }
-        }
-
-        function displayDailyVerse(verse) {
+            
+            // Обновляем отображение аята дня
             const verseArabic = document.querySelector('.verse-arabic');
             const verseTranslation = document.querySelector('.verse-translation');
             const verseSource = document.querySelector('.verse-source');
             
             if (verseArabic && verseTranslation && verseSource) {
-                verseArabic.textContent = verse.arabic;
-                verseTranslation.textContent = verse.translation;
-                verseSource.textContent = verse.source;
+                verseArabic.textContent = dailyVerse.arabic;
+                verseTranslation.textContent = dailyVerse.translation;
+                verseSource.textContent = dailyVerse.source;
             }
         }
 
@@ -4466,45 +3992,45 @@
             }
         }
 
-        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ПЕРЕКЛЮЧЕНИЯ ЗАДАЧ ===
-function toggleTask(taskElement, weekIndex, taskIndex) {
-    const isCompleted = taskElement.classList.contains('completed');
-    
-    if (!isCompleted) {
-        taskElement.classList.add('completed');
-        if (!weeklyTasks[weekIndex]) weeklyTasks[weekIndex] = [];
-        weeklyTasks[weekIndex][taskIndex] = true;
-        userProgress.tasksCompleted++;
-        showToast('Задача выполнена!', 'success');
-    } else {
-        taskElement.classList.remove('completed');
-        if (weeklyTasks[weekIndex]) weeklyTasks[weekIndex][taskIndex] = false;
-        userProgress.tasksCompleted = Math.max(0, userProgress.tasksCompleted - 1);
-        showToast('Задача отменена', 'warning');
-    }
-    
-    updateProgress();
-    updateStats();
-    localStorage.setItem('weeklyTasks', JSON.stringify(weeklyTasks));
-    localStorage.setItem('userProgress', JSON.stringify(userProgress));
-    
-    // Обновляем отображение прогресса недели
-    updateWeekProgress(weekIndex);
-    
-    // Проверяем требования уровней
-    checkLevelRequirements();
-}
-        function updateWeekProgress(weekIndex) {
-    const weekCard = document.querySelector(`.week-card:nth-child(${weekIndex + 1})`);
-    if (weekCard) {
-        const completedCount = weeklyTasks[weekIndex] ? 
-            weeklyTasks[weekIndex].filter(task => task).length : 0;
-        const progressElement = weekCard.querySelector('.week-progress');
-        if (progressElement) {
-            progressElement.textContent = `${completedCount}/7 выполнено`;
+        function toggleTask(taskElement, weekIndex, taskIndex) {
+            const isCompleted = taskElement.classList.contains('completed');
+            
+            if (!isCompleted) {
+                taskElement.classList.add('completed');
+                if (!weeklyTasks[weekIndex]) weeklyTasks[weekIndex] = [];
+                weeklyTasks[weekIndex][taskIndex] = true;
+                userProgress.tasksCompleted++;
+                showToast('Задача выполнена!', 'success');
+            } else {
+                taskElement.classList.remove('completed');
+                if (weeklyTasks[weekIndex]) weeklyTasks[weekIndex][taskIndex] = false;
+                userProgress.tasksCompleted = Math.max(0, userProgress.tasksCompleted - 1);
+                showToast('Задача отменена', 'warning');
+            }
+            
+            updateProgress();
+            updateStats();
+            localStorage.setItem('weeklyTasks', JSON.stringify(weeklyTasks));
+            localStorage.setItem('userProgress', JSON.stringify(userProgress));
+            
+            // Обновляем отображение прогресса недели
+            updateWeekProgress(weekIndex);
+            
+            // Проверяем требования уровней
+            checkLevelRequirements();
         }
-    }
-}
+
+        function updateWeekProgress(weekIndex) {
+            const weekCard = document.querySelector(`.week-card:nth-child(${weekIndex + 1})`);
+            if (weekCard) {
+                const completedCount = weeklyTasks[weekIndex] ? 
+                    weeklyTasks[weekIndex].filter(task => task).length : 0;
+                const progressElement = weekCard.querySelector('.week-progress');
+                if (progressElement) {
+                    progressElement.textContent = `${completedCount}/7 выполнено`;
+                }
+            }
+        }
 
         function calculateProgress() {
             // Рассчитываем прогресс на основе выполненных задач
@@ -4526,10 +4052,8 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
             const progressFill = document.getElementById('progressFill');
             const progressPercent = document.getElementById('progressPercent');
             
-            if (progressFill && progressPercent) {
-                progressFill.style.width = `${currentProgress}%`;
-                progressPercent.textContent = `${Math.round(currentProgress)}%`;
-            }
+            progressFill.style.width = `${currentProgress}%`;
+            progressPercent.textContent = `${Math.round(currentProgress)}%`;
         }
 
         function updateStats() {
@@ -4538,12 +4062,8 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
                 return sum + (weeklyTasks[week] ? weeklyTasks[week].filter(task => task).length : 0);
             }, 0);
             
-            const completedTasksEl = document.getElementById('completedTasks');
-            const quranPagesEl = document.getElementById('quranPages');
-            const streakDaysEl = document.getElementById('streakDays');
-            
-            if (completedTasksEl) completedTasksEl.textContent = userProgress.tasksCompleted;
-            if (quranPagesEl) quranPagesEl.textContent = userProgress.pagesRead;
+            document.getElementById('completedTasks').textContent = userProgress.tasksCompleted;
+            document.getElementById('quranPages').textContent = userProgress.pagesRead;
             
             // Рассчитываем серию выполненных дней подряд
             const dates = Object.keys(dailyTasks).sort();
@@ -4562,7 +4082,7 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
                 }
             }
             
-            if (streakDaysEl) streakDaysEl.textContent = streak;
+            document.getElementById('streakDays').textContent = streak;
         }
 
         function updateCurrentDate() {
@@ -4573,10 +4093,8 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
                 year: 'numeric',
                 weekday: 'long'
             };
-            const currentDateEl = document.getElementById('currentDate');
-            if (currentDateEl) {
-                currentDateEl.textContent = now.toLocaleDateString('ru-RU', options);
-            }
+            document.getElementById('currentDate').textContent = 
+                now.toLocaleDateString('ru-RU', options);
         }
 
         function updateDailyTask() {
@@ -4584,12 +4102,10 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
             const checkbox = document.getElementById('checkbox');
             
             // Проверяем, выполнена ли сегодняшняя задача
-            if (checkbox) {
-                if (dailyTasks[today]) {
-                    checkbox.classList.add('checked');
-                } else {
-                    checkbox.classList.remove('checked');
-                }
+            if (dailyTasks[today]) {
+                checkbox.classList.add('checked');
+            } else {
+                checkbox.classList.remove('checked');
             }
             
             // Обновляем задачу чтения Корана с учетом прогресса
@@ -4597,325 +4113,261 @@ function toggleTask(taskElement, weekIndex, taskIndex) {
             const daysPassed = Math.floor((new Date() - startDate) / (1000 * 60 * 60 * 24));
             const pagesToRead = Math.min(daysPassed + 1, 604); // 604 страницы в Коране
             
-            const taskTitle = document.getElementById('taskTitle');
-            const taskDescription = document.getElementById('taskDescription');
-            
-            if (taskTitle && taskDescription) {
-                taskTitle.textContent = `Прочитать ${pagesToRead} страниц Корана`;
-                taskDescription.textContent = 
-                    `Открой мусхаф и прочитай ${pagesToRead} страниц с медленным тажвидом. Постарайтесь понять смысл прочитанного и подумать над аятами.`;
-            }
+            document.getElementById('taskTitle').textContent = `Прочитать ${pagesToRead} страниц Корана`;
+            document.getElementById('taskDescription').textContent = 
+                `Открой мусхаф и прочитай ${pagesToRead} страниц с медленным тажвидом. Постарайтесь понять смысл прочитанного и подумать над аятами.`;
         }
 
         function updateReadingProgress() {
             const progressText = document.getElementById('reading-progress-text');
             
-            if (progressText) {
-                if (lastReadAyah.surah && lastReadAyah.ayah) {
-                    const surah = allSurahs.find(s => s.number === lastReadAyah.surah);
-                    if (surah) {
-                        progressText.textContent = `Вы остановились на суре ${surah.englishName} (${surah.name}), аят ${lastReadAyah.ayah}`;
-                    } else {
-                        progressText.textContent = `Вы остановились на суре ${lastReadAyah.surah}, аят ${lastReadAyah.ayah}`;
-                    }
+            if (lastReadAyah.surah && lastReadAyah.ayah) {
+                const surah = allSurahs.find(s => s.number === lastReadAyah.surah);
+                if (surah) {
+                    progressText.textContent = `Вы остановились на суре ${surah.englishName} (${surah.name}), аят ${lastReadAyah.ayah}`;
                 } else {
-                    progressText.textContent = 'Вы еще не начали чтение Корана';
+                    progressText.textContent = `Вы остановились на суре ${lastReadAyah.surah}, аят ${lastReadAyah.ayah}`;
                 }
+            } else {
+                progressText.textContent = 'Вы еще не начали чтение Корана';
             }
         }
 
         function updateQuranProgress() {
             const progressPercent = Math.round((quranProgress.readAyahs / quranProgress.totalAyahs) * 100);
-            const progressPercentEl = document.getElementById('quranProgressPercent');
-            const progressFillEl = document.getElementById('quranProgressFill');
+            document.getElementById('quranProgressPercent').textContent = `${progressPercent}%`;
+            document.getElementById('quranProgressFill').style.width = `${progressPercent}%`;
+            
             const progressText = document.getElementById('reading-progress-text');
-            
-            if (progressPercentEl) progressPercentEl.textContent = `${progressPercent}%`;
-            if (progressFillEl) progressFillEl.style.width = `${progressPercent}%`;
-            
-            if (progressText) {
-                progressText.textContent = `Прочитано ${quranProgress.readAyahs} из ${quranProgress.totalAyahs} аятов (${progressPercent}%)`;
-            }
+            progressText.textContent = `Прочитано ${quranProgress.readAyahs} из ${quranProgress.totalAyahs} аятов (${progressPercent}%)`;
         }
 
-        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ КОРАНА ===
-async function loadQuranData() {
-    const quranSection = document.getElementById('quran-section');
-    if (!quranSection) return;
-    
-    // Проверяем кэш
-    if (cache.quranData.surahs && isCacheValid('quranData', 120)) {
-        console.log('Загружаем Коран из кэша');
-        displayQuranData(cache.quranData.surahs);
-        return;
-    }
-    
-    quranSection.innerHTML = '<div class="loading">Загрузка Корана...</div>';
-    
-    try {
-        // Используем API для получения списка сур
-        const response = await fetch('https://api.alquran.cloud/v1/surah');
-        const data = await response.json();
-        
-        if (data.code === 200) {
-            allSurahs = data.data;
+        function loadPreparationData() {
+            const weekSection = document.getElementById('week-section');
+            weekSection.innerHTML = '';
             
-            // Обновляем кэш
-            updateCache('quranData', { surahs: allSurahs, timestamp: Date.now() });
+            preparationData.forEach((weekData, weekIndex) => {
+                const weekCard = document.createElement('div');
+                weekCard.className = 'week-card';
+                
+                // Подсчитываем выполненные задачи для этой недели
+                const completedCount = weeklyTasks[weekIndex] ? 
+                    weeklyTasks[weekIndex].filter(task => task).length : 0;
+                
+                weekCard.innerHTML = `
+                    <div class="week-header">
+                        <h3 class="week-title">Неделя ${weekData.week}: ${weekData.title}</h3>
+                        <span class="week-progress">${completedCount}/${weekData.tasks.length} выполнено</span>
+                    </div>
+                    <p class="week-theme">${weekData.theme}</p>
+                    <div class="tasks-list">
+                        ${weekData.tasks.map((task, taskIndex) => {
+                            const isCompleted = weeklyTasks[weekIndex] && weeklyTasks[weekIndex][taskIndex];
+                            return `
+                                <div class="task-item ${isCompleted ? 'completed' : ''}" 
+                                     onclick="toggleTask(this, ${weekIndex}, ${taskIndex})">
+                                    <div class="task-item-checkbox"></div>
+                                    <span class="task-item-text">${task}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+                
+                weekSection.appendChild(weekCard);
+            });
+        }
+
+        async function loadQuranData() {
+            const quranSection = document.getElementById('quran-section');
+            quranSection.innerHTML = '<div class="loading">Загрузка Корана...</div>';
             
-            displayQuranData(allSurahs);
-        } else {
-            throw new Error('Не удалось загрузить данные Корана');
+            try {
+                // Используем API для получения списка сур
+                const response = await fetch('https://api.alquran.cloud/v1/surah');
+                const data = await response.json();
+                
+                if (data.code === 200) {
+                    allSurahs = data.data;
+                    
+                    quranSection.innerHTML = allSurahs.map(surah => {
+                        const isBookmarked = bookmarks[surah.number];
+                        const isLastRead = lastReadAyah.surah === surah.number;
+                        
+                        return `
+                            <div class="surah-card" onclick="openSurah(${surah.number})">
+                                ${isBookmarked ? '<div class="bookmark-indicator">🔖</div>' : ''}
+                                ${isLastRead ? '<div class="last-read-indicator">📖</div>' : ''}
+                                <div class="surah-number">${surah.number}</div>
+                                <div class="surah-info">
+                                    <div class="surah-name">${surah.englishName} (${surah.name})</div>
+                                    <div class="surah-details">${surah.numberOfAyahs} аятов • ${surah.revelationType === 'Meccan' ? 'Мекканская' : 'Мединская'}</div>
+                                </div>
+                                <div class="surah-actions">
+                                    <button class="surah-action-btn" onclick="event.stopPropagation(); toggleBookmark(${surah.number})">🔖</button>
+                                    <button class="surah-action-btn" onclick="event.stopPropagation(); playSurahAudio(${surah.number})">🔊</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    throw new Error('Не удалось загрузить данные Корана');
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки Корана:', error);
+                showToast('Ошибка загрузки Корана', 'error');
+                // Запасной вариант - статические данные
+                loadFallbackQuranData();
+            }
         }
-    } catch (error) {
-        console.error('Ошибка загрузки Корана:', error);
-        
-        // Пробуем загрузить из кэша
-        if (cache.quranData.surahs) {
-            console.log('Используем устаревший кэш Корана');
-            displayQuranData(cache.quranData.surahs);
-            return;
-        }
-        
-        showToast('Ошибка загрузки Корана', 'error');
-        loadFallbackQuranData();
-    }
-}
-        function displayQuranData(surahs) {
-    const quranSection = document.getElementById('quran-section');
-    if (!quranSection) return;
-    
-    quranSection.innerHTML = surahs.map(surah => {
-        const isBookmarked = bookmarks[surah.number];
-        const isLastRead = lastReadAyah.surah === surah.number;
-        
-        return `
-            <div class="surah-card" onclick="openSurah(${surah.number})">
-                ${isBookmarked ? '<div class="bookmark-indicator">🔖</div>' : ''}
-                ${isLastRead ? '<div class="last-read-indicator">📖</div>' : ''}
-                <div class="surah-number">${surah.number}</div>
-                <div class="surah-info">
-                    <div class="surah-name">${surah.englishName} (${surah.name})</div>
-                    <div class="surah-details">${surah.numberOfAyahs} аятов • ${surah.revelationType === 'Meccan' ? 'Мекканская' : 'Мединская'}</div>
-                </div>
-                <div class="surah-actions">
-                    <button class="surah-action-btn" onclick="event.stopPropagation(); toggleBookmark(${surah.number})">🔖</button>
-                    <button class="surah-action-btn" onclick="event.stopPropagation(); playSurahAudio(${surah.number})">🔊</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
 
         function loadFallbackQuranData() {
-    const quranSection = document.getElementById('quran-section');
-    if (!quranSection) return;
-    
-    const fallbackSurahs = [
-        { number: 1, name: "الفاتحة", englishName: "Al-Fatihah", numberOfAyahs: 7, revelationType: "Meccan" },
-        { number: 2, name: "البقرة", englishName: "Al-Baqarah", numberOfAyahs: 286, revelationType: "Medinan" },
-        { number: 3, name: "آل عمران", englishName: "Ali 'Imran", numberOfAyahs: 200, revelationType: "Medinan" },
-        { number: 4, name: "النساء", englishName: "An-Nisa", numberOfAyahs: 176, revelationType: "Medinan" },
-        { number: 5, name: "المائدة", englishName: "Al-Ma'idah", numberOfAyahs: 120, revelationType: "Medinan" },
-        { number: 6, name: "الأنعام", englishName: "Al-An'am", numberOfAyahs: 165, revelationType: "Meccan" },
-        { number: 7, name: "الأعراف", englishName: "Al-A'raf", numberOfAyahs: 206, revelationType: "Meccan" },
-        { number: 8, name: "الأنفال", englishName: "Al-Anfal", numberOfAyahs: 75, revelationType: "Medinan" },
-        { number: 9, name: "التوبة", englishName: "At-Tawbah", numberOfAyahs: 129, revelationType: "Medinan" },
-        { number: 10, name: "يونس", englishName: "Yunus", numberOfAyahs: 109, revelationType: "Meccan" }
-    ];
-    
-    quranSection.innerHTML = fallbackSurahs.map(surah => {
-        const isBookmarked = bookmarks[surah.number];
-        const isLastRead = lastReadAyah.surah === surah.number;
-        
-        return `
-            <div class="surah-card" onclick="openSurah(${surah.number})">
-                ${isBookmarked ? '<div class="bookmark-indicator">🔖</div>' : ''}
-                ${isLastRead ? '<div class="last-read-indicator">📖</div>' : ''}
-                <div class="surah-number">${surah.number}</div>
-                <div class="surah-info">
-                    <div class="surah-name">${surah.englishName} (${surah.name})</div>
-                    <div class="surah-details">${surah.numberOfAyahs} аятов • ${surah.revelationType === 'Meccan' ? 'Мекканская' : 'Мединская'}</div>
-                </div>
-                <div class="surah-actions">
-                    <button class="surah-action-btn" onclick="event.stopPropagation(); toggleBookmark(${surah.number})">🔖</button>
-                    <button class="surah-action-btn" onclick="event.stopPropagation(); playSurahAudio(${surah.number})">🔊</button>
-                </div>
-            </div>
-        `;
-    }).join('');
-}
-
-        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ОТКРЫТИЯ СУРЫ ===
-async function openSurah(surahNumber) {
-    const cacheKey = `surah_${surahNumber}`;
-    
-    // Проверяем кэш
-    if (cache.quranData[cacheKey] && isCacheValid(cacheKey, 24 * 60)) {
-        console.log('Загружаем суру из кэша');
-        displaySurahContent(cache.quranData[cacheKey], surahNumber);
-        return;
-    }
-    
-    currentSurah = surahNumber;
-    
-    try {
-        // Загружаем данные суры из API
-        const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/quran-uthmani,ru.kuliev`);
-        const data = await response.json();
-        
-        if (data.code === 200) {
-            const arabicEdition = data.data.find(edition => edition.edition.identifier === 'quran-uthmani');
-            const translationEdition = data.data.find(edition => edition.edition.identifier === 'ru.kuliev');
+            const quranSection = document.getElementById('quran-section');
+            const fallbackSurahs = [
+                { number: 1, name: "الفاتحة", englishName: "Al-Fatihah", numberOfAyahs: 7, revelationType: "Meccan" },
+                { number: 2, name: "البقرة", englishName: "Al-Baqarah", numberOfAyahs: 286, revelationType: "Medinan" },
+                { number: 3, name: "آل عمران", englishName: "Ali 'Imran", numberOfAyahs: 200, revelationType: "Medinan" },
+                { number: 4, name: "النساء", englishName: "An-Nisa", numberOfAyahs: 176, revelationType: "Medinan" },
+                { number: 5, name: "المائدة", englishName: "Al-Ma'idah", numberOfAyahs: 120, revelationType: "Medinan" },
+                { number: 9, name: "التوبة", englishName: "At-Tawbah", numberOfAyahs: 129, revelationType: "Medinan" }
+            ];
             
-            if (arabicEdition && translationEdition) {
-                const surahData = {
-                    arabic: arabicEdition,
-                    translation: translationEdition,
-                    timestamp: Date.now()
-                };
+            quranSection.innerHTML = fallbackSurahs.map(surah => {
+                const isBookmarked = bookmarks[surah.number];
+                const isLastRead = lastReadAyah.surah === surah.number;
                 
-                // Обновляем кэш
-                cache.quranData[cacheKey] = surahData;
-                updateCache('quranData', cache.quranData);
-                
-                displaySurahContent(surahData, surahNumber);
+                return `
+                    <div class="surah-card" onclick="openSurah(${surah.number})">
+                        ${isBookmarked ? '<div class="bookmark-indicator">🔖</div>' : ''}
+                        ${isLastRead ? '<div class="last-read-indicator">📖</div>' : ''}
+                        <div class="surah-number">${surah.number}</div>
+                        <div class="surah-info">
+                            <div class="surah-name">${surah.englishName} (${surah.name})</div>
+                            <div class="surah-details">${surah.numberOfAyahs} аятов • ${surah.revelationType === 'Meccan' ? 'Мекканская' : 'Мединская'}</div>
+                        </div>
+                        <div class="surah-actions">
+                            <button class="surah-action-btn" onclick="event.stopPropagation(); toggleBookmark(${surah.number})">🔖</button>
+                            <button class="surah-action-btn" onclick="event.stopPropagation(); playSurahAudio(${surah.number})">🔊</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        async function openSurah(surahNumber) {
+            // Показываем выбор режима чтения
+            if (confirm('Выберите режим чтения:\n\n"ОК" - Книжный режим (постранично)\n"Отмена" - Обычный режим (посурочно)')) {
+                openBookMode(surahNumber);
             } else {
-                throw new Error('Не удалось загрузить текст суры');
-            }
-        } else {
-            throw new Error('Не удалось загрузить данные суры');
-        }
-    } catch (error) {
-        console.error('Ошибка загрузки суры:', error);
-        
-        // Пробуем загрузить из кэша
-        if (cache.quranData[cacheKey]) {
-            console.log('Используем устаревший кэш суры');
-            displaySurahContent(cache.quranData[cacheKey], surahNumber);
-            return;
-        }
-        
-        showToast('Ошибка загрузки суры', 'error');
-        // Показываем сообщение об ошибке
-        const modalTitle = document.getElementById('surah-modal-title');
-        const surahContent = document.getElementById('surah-content');
-        
-        if (modalTitle) modalTitle.textContent = 'Ошибка загрузки';
-        if (surahContent) {
-            surahContent.innerHTML = '<div style="text-align: center; padding: 2rem;">Не удалось загрузить суру. Пожалуйста, проверьте подключение к интернету.</div>';
-        }
-        
-        const surahModal = document.getElementById('surah-modal');
-        if (surahModal) surahModal.classList.add('active');
-    }
-}
-
-        function displaySurahContent(surahData, surahNumber) {
-    const surah = allSurahs.find(s => s.number === surahNumber);
-    
-    const modalTitle = document.getElementById('surah-modal-title');
-    if (modalTitle) {
-        modalTitle.textContent = surah ? `Сура ${surah.englishName} (${surah.name})` : `Сура ${surahNumber}`;
-    }
-    
-    const surahContent = document.getElementById('surah-content');
-    if (surahContent) {
-        surahContent.innerHTML = '';
-        
-        // Добавляем тасмию отдельно (кроме суры Ат-Тауба)
-        if (surahNumber !== 9) {
-            const bismillah = document.createElement('div');
-            bismillah.className = 'bismillah';
-            bismillah.textContent = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
-            surahContent.appendChild(bismillah);
-        }
-        
-        // Создаем контейнеры для каждого аята
-        for (let i = 0; i < surahData.arabic.ayahs.length; i++) {
-            const arabicAyah = surahData.arabic.ayahs[i];
-            const translationAyah = surahData.translation.ayahs[i];
-            
-            const ayahContainer = document.createElement('div');
-            ayahContainer.className = 'ayah-container';
-            
-            const isLastRead = lastReadAyah.surah === surahNumber && lastReadAyah.ayah === arabicAyah.numberInSurah;
-            
-            ayahContainer.innerHTML = `
-                <div class="ayah-arabic" ${isLastRead ? 'style="border-right: 3px solid var(--accent-gold); padding-right: 10px;"' : ''}
-                    onclick="playAyah(${arabicAyah.numberInSurah}, ${surahNumber})">
-                    ${arabicAyah.text} <span class="ayah-number">${arabicAyah.numberInSurah}</span>
-                </div>
-                <div class="ayah-translation">
-                    <strong>${arabicAyah.numberInSurah}.</strong> ${translationAyah.text}
-                </div>
-                <button class="nav-button" onclick="setLastReadAyah(${surahNumber}, ${arabicAyah.numberInSurah})" style="font-size: 0.8rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
-                    Отметить как прочитанное
-                </button>
-            `;
-            
-            surahContent.appendChild(ayahContainer);
-        }
-    }
-    
-    // Обновляем навигацию
-    const prevSurah = document.getElementById('prev-surah');
-    const nextSurah = document.getElementById('next-surah');
-    
-    if (prevSurah) prevSurah.disabled = surahNumber <= 1;
-    if (nextSurah) nextSurah.disabled = surahNumber >= (allSurahs.length || 114);
-    
-    // Применяем сохраненные настройки
-    applyQuranReadingSettings();
-    
-    // Открываем модальное окно
-    const surahModal = document.getElementById('surah-modal');
-    if (surahModal) {
-        surahModal.classList.add('active');
-    }
-    
-    document.body.style.overflow = 'hidden';
-}
-
-        function applyQuranReadingSettings() {
-            const modalContent = document.getElementById('modal-content');
-            const toggleButton = document.getElementById('quranThemeToggle');
-            
-            if (modalContent && toggleButton) {
-                if (quranReadingTheme === 'pleasant') {
-                    modalContent.classList.add('quran-reading-theme');
-                    toggleButton.textContent = 'Обычная тема';
-                } else {
-                    modalContent.classList.remove('quran-reading-theme');
-                    toggleButton.textContent = 'Приятная тема';
-                }
-            }
-            
-            // Применяем сохраненный книжный режим
-            const bookModeToggle = document.getElementById('bookModeToggle');
-            const audioPlayer = document.getElementById('audio-player');
-            const surahNavigation = document.querySelector('.surah-navigation');
-            
-            if (modalContent && bookModeToggle) {
-                if (bookModeEnabled) {
-                    modalContent.classList.add('book-mode');
-                    bookModeToggle.textContent = 'Обычный режим';
-                    if (audioPlayer) audioPlayer.style.display = 'none';
-                    if (surahNavigation) surahNavigation.style.display = 'none';
-                } else {
-                    modalContent.classList.remove('book-mode');
-                    bookModeToggle.textContent = 'Книжный режим';
-                    if (audioPlayer) audioPlayer.style.display = 'flex';
-                    if (surahNavigation) surahNavigation.style.display = 'flex';
+                // Стандартный режим чтения суры
+                currentSurah = surahNumber;
+                
+                try {
+                    // Загружаем данные суры из API
+                    const response = await fetch(`https://api.alquran.cloud/v1/surah/${surahNumber}/editions/quran-uthmani,ru.kuliev`);
+                    const data = await response.json();
+                    
+                    if (data.code === 200) {
+                        const arabicEdition = data.data.find(edition => edition.edition.identifier === 'quran-uthmani');
+                        const translationEdition = data.data.find(edition => edition.edition.identifier === 'ru.kuliev');
+                        
+                        if (arabicEdition && translationEdition) {
+                            const surah = allSurahs.find(s => s.number === surahNumber);
+                            
+                            document.getElementById('surah-modal-title').textContent = 
+                                `Сура ${surah.englishName} (${surah.name})`;
+                            
+                            const surahContent = document.getElementById('surah-content');
+                            surahContent.innerHTML = '';
+                            
+                            // ИСПРАВЛЕНИЕ: Добавляем тасмию отдельно (кроме суры Ат-Тауба)
+                            if (surahNumber !== 9) {
+                                const bismillah = document.createElement('div');
+                                bismillah.className = 'bismillah';
+                                bismillah.textContent = 'بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ';
+                                surahContent.appendChild(bismillah);
+                            }
+                            
+                            // Создаем контейнеры для каждого аята с арабским текстом и переводом
+                            for (let i = 0; i < arabicEdition.ayahs.length; i++) {
+                                const arabicAyah = arabicEdition.ayahs[i];
+                                const translationAyah = translationEdition.ayahs[i];
+                                
+                                const ayahContainer = document.createElement('div');
+                                ayahContainer.className = 'ayah-container';
+                                
+                                // Помечаем последний прочитанный аят
+                                const isLastRead = lastReadAyah.surah === surahNumber && lastReadAyah.ayah === arabicAyah.numberInSurah;
+                                
+                                ayahContainer.innerHTML = `
+                                    <div class="ayah-arabic" ${isLastRead ? 'style="border-right: 3px solid var(--accent-gold); padding-right: 10px;"' : ''}
+                                        onclick="playAyah(${arabicAyah.numberInSurah}, ${surahNumber})">
+                                        ${arabicAyah.text} <span class="ayah-number">${arabicAyah.numberInSurah}</span>
+                                    </div>
+                                    <div class="ayah-translation">
+                                        <strong>${arabicAyah.numberInSurah}.</strong> ${translationAyah.text}
+                                    </div>
+                                    <button class="nav-button" onclick="setLastReadAyah(${surahNumber}, ${arabicAyah.numberInSurah})" style="font-size: 0.8rem; padding: 0.5rem 1rem; margin-top: 0.5rem;">
+                                        Отметить как прочитанное
+                                    </button>
+                                `;
+                                
+                                surahContent.appendChild(ayahContainer);
+                            }
+                            
+                            // Обновляем навигацию
+                            document.getElementById('prev-surah').disabled = surahNumber <= 1;
+                            document.getElementById('next-surah').disabled = surahNumber >= allSurahs.length;
+                            
+                            // Применяем сохраненную тему чтения Корана
+                            const modalContent = document.getElementById('modal-content');
+                            const toggleButton = document.getElementById('quranThemeToggle');
+                            
+                            if (quranReadingTheme === 'pleasant') {
+                                modalContent.classList.add('quran-reading-theme');
+                                toggleButton.textContent = 'Обычная тема';
+                            } else {
+                                modalContent.classList.remove('quran-reading-theme');
+                                toggleButton.textContent = 'Приятная тема';
+                            }
+                            
+                            // Применяем сохраненный книжный режим
+                            const bookModeToggle = document.getElementById('bookModeToggle');
+                            const audioPlayer = document.getElementById('audio-player');
+                            const surahNavigation = document.querySelector('.surah-navigation');
+                            
+                            if (bookModeEnabled) {
+                                modalContent.classList.add('book-mode');
+                                bookModeToggle.textContent = 'Обычный режим';
+                                audioPlayer.style.display = 'none';
+                                surahNavigation.style.display = 'none';
+                            } else {
+                                modalContent.classList.remove('book-mode');
+                                bookModeToggle.textContent = 'Книжный режим';
+                                audioPlayer.style.display = 'flex';
+                                surahNavigation.style.display = 'flex';
+                            }
+                            
+                            // ИСПРАВЛЕНИЕ: Открываем модальное окно
+                            document.getElementById('surah-modal').classList.add('active');
+                            
+                            // ИСПРАВЛЕНИЕ: Предотвращаем скроллинг под модальным окном
+                            document.body.style.overflow = 'hidden';
+                        } else {
+                            throw new Error('Не удалось загрузить текст суры');
+                        }
+                    } else {
+                        throw new Error('Не удалось загрузить данные суры');
+                    }
+                } catch (error) {
+                    console.error('Ошибка загрузки суры:', error);
+                    showToast('Ошибка загрузки суры', 'error');
                 }
             }
         }
 
         function closeSurahModal() {
-            const surahModal = document.getElementById('surah-modal');
-            if (surahModal) {
-                surahModal.classList.remove('active');
-            }
+            document.getElementById('surah-modal').classList.remove('active');
             stopAudio();
             
             // ИСПРАВЛЕНИЕ: Восстанавливаем скроллинг
@@ -4985,18 +4437,12 @@ async function openSurah(surahNumber) {
             }
             
             loadQuranPage(currentPage);
-            const bookModal = document.getElementById('book-mode-modal');
-            if (bookModal) {
-                bookModal.classList.add('active');
-            }
+            document.getElementById('book-mode-modal').classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
         function closeBookModeModal() {
-            const bookModal = document.getElementById('book-mode-modal');
-            if (bookModal) {
-                bookModal.classList.remove('active');
-            }
+            document.getElementById('book-mode-modal').classList.remove('active');
             document.body.style.overflow = '';
         }
 
@@ -5010,51 +4456,44 @@ async function openSurah(surahNumber) {
                     const pageData = data.data;
                     
                     // Обновляем заголовок
-                    const modalTitle = document.getElementById('book-modal-title');
-                    const pageNumberEl = document.getElementById('page-number');
-                    
-                    if (modalTitle) modalTitle.textContent = `Чтение Корана - Страница ${pageNumber}`;
-                    if (pageNumberEl) pageNumberEl.textContent = `Страница ${pageNumber}`;
+                    document.getElementById('book-modal-title').textContent = 
+                        `Чтение Корана - Страница ${pageNumber}`;
+                    document.getElementById('page-number').textContent = `Страница ${pageNumber}`;
                     
                     // Отображаем аяты страницы
                     const pageContent = document.getElementById('book-page-content');
-                    if (pageContent) {
-                        pageContent.innerHTML = '';
+                    pageContent.innerHTML = '';
+                    
+                    // Группируем аяты по строкам для правильного отображения
+                    let currentLine = '';
+                    let ayahsInLine = [];
+                    
+                    pageData.ayahs.forEach(ayah => {
+                        const ayahText = ayah.text;
+                        const ayahNumber = ayah.numberInSurah;
                         
-                        // Группируем аяты по строкам для правильного отображения
-                        let currentLine = '';
-                        let ayahsInLine = [];
+                        // Добавляем аят к текущей строке
+                        currentLine += `<span class="ayah">${ayahText}<span class="ayah-number">${ayahNumber}</span></span>`;
+                        ayahsInLine.push(ayah.number);
                         
-                        pageData.ayahs.forEach(ayah => {
-                            const ayahText = ayah.text;
-                            const ayahNumber = ayah.numberInSurah;
+                        // Если строка заполнена или это последний аят, создаем новую строку
+                        if (ayah.words && ayah.words[ayah.words.length - 1].lineEnd || 
+                            ayah === pageData.ayahs[pageData.ayahs.length - 1]) {
                             
-                            // Добавляем аят к текущей строке
-                            currentLine += `<span class="ayah">${ayahText}<span class="ayah-number">${ayahNumber}</span></span>`;
-                            ayahsInLine.push(ayah.number);
+                            const lineDiv = document.createElement('div');
+                            lineDiv.className = 'quran-line';
+                            lineDiv.innerHTML = currentLine;
+                            pageContent.appendChild(lineDiv);
                             
-                            // Если строка заполнена или это последний аят, создаем новую строку
-                            if (ayah.words && ayah.words[ayah.words.length - 1].lineEnd || 
-                                ayah === pageData.ayahs[pageData.ayahs.length - 1]) {
-                                
-                                const lineDiv = document.createElement('div');
-                                lineDiv.className = 'quran-line';
-                                lineDiv.innerHTML = currentLine;
-                                pageContent.appendChild(lineDiv);
-                                
-                                // Сбрасываем для следующей строки
-                                currentLine = '';
-                                ayahsInLine = [];
-                            }
-                        });
-                    }
+                            // Сбрасываем для следующей строки
+                            currentLine = '';
+                            ayahsInLine = [];
+                        }
+                    });
                     
                     // Обновляем навигацию
-                    const prevPage = document.getElementById('prev-page');
-                    const nextPage = document.getElementById('next-page');
-                    
-                    if (prevPage) prevPage.disabled = pageNumber <= 1;
-                    if (nextPage) nextPage.disabled = pageNumber >= totalPages;
+                    document.getElementById('prev-page').disabled = pageNumber <= 1;
+                    document.getElementById('next-page').disabled = pageNumber >= totalPages;
                     
                     // Применяем сохраненный размер шрифта
                     applyBookFontSize();
@@ -5069,11 +4508,8 @@ async function openSurah(surahNumber) {
                 console.error('Ошибка загрузки страницы Корана:', error);
                 showToast('Ошибка загрузки страницы Корана', 'error');
                 // Запасной вариант - сообщение об ошибке
-                const pageContent = document.getElementById('book-page-content');
-                if (pageContent) {
-                    pageContent.innerHTML = 
-                        '<div style="text-align: center; padding: 2rem;">Не удалось загрузить страницу Корана. Пожалуйста, проверьте подключение к интернету.</div>';
-                }
+                document.getElementById('book-page-content').innerHTML = 
+                    '<div style="text-align: center; padding: 2rem;">Не удалось загрузить страницу Корана. Пожалуйста, проверьте подключение к интернету.</div>';
             }
         }
 
@@ -5118,20 +4554,16 @@ async function openSurah(surahNumber) {
             if (currentPageMarked) {
                 // Убираем отметку
                 markedPages = markedPages.filter(page => page !== currentPage);
-                if (pageMarkButton) {
-                    pageMarkButton.classList.remove('marked');
-                    pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
-                }
+                pageMarkButton.classList.remove('marked');
+                pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
                 showToast('Страница удалена из отмеченных', 'warning');
             } else {
                 // Добавляем отметку
                 if (!markedPages.includes(currentPage)) {
                     markedPages.push(currentPage);
                 }
-                if (pageMarkButton) {
-                    pageMarkButton.classList.add('marked');
-                    pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
-                }
+                pageMarkButton.classList.add('marked');
+                pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
                 showToast('Страница отмечена!', 'success');
                 
                 // ИСПРАВЛЕНИЕ: Автоматически отмечаем предыдущие страницы
@@ -5169,23 +4601,20 @@ async function openSurah(surahNumber) {
 
         function updatePageMarkButton() {
             const pageMarkButton = document.getElementById('page-mark-button');
-            if (pageMarkButton) {
-                currentPageMarked = markedPages.includes(currentPage);
-                
-                if (currentPageMarked) {
-                    pageMarkButton.classList.add('marked');
-                    pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
-                } else {
-                    pageMarkButton.classList.remove('marked');
-                    pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
-                }
+            currentPageMarked = markedPages.includes(currentPage);
+            
+            if (currentPageMarked) {
+                pageMarkButton.classList.add('marked');
+                pageMarkButton.innerHTML = '<span>✅</span> Страница отмечена';
+            } else {
+                pageMarkButton.classList.remove('marked');
+                pageMarkButton.innerHTML = '<span>📌</span> Отметить страницу';
             }
         }
 
-        // === ИСПРАВЛЕННЫЕ АУДИО ФУНКЦИИ С НОВЫМ API ===
+        // === АУДИО ФУНКЦИИ ===
 
-        // ИСПРАВЛЕННАЯ ФУНКЦИЯ ВОСПРОИЗВЕДЕНИЯ АЯТА
-         function playAyah(ayahNumber, surahNumber = currentSurah) {
+        function playAyah(ayahNumber, surahNumber = currentSurah) {
             // ИСПРАВЛЕНИЕ: Проверяем, было ли взаимодействие пользователя
             if (!userInteracted) {
                 showToast('Нажмите на аят еще раз для воспроизведения', 'warning');
@@ -5315,19 +4744,8 @@ async function openSurah(surahNumber) {
             });
         }
 
-        // === ИСПРАВЛЕННАЯ ФУНКЦИЯ ЗАГРУЗКИ ВРЕМЕНИ НАМАЗОВ ===
         async function loadPrayerTimes() {
             const prayerList = document.getElementById('prayer-list');
-            if (!prayerList) return;
-            
-            // Проверяем кэш
-            const cacheKey = 'prayerTimes';
-            if (cache.prayerTimes.data && isCacheValid(cacheKey, 60)) { // 1 час
-                console.log('Загружаем время намазов из кэша');
-                updatePrayerList(cache.prayerTimes.data);
-                return;
-            }
-            
             prayerList.innerHTML = '<div class="loading">Загрузка времени намазов...</div>';
             
             try {
@@ -5352,42 +4770,24 @@ async function openSurah(surahNumber) {
                         { name: 'Иша', time: timings.Isha, icon: '🌙' }
                     ];
                     
-                    // Обновляем кэш
-                    updateCache('prayerTimes', { data: prayerTimes, location: data.data.meta.timezone });
-                    
                     updatePrayerList(prayerTimes);
                     
                     // Обновляем местоположение
-                    const prayerLocation = document.getElementById('prayer-location');
-                    if (prayerLocation) {
-                        prayerLocation.textContent = data.data.meta.timezone;
-                    }
+                    document.getElementById('prayer-location').textContent = data.data.meta.timezone;
                     
                 } else {
                     throw new Error('Не удалось получить время намазов');
                 }
             } catch (error) {
                 console.error('Ошибка загрузки времени намазов:', error);
-                
-                // Пробуем загрузить из кэша
-                if (cache.prayerTimes.data) {
-                    console.log('Используем устаревший кэш времени намазов');
-                    updatePrayerList(cache.prayerTimes.data);
-                    
-                    const prayerLocation = document.getElementById('prayer-location');
-                    if (prayerLocation && cache.prayerTimes.location) {
-                        prayerLocation.textContent = cache.prayerTimes.location;
-                    }
-                    return;
-                }
-                
                 showToast('Используется время для Махачкалы', 'warning');
+                // Запасной вариант - статические данные для Махачкалы
                 loadFallbackPrayerTimes();
             }
         }
 
         function getCurrentPosition() {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) {
                 if (!navigator.geolocation) {
                     reject(new Error('Геолокация не поддерживается'));
                 }
@@ -5415,8 +4815,6 @@ async function openSurah(surahNumber) {
 
         function updatePrayerList(prayerTimes) {
             const prayerList = document.getElementById('prayer-list');
-            if (!prayerList) return;
-            
             const now = new Date();
             const currentHour = now.getHours();
             const currentMinutes = now.getMinutes();
@@ -5445,7 +4843,6 @@ async function openSurah(surahNumber) {
 
         function loadAzkarsData() {
             const duaSection = document.getElementById('dua-section');
-            if (!duaSection) return;
             
             duaSection.innerHTML = `
                 <div class="dua-category">
@@ -5722,33 +5119,28 @@ async function openSurah(surahNumber) {
             const levelDescription = document.getElementById('unlock-level-description');
             const levelDua = document.getElementById('unlock-level-dua');
             
-            if (animation && levelName && levelDescription && levelDua) {
-                levelName.textContent = `Уровень ${level.id} разблокирован: ${level.name}`;
-                levelDescription.textContent = level.description;
-                levelDua.textContent = level.dua;
-                
-                animation.classList.add('active');
-                
-                // Создаем конфетти
-                createConfetti();
-                
-                // Добавляем дополнительные эффекты
-                setTimeout(() => {
-                    const levelCards = document.querySelectorAll('.level-card');
-                    levelCards.forEach(card => {
-                        if (parseInt(card.className.match(/level-(\d+)/)[1]) === level.id) {
-                            card.classList.add('unlocking');
-                        }
-                    });
-                }, 500);
-            }
+            levelName.textContent = `Уровень ${level.id} разблокирован: ${level.name}`;
+            levelDescription.textContent = level.description;
+            levelDua.textContent = level.dua;
+            
+            animation.classList.add('active');
+            
+            // Создаем конфетти
+            createConfetti();
+            
+            // Добавляем дополнительные эффекты
+            setTimeout(() => {
+                const levelCards = document.querySelectorAll('.level-card');
+                levelCards.forEach(card => {
+                    if (parseInt(card.className.match(/level-(\d+)/)[1]) === level.id) {
+                        card.classList.add('unlocking');
+                    }
+                });
+            }, 500);
         }
 
         function closeLevelUnlock() {
-            const animation = document.getElementById('level-unlock-animation');
-            if (animation) {
-                animation.classList.remove('active');
-            }
+            document.getElementById('level-unlock-animation').classList.remove('active');
             
             // Убираем класс анимации с карточек уровней
             const levelCards = document.querySelectorAll('.level-card');
@@ -5780,23 +5172,14 @@ async function openSurah(surahNumber) {
             const currentLevel = levelsData[userProgress.currentLevel - 1];
             if (!currentLevel) return;
             
-            const levelIcon = document.getElementById('current-level-icon');
-            const levelTitle = document.getElementById('current-level-title');
-            const levelSubtitle = document.getElementById('current-level-subtitle');
-            
-            if (levelIcon) {
-                levelIcon.textContent = currentLevel.icon;
-                levelIcon.className = `level-icon level-${currentLevel.id}`;
-            }
-            if (levelTitle) levelTitle.textContent = currentLevel.name;
-            if (levelSubtitle) levelSubtitle.textContent = `Уровень ${userProgress.currentLevel} из ${levelsData.length}`;
+            document.getElementById('current-level-icon').textContent = currentLevel.icon;
+            document.getElementById('current-level-icon').className = `level-icon level-${currentLevel.id}`;
+            document.getElementById('current-level-title').textContent = currentLevel.name;
+            document.getElementById('current-level-subtitle').textContent = `Уровень ${userProgress.currentLevel} из ${levelsData.length}`;
         }
 
         function updateQuranProgressDisplay() {
-            const quranPages = document.getElementById('quranPages');
-            if (quranPages) {
-                quranPages.textContent = userProgress.pagesRead;
-            }
+            document.getElementById('quranPages').textContent = userProgress.pagesRead;
         }
 
         function showAchievements() {
