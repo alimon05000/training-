@@ -1447,7 +1447,7 @@
             },
             
             // AI State
-            aiMessages: [],
+            aiMessages: JSON.parse(localStorage.getItem('aiMessages')) || [],
             aiRecommendations: [],
             
             // Initialize with zero stats
@@ -1492,6 +1492,34 @@
                     equipment: 'dumbbell',
                     image: null
                 },
+
+                {
+                    id: 'push-ups',
+                    name: 'Отжимания',
+                    description: 'Классическое упражнение с весом собственного тела для грудных, трицепсов и плеч.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: ['triceps', 'shoulders'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                { 
+                    id: 'cable-crossover',
+                    name: 'Сведение рук в кроссовере',
+                    description: 'Изоляция грудных мышц с постоянным натяжением тросов.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: ['shoulders'],
+                    equipment: 'cable',
+                    image: null
+                },
+                {
+                    id: 'push-up-ring',
+                    name: 'Отжимания на кольцах',
+                    description: 'Усложнённый вариант отжиманий с акцентом на стабилизацию корпуса и плеч.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: ['shoulders', 'core'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
                 
                 // Back
                 {
@@ -1519,6 +1547,43 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps'],
                     equipment: 'barbell',
+                    image: null
+                },
+
+                {
+                    id: 'lat-pulldown',
+                    name: 'Тяга верхнего блока',
+                    description: 'Тренировка широчайших мышц с возможностью регулировать нагрузку.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['biceps'],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'seated-row',
+                    name: 'Тяга горизонтального блока',
+                    description: 'Упражнение для средней части спины и задней дельты.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['biceps', 'shoulders'],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'face-pull',
+                    name: 'Тяга к лицу',
+                    description: 'Укрепляет верхнюю часть спины, задние дельты и улучшает осанку.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['shoulders'],
+                    equipment: 'cable',
+                    image: null
+                },
+                {
+                    id: 't-bar-row',
+                    name: 'Тяга T-грифа',
+                    description: 'Многосуставное упражнение для толщины спины с акцентом на середину траектории.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['biceps', 'rear delts'],
+                    equipment: 'machine',
                     image: null
                 },
                 
@@ -1550,6 +1615,52 @@
                     equipment: 'dumbbell',
                     image: null
                 },
+
+                {
+                    id: 'romanian-deadlift',
+                    name: 'Румынская тяга',
+                    description: 'Отлично нагружает заднюю поверхность бедра и ягодицы.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['glutes', 'back'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'hip-thrust',
+                    name: 'Ягодичный мост',
+                    description: 'Изолирует ягодицы и помогает улучшить силу задней цепи.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['core'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'calf-raise',
+                    name: 'Подъёмы на носки',
+                    description: 'Упражнение на икроножные мышцы, выполняется стоя или сидя.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: [],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'pistol-squat',
+                    name: 'Пистолетик',
+                    description: 'Одноногий присед для развития баланса, силы ног и мобильности тазобедренных суставов.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['core', 'glutes'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'step-up',
+                    name: 'Подъём на тумбу',
+                    description: 'Функциональное упражнение для квадрицепсов и ягодиц, можно выполнять с гантелями.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['glutes', 'core'],
+                    equipment: 'dumbbell',
+                    image: null
+                },
                 
                 // Shoulders
                 {
@@ -1568,6 +1679,43 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: [],
                     equipment: 'dumbbell',
+                    image: null
+                },
+
+                {
+                    id: 'arnold-press',
+                    name: 'Жим Арнольда',
+                    description: 'Вариация жима гантелей с разворотом кистей для полной проработки дельт.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: ['triceps'],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                {
+                    id: 'rear-delt-fly',
+                    name: 'Разведение гантелей в наклоне',
+                    description: 'Изолирует задние дельты и улучшает баланс плечевого пояса.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: ['back'],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                {
+                    id: 'upright-row',
+                    name: 'Тяга к подбородку',
+                    description: 'Комплексное упражнение для плеч и трапеций.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: ['arms'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'landmine-press',
+                    name: 'Жим штанги в стойке с упором',
+                    description: 'Безопасный жим для передних дельт с дополнительной стабилизацией корпуса.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: ['triceps', 'core'],
+                    equipment: 'barbell',
                     image: null
                 },
                 
@@ -1590,6 +1738,43 @@
                     equipment: 'cable',
                     image: null
                 },
+
+                {
+                    id: 'hammer-curl',
+                    name: 'Молотковые сгибания',
+                    description: 'Прорабатывают брахиалис и предплечья, увеличивая общую силу рук.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: ['forearms'],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                {
+                    id: 'dips',
+                    name: 'Отжимания на брусьях',
+                    description: 'Многосуставное упражнение для трицепсов, груди и передних дельт.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: ['chest', 'shoulders'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'skullcrusher',
+                    name: 'Французский жим лёжа',
+                    description: 'Изолирующее упражнение для трицепса с EZ-грифом или гантелями.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: [],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'rope-pushdown',
+                    name: 'Разгибания на блоке с канатом',
+                    description: 'Контролируемое движение для изоляции латеральной головки трицепса.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: ['shoulders'],
+                    equipment: 'cable',
+                    image: null
+                },
                 
                 // Core
                 {
@@ -1601,10 +1786,48 @@
                     equipment: 'bodyweight',
                     image: null
                 },
+
+                {
+                    id: 'hanging-leg-raise',
+                    name: 'Подъём ног в висе',
+                    description: 'Укрепляет прямые и косые мышцы живота, развивает хват.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: ['grip'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'russian-twist',
+                    name: 'Русский твист',
+                    description: 'Динамическое упражнение для косых мышц живота и корпуса.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: ['hips'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'back-extension',
+                    name: 'Гиперэкстензия',
+                    description: 'Укрепляет разгибатели спины и ягодицы, помогает улучшить осанку.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: ['glutes'],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'pallof-press',
+                    name: 'Пресс Паллова',
+                    description: 'Антиротационное упражнение для стабильности корпуса и защиты поясницы.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: ['shoulders'],
+                    equipment: 'cable',
+                    image: null
+                },
+                
                 {
                     id: 'crunches',
                     name: 'Скручивания',
-                    description: 'Упражнение для пресса.',
+                    description: 'Базовое упражнение для проработки прямых мышц живота.',
                     muscleGroup: 'core',
                     secondaryMuscles: [],
                     equipment: 'bodyweight',
@@ -1613,21 +1836,48 @@
                 
                 // Cardio
                 {
-                    id: 'running',
-                    name: 'Бег',
-                    description: 'Кардио упражнение для выносливости.',
+                    id: 'treadmill-run',
+                    name: 'Беговая дорожка',
+                    description: 'Кардио-тренировка для выносливости и контроля веса.',
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs'],
-                    equipment: 'cardio',
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'rowing',
+                    name: 'Гребной тренажёр',
+                    description: 'Низкоударное кардио с равномерной нагрузкой на все тело.',
+                    muscleGroup: 'cardio',
+                    secondaryMuscles: ['back', 'legs', 'arms'],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'jump-rope',
+                    name: 'Прыжки на скакалке',
+                    description: 'Быстрый способ разогреться и повысить ЧСС в любом месте.',
+                    muscleGroup: 'cardio',
+                    secondaryMuscles: ['legs'],
+                    equipment: 'bodyweight',
                     image: null
                 },
                 {
                     id: 'cycling',
-                    name: 'Велосипед',
-                    description: 'Низкоударное кардио упражнение.',
+                    name: 'Велотренажёр',
+                    description: 'Кардио-нагрузка с бережным воздействием на суставы.',
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs'],
-                    equipment: 'cardio',
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'sled-push',
+                    name: 'Толкание санок',
+                    description: 'Функциональное кардио с силовой нагрузкой на ноги и стабилизацией корпуса.',
+                    muscleGroup: 'cardio',
+                    secondaryMuscles: ['legs', 'core'],
+                    equipment: 'machine',
                     image: null
                 }
             ]
@@ -1635,6 +1885,66 @@
 
         // ==================== AI TRAINER ====================
         const AITrainer = {
+            getMuscleFrequency: function(days = 7) {
+                const since = Date.now() - days * 24 * 60 * 60 * 1000;
+                const frequency = {};
+
+                AppState.workouts
+                    .filter(workout => new Date(workout.date).getTime() >= since)
+                    .forEach(workout => {
+                        const muscles = new Set();
+                        workout.exercises?.forEach(exercise => {
+                            if (exercise.muscleGroup) {
+                                muscles.add(exercise.muscleGroup);
+                            }
+                        });
+                        muscles.forEach(muscle => {
+                            frequency[muscle] = (frequency[muscle] || 0) + 1;
+                        });
+                    });
+
+                return frequency;
+            },
+
+            getNextFocusMuscle: function() {
+                const frequency = this.getMuscleFrequency();
+                const muscleOrder = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'cardio'];
+
+                // Avoid repeating the same muscle as the last workout if possible
+                const lastWorkout = AppState.workouts[AppState.workouts.length - 1];
+                const lastMuscle = lastWorkout?.exercises?.[0]?.muscleGroup;
+
+                const sorted = muscleOrder.sort((a, b) => {
+                    const diff = (frequency[a] || 0) - (frequency[b] || 0);
+                    if (diff === 0 && lastMuscle) {
+                        return a === lastMuscle ? 1 : b === lastMuscle ? -1 : 0;
+                    }
+                    return diff;
+                });
+
+                return sorted[0] || 'chest';
+            },
+
+            pickExercises: function(muscleGroup, count = 3) {
+                const pool = [...ExerciseLibrary.exercises, ...AppState.exercises]
+                    .filter(ex => ex.muscleGroup === muscleGroup);
+
+                if (pool.length === 0) return [];
+
+                return [...pool]
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, Math.min(count, pool.length));
+            },
+
+            createExerciseSets: function(exercises) {
+                return exercises.map(exercise => ({
+                    name: exercise.name,
+                    muscleGroup: exercise.muscleGroup,
+                    secondaryMuscles: exercise.secondaryMuscles,
+                    sets: Array.from({ length: 3 }, () => ({ weight: 0, reps: 10, completed: false })),
+                    targetSets: 3
+                }));
+            },
             getRecommendation: function() {
                 const workouts = AppState.workouts;
                 if (workouts.length === 0) {
@@ -1642,31 +1952,23 @@
                 }
                 
                 const lastWorkout = workouts[workouts.length - 1];
-                const totalWorkouts = workouts.length;
-                
-                const recommendations = [
-                    "Отличная работа! Продолжайте в том же темпе.",
-                    "Рекомендую увеличить вес на 2.5кг в основных упражнениях.",
-                    "Обратите внимание на время отдыха между подходами.",
-                    "Попробуйте добавить ещё одно упражнение на отстающую группу мышц.",
-                    "Ваша консистентность улучшается! Так держать!",
-                    "Рассмотрите возможность увеличения объёма тренировок.",
-                    "Не забывайте про восстановление - это ключ к прогрессу.",
-                    "Попробуйте варьировать количество повторений для мышечного роста."
-                ];
-                
-                // Analyze progress
-                if (totalWorkouts > 5) {
-                    const progress = this.analyzeProgress();
-                    if (progress.stagnant.length > 0) {
-                        return `Заметил, что ${progress.stagnant[0]} не прогрессирует. Попробуйте изменить подходы или технику.`;
-                    }
-                    if (progress.improving.length > 0) {
-                        return `Отлично прогрессируете в ${progress.improving[0]}! Продолжайте увеличивать нагрузку.`;
-                    }
+                const daysFromLast = Math.floor((Date.now() - new Date(lastWorkout.date).getTime()) / (1000 * 60 * 60 * 24));
+                const progress = this.analyzeProgress();
+                const focus = this.getNextFocusMuscle();
+
+                if (daysFromLast >= 3) {
+                    return `Пора вернуться в зал! Начните с ${UI.getMuscleGroupName(focus)} и лёгкого разогрева.`;
                 }
                 
-                return recommendations[Math.floor(Math.random() * recommendations.length)];
+                if (progress.stagnant.length > 0) {
+                    return `Замечаю плато в упражнении ${progress.stagnant[0]}. Снизьте вес на 10% и сосредоточьтесь на технике.`;
+                }
+
+                if (progress.improving.length > 0) {
+                    return `Отлично растёте в ${progress.improving[0]}! Добавьте +1 подход для закрепления результата.`;
+                }
+
+                return `Сегодня в приоритете ${UI.getMuscleGroupName(focus)}. Подберите 3 упражнения и держите отдых 60-90 секунд.`;
             },
             
             analyzeProgress: function() {
@@ -1675,7 +1977,7 @@
                     return { stagnant: [], improving: [] };
                 }
                 
-                // Simple progress analysis
+                
                 const exerciseProgress = {};
                 
                 workouts.forEach(workout => {
@@ -1697,7 +1999,7 @@
                     const recentAvg = weights.slice(-3).reduce((a, b) => a + b, 0) / 3;
                     const previousAvg = weights.slice(-6, -3).reduce((a, b) => a + b, 0) / 3 || recentAvg;
                     
-                    if (recentAvg <= previousAvg * 1.02) { // Less than 2% improvement
+                    if (recentAvg <= previousAvg * 1.02) {
                         stagnant.push(exercise);
                     } else {
                         improving.push(exercise);
@@ -1706,19 +2008,62 @@
                 
                 return { stagnant, improving };
             },
+
+            getProgressInsights: function() {
+                const stats = AppState.stats;
+                if (!stats.totalWorkouts) {
+                    return ["Заполните первую тренировку, чтобы увидеть рекомендации."];
+                }
+
+                const insights = [];
+                const mostWorked = Object.entries(stats.muscleGroups || {}).sort((a, b) => b[1] - a[1])[0];
+                const leastWorked = Object.entries(stats.muscleGroups || {}).sort((a, b) => a[1] - b[1])[0];
+
+                insights.push(`Консистентность: ${Math.round(stats.consistency || 0)}%. Поддерживайте не менее 3 тренировок в неделю.`);
+                if (stats.totalVolume) {
+                    insights.push(`Суммарный объём: ${Math.round(stats.totalVolume)} кг. Продолжайте прогрессию +2-5% каждую неделю.`);
+                }
+                if (mostWorked) {
+                    insights.push(`Чаще всего тренируете: ${UI.getMuscleGroupName(mostWorked[0])}.`);
+                }
+                if (leastWorked) {
+                    insights.push(`Добавьте больше нагрузки на: ${UI.getMuscleGroupName(leastWorked[0])}.`);
+                }
+
+                return insights;
+            },
             
             generateWeeklyPlan: function() {
-                const plan = {
-                    monday: { muscleGroup: 'Грудь', exercises: ['Жим штанги лёжа', 'Жим гантелей на наклонной', 'Разведение гантелей'] },
-                    tuesday: { muscleGroup: 'Спина', exercises: ['Подтягивания', 'Тяга штанги в наклоне', 'Гиперэкстензия'] },
-                    wednesday: { muscleGroup: 'Отдых', exercises: [] },
-                    thursday: { muscleGroup: 'Ноги', exercises: ['Приседания со штангой', 'Жим ногами', 'Сгибания ног'] },
-                    friday: { muscleGroup: 'Плечи', exercises: ['Жим штанги стоя', 'Подъём гантелей в стороны', 'Тяга к подбородку'] },
-                    saturday: { muscleGroup: 'Руки', exercises: ['Сгибания со штангой', 'Французский жим', 'Молотки'] },
-                    sunday: { muscleGroup: 'Кардио', exercises: ['Бег 30 минут'] }
-                };
-                
+                const focusStart = this.getNextFocusMuscle();
+                const baseSplit = ['chest', 'back', 'legs', 'shoulders', 'arms', 'cardio', 'core'];
+                const rotatedSplit = [focusStart, ...baseSplit.filter(muscle => muscle !== focusStart)];
+                const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+
+                const plan = {};
+                days.forEach((day, index) => {
+                    const muscleGroup = rotatedSplit[index % rotatedSplit.length];
+                    const exercises = this.pickExercises(muscleGroup, 3).map(ex => ex.name);
+                    plan[day] = {
+                        muscleGroup: muscleGroup === 'cardio' ? 'Кардио / восстановление' : UI.getMuscleGroupName(muscleGroup),
+                        exercises: exercises.length ? exercises : ['Лёгкая растяжка и ходьба 20 мин']
+                    };
+                });
+
+                // Добавляем один день отдыха
+                plan.wednesday = { muscleGroup: 'Восстановление', exercises: ['Растяжка 15 минут', 'Прогулка 30 минут'] };
+
                 return plan;
+            },
+
+            getQuickWorkoutTemplate: function() {
+                const focus = this.getNextFocusMuscle();
+                const exercises = this.createExerciseSets(this.pickExercises(focus, 3));
+
+                return {
+                    name: `Быстрая тренировка: ${UI.getMuscleGroupName(focus)}`,
+                    type: focus === 'cardio' ? 'cardio' : 'gym',
+                    exercises
+                };
             },
             
             chatResponse: function(message) {
@@ -1729,26 +2074,38 @@
                 }
                 
                 if (lowerMessage.includes('прогресс') || lowerMessage.includes('улучшить')) {
-                    return "Для улучшения прогресса рекомендую: 1) Увеличивать вес постепенно, 2) Следить за техникой, 3) Давать мышцам время на восстановление.";
+                    return "Для прогресса: увеличивайте вес на 2-5% раз в неделю, держите отдых 60-90 секунд и следите за техникой.";
                 }
                 
                 if (lowerMessage.includes('боль') || lowerMessage.includes('травм')) {
-                    return "При болях в суставах или мышцах рекомендуется снизить нагрузку, сделать перерыв и проконсультироваться с врачом. Не тренируйтесь через боль!";
+                    return "При болях снизьте нагрузку, уделите внимание мобилизации и обратитесь к врачу. Не тренируйтесь через боль.";
                 }
                 
                 if (lowerMessage.includes('вес') && lowerMessage.includes('увеличить')) {
-                    return "Увеличивайте вес на 2.5-5кг, когда можете выполнить все запланированные повторения с правильной техникой в последнем подходе.";
+                    return "Увеличивайте вес, когда выполняете последний подход с запасом 1-2 повторения. Добавляйте +2.5-5кг постепенно.";
                 }
-                
+
+                if (lowerMessage.includes('сброс') || lowerMessage.includes('похуд')) {
+                    return "Для снижения веса: держите дефицит 300-500 ккал, добавьте 2-3 кардио-сессии в неделю и контролируйте шаги.";
+                }
+
+                if (lowerMessage.includes('масса') || lowerMessage.includes('набор')) {
+                    return "Для набора: профицит 200-300 ккал, 1.6-2.2г белка на кг веса, силовые 3-4 раза в неделю.";
+                }
+            
                 if (lowerMessage.includes('отдых') || lowerMessage.includes('восстановление')) {
-                    return "Оптимальное время отдыха между подходами: 60-90 секунд для гипертрофии, 2-3 минуты для силы. Спите 7-9 часов в сутки.";
+                    return "Отдых между подходами: 60-90 сек для гипертрофии, 2-3 мин для силы. Спите 7-9 часов и делайте растяжку.";
                 }
                 
                 if (lowerMessage.includes('питание') || lowerMessage.includes('диет')) {
-                    return "Для роста мышц: 1.6-2.2г белка на кг веса, достаточно углеводов для энергии, полезные жиры. Пейте много воды.";
+                    return "Сбалансируйте тарелку: белок, сложные углеводы, овощи и полезные жиры. Пейте 30-40 мл воды на кг веса.";
                 }
                 
-                return "Я ваш AI-тренер. Задавайте вопросы о тренировках, технике упражнений или получайте рекомендации по прогрессу.";
+                if (lowerMessage.includes('размин') || lowerMessage.includes('warm')) {
+                    return "Сделайте 5-7 минут кардио, затем суставную гимнастику и 1-2 разминочных подхода перед рабочими весами.";
+                }
+
+                return "Я ваш AI-тренер. Спросите о программе, питании или восстановлении — помогу подобрать решение.";
             }
         };
 
@@ -1921,11 +2278,13 @@
                 this.setupEventListeners();
                 this.generateCalendar();
                 this.generateCalendarPreview();
+                this.updateTodaysWorkoutCard();
                 this.loadExercises();
                 this.loadTemplates();
                 this.updateStats();
                 this.setupServiceWorker();
                 this.updateAIRecommendation();
+                this.renderAiChat();
             },
             
             setTheme: function(theme) {
@@ -2065,6 +2424,58 @@
                 
                 previewHTML += '</div>';
                 document.getElementById('calendarPreview').innerHTML = previewHTML;
+            },
+
+            updateTodaysWorkoutCard: function() {
+                const container = document.getElementById('todaysWorkout');
+                const todayStr = new Date().toISOString().split('T')[0];
+                const todayWorkouts = AppState.workouts.filter(w => w.date === todayStr);
+
+                if (AppState.isWorkoutActive && AppState.activeWorkout) {
+                    container.innerHTML = `
+                        <p class="text-secondary mb-2">Тренировка в процессе</p>
+                        <div class="mb-2"><strong>${AppState.activeWorkout.name}</strong></div>
+                        <div class="text-sm text-secondary mb-3">${AppState.activeWorkout.exercises.length} упражнений • тип: ${AppState.activeWorkout.type}</div>
+                        <button class="btn btn-primary w-full" onclick="UI.switchPage('workoutSession')">
+                            <i class="mdi mdi-arrow-right"></i> Перейти к сессии
+                        </button>
+                    `;
+                    return;
+                }
+
+                if (todayWorkouts.length > 0) {
+                    const last = todayWorkouts[todayWorkouts.length - 1];
+                    const totalVolume = last.exercises?.reduce((sum, ex) => sum + ex.sets?.reduce((s, set) => s + ((set.weight || 0) * (set.reps || 0)), 0) || 0, 0) || 0;
+
+                    container.innerHTML = `
+                        <p class="text-secondary mb-2">Сегодня уже есть тренировка</p>
+                        <div class="mb-1"><strong>${last.name}</strong></div>
+                        <div class="text-sm text-secondary mb-2">${last.duration || 0} мин • ${Math.round(totalVolume)} кг объёма</div>
+                        <button class="btn btn-secondary w-full" id="startExtraSession">
+                            <i class="mdi mdi-repeat"></i> Добавить ещё одну
+                        </button>
+                    `;
+
+                    const extraBtn = document.getElementById('startExtraSession');
+                    extraBtn?.addEventListener('click', () => {
+                        const quickTemplate = AITrainer.getQuickWorkoutTemplate();
+                        this.startWorkout(quickTemplate.name, quickTemplate.type, null, quickTemplate.exercises);
+                    });
+                    return;
+                }
+
+                container.innerHTML = `
+                    <p class="text-secondary mb-2">Нет запланированных тренировок</p>
+                    <button class="btn btn-primary w-full" id="startTodayWorkoutBtn">
+                        <i class="mdi mdi-play"></i>
+                        Начать тренировку
+                    </button>
+                `;
+
+                document.getElementById('startTodayWorkoutBtn').addEventListener('click', () => {
+                    const quickTemplate = AITrainer.getQuickWorkoutTemplate();
+                    this.startWorkout(quickTemplate.name, quickTemplate.type, null, quickTemplate.exercises);
+                });
             },
             
             showDayDetail: function(dateStr) {
@@ -2370,10 +2781,61 @@
                 const recommendation = AITrainer.getRecommendation();
                 document.getElementById('aiRecommendation').textContent = recommendation;
                 document.getElementById('aiMainRecommendation').textContent = recommendation;
+
+                const insights = AITrainer.getProgressInsights();
+                document.getElementById('progressRecommendations').innerHTML = insights
+                    .map(text => `<div class="ai-message">${text}</div>`)
+                    .join('');
+
+                this.renderWeeklyPlan(AITrainer.generateWeeklyPlan());
+            },
+
+            renderAiChat: function() {
+                const chat = document.getElementById('aiChat');
+                chat.innerHTML = '<div class="ai-message-bubble">Привет! Я ваш AI-тренер. Спросите меня о тренировках, технике упражнений или получите рекомендации по прогрессу.</div>';
+
+                AppState.aiMessages.forEach(msg => {
+                    const bubble = document.createElement('div');
+                    bubble.className = `ai-message-bubble ${msg.role === 'user' ? 'user' : ''}`;
+                    bubble.textContent = msg.text;
+                    chat.appendChild(bubble);
+                });
+
+                chat.scrollTop = chat.scrollHeight;
+            },
+
+            renderWeeklyPlan: function(plan) {
+                let planHTML = '<div class="space-y-3">';
+
+                Object.entries(plan).forEach(([day, data]) => {
+                    const dayName = {
+                        monday: 'Понедельник',
+                        tuesday: 'Вторник',
+                        wednesday: 'Среда',
+                        thursday: 'Четверг',
+                        friday: 'Пятница',
+                        saturday: 'Суббота',
+                        sunday: 'Воскресенье'
+                    }[day];
+
+                    planHTML += `
+                        <div class="exercise-item">
+                            <h5 class="font-semibold mb-1">${dayName}: ${data.muscleGroup}</h5>
+                            ${data.exercises.length > 0 ?
+                                `<ul class="text-sm text-secondary pl-4">
+                                    ${data.exercises.map(ex => `<li>• ${ex}</li>`).join('')}
+                                </ul>` :
+                                '<p class="text-sm text-secondary">День отдыха</p>'}
+                        </div>
+                    `;
+                });
+
+                planHTML += '</div>';
+                document.getElementById('weeklyPlan').innerHTML = planHTML;
             },
             
             // ==================== WORKOUT FUNCTIONS ====================
-            startWorkout: function(name, type, templateId) {
+            startWorkout: function(name, type, templateId, preloadedExercises = []) {
                 AppState.activeWorkout = {
                     id: Date.now(),
                     name: name || 'Новая тренировка',
@@ -2384,9 +2846,14 @@
                     exercises: [],
                     notes: ''
                 };
+
+                // Use AI quick template if provided
+                if (preloadedExercises.length > 0) {
+                    AppState.activeWorkout.exercises = JSON.parse(JSON.stringify(preloadedExercises));
+                }
                 
                 // Load template if selected
-                if (templateId) {
+                else if (templateId) {
                     const template = AppState.templates.find(t => t.id === templateId);
                     if (template) {
                         AppState.activeWorkout.exercises = JSON.parse(JSON.stringify(template.exercises || []));
@@ -2404,6 +2871,7 @@
                 // Start timer
                 this.startWorkoutTimer();
                 this.updateActiveExercises();
+                this.updateTodaysWorkoutCard();
                 
                 DataStorage.showToast('Тренировка начата', 'success');
             },
@@ -2609,6 +3077,9 @@
                 DataStorage.save();
                 this.updateStats();
                 this.updateAIRecommendation();
+                this.generateCalendar();
+                this.generateCalendarPreview();
+                this.updateTodaysWorkoutCard();
                 
                 document.getElementById('workoutSession').classList.add('hidden');
                 document.getElementById('dashboardPage').classList.remove('hidden');
@@ -2720,7 +3191,8 @@
                 });
                 
                 document.getElementById('quickWorkoutBtn').addEventListener('click', () => {
-                    this.startWorkout('Быстрая тренировка', 'gym');
+                    const quickTemplate = AITrainer.getQuickWorkoutTemplate();
+                    this.startWorkout(quickTemplate.name, quickTemplate.type, null, quickTemplate.exercises);
                 });
                 
                 document.getElementById('startWorkoutBtn').addEventListener('click', () => {
@@ -2878,24 +3350,20 @@
                     
                     if (!message) return;
                     
-                    // Add user message
-                    const chat = document.getElementById('aiChat');
-                    const userBubble = document.createElement('div');
-                    userBubble.className = 'ai-message-bubble user';
-                    userBubble.textContent = message;
-                    chat.appendChild(userBubble);
+                    const saveMessage = (role, text) => {
+                        AppState.aiMessages.push({ role, text });
+                        localStorage.setItem('aiMessages', JSON.stringify(AppState.aiMessages));
+                    };
+
+                    saveMessage('user', message);
+                    this.renderAiChat();
                     
                     // Get AI response
                     setTimeout(() => {
                         const response = AITrainer.chatResponse(message);
-                        const aiBubble = document.createElement('div');
-                        aiBubble.className = 'ai-message-bubble';
-                        aiBubble.textContent = response;
-                        chat.appendChild(aiBubble);
-                        
-                        // Scroll to bottom
-                        chat.scrollTop = chat.scrollHeight;
-                    }, 500);
+                        saveMessage('ai', response);
+                        this.renderAiChat();
+                    }, 400);
                     
                     input.value = '';
                 });
@@ -2913,33 +3381,7 @@
                 // Generate AI plan
                 document.getElementById('generatePlanBtn').addEventListener('click', () => {
                     const plan = AITrainer.generateWeeklyPlan();
-                    let planHTML = '<div class="space-y-3">';
-                    
-                    Object.entries(plan).forEach(([day, data]) => {
-                        const dayName = {
-                            monday: 'Понедельник',
-                            tuesday: 'Вторник',
-                            wednesday: 'Среда',
-                            thursday: 'Четверг',
-                            friday: 'Пятница',
-                            saturday: 'Суббота',
-                            sunday: 'Воскресенье'
-                        }[day];
-                        
-                        planHTML += `
-                            <div class="exercise-item">
-                                <h5 class="font-semibold mb-1">${dayName}: ${data.muscleGroup}</h5>
-                                ${data.exercises.length > 0 ? 
-                                    `<ul class="text-sm text-secondary pl-4">
-                                        ${data.exercises.map(ex => `<li>• ${ex}</li>`).join('')}
-                                    </ul>` : 
-                                    '<p class="text-sm text-secondary">День отдыха</p>'}
-                            </div>
-                        `;
-                    });
-                    
-                    planHTML += '</div>';
-                    document.getElementById('weeklyPlan').innerHTML = planHTML;
+                    this.renderWeeklyPlan(plan);
                     
                     DataStorage.showToast('План на неделю создан AI', 'success');
                 });
@@ -3055,11 +3497,6 @@
             document.getElementById('notificationsEnabled').checked = settings.notifications;
             document.getElementById('reminderEnabled').checked = settings.reminders;
             document.getElementById('autoSave').checked = settings.autoSave;
-            
-            // Update today's workout button
-            document.getElementById('startTodayWorkoutBtn').addEventListener('click', () => {
-                UI.startWorkout('Тренировка на сегодня', 'gym');
-            });
             
             // View calendar from dashboard
             document.getElementById('viewCalendarBtn').addEventListener('click', () => {
