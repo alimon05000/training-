@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Тренировочный Календарь | AI-тренер</title>
     <meta name="description" content="Продвинутый фитнес-трекер с AI-тренером для планирования и отслеживания тренировок">
     <meta name="theme-color" content="#6366f1">
@@ -137,12 +137,29 @@
             overflow-x: hidden;
         }
 
+        button, input, select, textarea {
+            touch-action: manipulation;
+        }
+        
         .app {
             display: grid;
             grid-template-columns: 280px 1fr;
             min-height: 100vh;
         }
 
+        .sidebar-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.45);
+            backdrop-filter: blur(2px);
+            z-index: 950;
+            display: none;
+        }
+
+        .sidebar-overlay.active {
+            display: block;
+        }
+        
         /* Sidebar */
         .sidebar {
             background: var(--surface);
@@ -346,8 +363,21 @@
         .card-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
             margin-bottom: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .card-actions .form-input {
+            width: min(260px, 100%);
         }
 
         .card-title {
@@ -692,6 +722,9 @@
             margin-bottom: 1.5rem;
             border-bottom: 1px solid var(--border);
             padding-bottom: 0.5rem;
+            flex-wrap: wrap;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .tab {
@@ -701,6 +734,7 @@
             user-select: none;
             color: var(--text-secondary);
             transition: all 0.2s ease;
+            flex-shrink: 0;
         }
 
         .tab.active {
@@ -821,6 +855,16 @@
                 padding: 1rem;
                 width: 95%;
             }
+
+            .card-actions {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .card-actions > * {
+                width: 100%;
+            }
         }
 
         /* Animations */
@@ -900,6 +944,7 @@
     </style>
 </head>
 <body>
+    <div class="sidebar-overlay hidden" id="sidebarOverlay"></div>
     <div class="app">
         <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
@@ -1116,8 +1161,8 @@
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Библиотека упражнений</h3>
-                        <div class="flex gap-2">
-                            <input type="text" id="exerciseSearch" placeholder="Поиск упражнений..." class="form-input" style="width: 200px;">
+                        <div class="card-actions">
+                            <input type="text" id="exerciseSearch" placeholder="Поиск упражнений..." class="form-input">
                             <button class="btn btn-primary" id="addCustomExerciseBtn">
                                 <i class="mdi mdi-plus"></i>
                                 Добавить своё
@@ -2154,43 +2199,70 @@
             chatResponse: function(message) {
                 const lowerMessage = message.toLowerCase();
                 
-                if (lowerMessage.includes('привет') || lowerMessage.includes('здравствуй')) {
-                    return "Привет! Как ваши тренировки? Чем могу помочь?";
+                const lastWorkout = AppState.workouts[AppState.workouts.length - 1];
+                const lastMuscle = lastWorkout?.exercises?.[0]?.muscleGroup;
+                const lastMuscleName = lastMuscle ? UI.getMuscleGroupName(lastMuscle) : null;
+                const nextFocusName = UI.getMuscleGroupName(this.getNextFocusMuscle());
+               const scriptedAnswers = [
+                    {
+                        keywords: ['привет', 'здравствуй', 'hello', 'хай'],
+                        response: 'Привет! Я готов помочь с тренировками, питанием или восстановлением. Что интересно сегодня?'
+                    },
+                    {
+                        keywords: ['прогресс', 'улучшить', 'застой', 'plateau'],
+                        response: 'Чтобы выйти на новый уровень: 1) фиксируйте прогресс в подходах, 2) добавляйте по 2-5% нагрузки раз в неделю, 3) меняйте угол или темп движения каждые 4-6 недель.'
+                    },
+                    {
+                        keywords: ['боль', 'травм', 'болит', 'растяжение'],
+                        response: 'Сбавьте нагрузку и уделите время мобилизации. Если боль острая — приостановите тренировки и обратитесь к врачу. Упражнения без боли: планка, прогулка, легкая растяжка.'
+                    },
+                    {
+                        keywords: ['вес', 'нагруз', 'увеличить вес'],
+                        response: 'Увеличивайте вес, когда последний подход выполняется с запасом 1-2 повторения. Добавляйте 2.5-5 кг или 5-10% от текущего веса, сохраняя технику.'
+                    },
+                    {
+                        keywords: ['сброс', 'похуд', 'жир'],
+                        response: 'Для снижения веса держите дефицит 300-500 ккал, 2-3 кардио-сессии в неделю и 7-9 часов сна. Шаги: 8-10 тысяч в день + достаточный белок.'
+                    },
+                    {
+                        keywords: ['масса', 'набор', 'bulk'],
+                        response: 'Для набора массы держите профицит 200-300 ккал, 1.6-2.2 г белка на кг и 3-4 силовые тренировки в неделю. Следите, чтобы вес рос медленно — 0.25-0.5 кг в неделю.'
+                    },
+                    {
+                        keywords: ['отдых', 'восстановление', 'сон', 'перерыв'],
+                        response: 'Отдых между подходами: 60-90 сек для гипертрофии, 2-3 мин для силы. Сон 7-9 часов, прогулки или растяжка в дни без зала.'
+                    },
+                    {
+                        keywords: ['питание', 'диет', 'еда', 'калор'],
+                        response: 'Сбалансируйте тарелку: белок в каждом приеме, сложные углеводы до тренировок, овощи и полезные жиры. Воды 30-40 мл на кг веса.'
+                    },
+                    {
+                        keywords: ['размин', 'warm'],
+                        response: '5-7 минут лёгкого кардио + суставная гимнастика. Перед рабочими весами делайте 1-2 разминочных подхода с меньшим весом.'
+                    },
+                    {
+                        keywords: ['дом', 'дома', 'без зала', 'оборудование', 'инвентаря'],
+                        response: 'Без зала подойдёт круг: приседания, отжимания, тяга эспандера/в наклоне, планка. 3 круга по 12-15 повторений, отдых 60 секунд.'
+                    },
+                    {
+                        keywords: ['нет времени', 'спешу', 'быстро'],
+                        response: 'Быстрый план на 15 минут: 1) приседания 2×12, 2) отжимания 2×8-12, 3) планка 3×30 сек, 4) выпады 2×10 на ногу. Минимальный отдых — сердце разгонится.'
+                    }
+                ];
+
+                 const matched = scriptedAnswers.find(item => item.keywords.some(k => lowerMessage.includes(k)));
+                if (matched) return matched.response;
+
+                if (lowerMessage.includes('?')) {
+                    return 'Я могу помочь с программой, питанием, восстановлением и техникой. Уточните цель (сила, масса, снижение веса или выносливость), и предложу конкретный план.';
                 }
                 
-                if (lowerMessage.includes('прогресс') || lowerMessage.includes('улучшить')) {
-                    return "Для прогресса: увеличивайте вес на 2-5% раз в неделю, держите отдых 60-90 секунд и следите за техникой.";
-                }
-                
-                if (lowerMessage.includes('боль') || lowerMessage.includes('травм')) {
-                    return "При болях снизьте нагрузку, уделите внимание мобилизации и обратитесь к врачу. Не тренируйтесь через боль.";
-                }
-                
-                if (lowerMessage.includes('вес') && lowerMessage.includes('увеличить')) {
-                    return "Увеличивайте вес, когда выполняете последний подход с запасом 1-2 повторения. Добавляйте +2.5-5кг постепенно.";
+                const insights = [];
+                if (lastMuscleName) {
+                    insights.push(`В прошлый раз вы тренировали ${lastMuscleName.toLowerCase()}.`);
                 }
 
-                if (lowerMessage.includes('сброс') || lowerMessage.includes('похуд')) {
-                    return "Для снижения веса: держите дефицит 300-500 ккал, добавьте 2-3 кардио-сессии в неделю и контролируйте шаги.";
-                }
-
-                if (lowerMessage.includes('масса') || lowerMessage.includes('набор')) {
-                    return "Для набора: профицит 200-300 ккал, 1.6-2.2г белка на кг веса, силовые 3-4 раза в неделю.";
-                }
-            
-                if (lowerMessage.includes('отдых') || lowerMessage.includes('восстановление')) {
-                    return "Отдых между подходами: 60-90 сек для гипертрофии, 2-3 мин для силы. Спите 7-9 часов и делайте растяжку.";
-                }
-                
-                if (lowerMessage.includes('питание') || lowerMessage.includes('диет')) {
-                    return "Сбалансируйте тарелку: белок, сложные углеводы, овощи и полезные жиры. Пейте 30-40 мл воды на кг веса.";
-                }
-                
-                if (lowerMessage.includes('размин') || lowerMessage.includes('warm')) {
-                    return "Сделайте 5-7 минут кардио, затем суставную гимнастику и 1-2 разминочных подхода перед рабочими весами.";
-                }
-
-                return "Я ваш AI-тренер. Спросите о программе, питании или восстановлении — помогу подобрать решение.";
+                return insights.join(' ');
             }
         };
 
@@ -3127,7 +3199,20 @@
                 this.updateActiveExercises();
                 DataStorage.showToast('Упражнение добавлено', 'success');
             },
-            
+
+        removeExercise: function(exerciseIndex) {
+                if (!AppState.activeWorkout) {
+                    DataStorage.showToast('Нет активной тренировки', 'error');
+                    return;
+                }
+
+                AppState.activeWorkout.exercises.splice(exerciseIndex, 1);
+                this.updateActiveExercises();
+                this.updateTodaysWorkoutCard();
+                DataStorage.save();
+                DataStorage.showToast('Упражнение удалено', 'success');
+            },
+        
             addSet: function(exerciseIndex) {
                 AppState.activeExercise = exerciseIndex;
                 AppState.activeSetIndex = AppState.activeWorkout.exercises[exerciseIndex].sets.length;
@@ -3237,10 +3322,14 @@
             
             stopWorkoutTimer: function() {
                 clearInterval(AppState.workoutTimer);
+                AppState.workoutTimer = null;
             },
             
             completeWorkout: function() {
-                if (!AppState.activeWorkout) return;
+                if (!AppState.activeWorkout) {
+                    DataStorage.showToast('Нет активной тренировки для завершения', 'error');
+                    return;
+                }
                 
                 AppState.activeWorkout.duration = Math.floor(AppState.workoutSeconds / 60);
                 AppState.activeWorkout.endTime = Date.now();
@@ -3322,6 +3411,16 @@
                         this.setTheme(btn.dataset.theme);
                     });
                 });
+
+                const sidebar = document.getElementById('sidebar');
+                const sidebarOverlay = document.getElementById('sidebarOverlay');
+                const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+
+                const toggleSidebar = (isOpen) => {
+                    sidebar.classList.toggle('active', isOpen);
+                    sidebarOverlay.classList.toggle('active', isOpen);
+                    sidebarOverlay.classList.toggle('hidden', !isOpen);
+                };
                 
                 // Navigation
                 document.querySelectorAll('.nav-item').forEach(item => {
@@ -3330,7 +3429,7 @@
                         this.switchPage(item.dataset.page + 'Page');
                         
                         if (window.innerWidth <= 1024) {
-                            document.getElementById('sidebar').classList.remove('active');
+                            toggleSidebar(false);
                         }
                     });
                 });
@@ -3596,8 +3695,17 @@
                 });
                 
                 // Mobile menu
-                document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-                    document.getElementById('sidebar').classList.toggle('active');
+                mobileMenuBtn.addEventListener('click', () => {
+                    toggleSidebar(!sidebar.classList.contains('active'));
+                });
+
+                sidebarOverlay.addEventListener('click', () => toggleSidebar(false));
+
+                document.addEventListener('click', (e) => {
+                    const isClickOutside = !sidebar.contains(e.target) && !mobileMenuBtn.contains(e.target);
+                    if (window.innerWidth <= 1024 && sidebar.classList.contains('active') && isClickOutside) {
+                        toggleSidebar(false);
+                    }
                 });
                 
                 // Modal close on outside click
@@ -3612,7 +3720,7 @@
                 // Window resize
                 window.addEventListener('resize', () => {
                     if (window.innerWidth > 1024) {
-                        document.getElementById('sidebar').classList.remove('active');
+                        toggleSidebar(false);
                         document.getElementById('mobileMenuBtn').classList.add('hidden');
                     } else {
                         document.getElementById('mobileMenuBtn').classList.remove('hidden');
