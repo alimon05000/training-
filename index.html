@@ -1474,6 +1474,47 @@
         </div>
     </div>
 
+    <div class="modal" id="customExerciseModal">
+        <div class="modal-content modal-large">
+            <h3 class="mb-3">Добавить своё упражнение</h3>
+            <div class="form-group">
+                <label class="form-label">Название</label>
+                <input type="text" id="customExerciseName" class="form-input" placeholder="Например: Планка на локтях">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="customExerciseDescription" class="form-input" rows="3" placeholder="Краткое описание техники выполнения"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Группа мышц</label>
+                <select id="customExerciseMuscle" class="form-input">
+                    <option value="chest">Грудь</option>
+                    <option value="back">Спина</option>
+                    <option value="legs">Ноги</option>
+                    <option value="shoulders">Плечи</option>
+                    <option value="arms">Руки</option>
+                    <option value="core" selected>Пресс</option>
+                    <option value="cardio">Кардио</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Оборудование</label>
+                <select id="customExerciseEquipment" class="form-input">
+                    <option value="bodyweight">Собственный вес</option>
+                    <option value="dumbbell">Гантели</option>
+                    <option value="barbell">Штанга</option>
+                    <option value="machine">Тренажёр</option>
+                    <option value="cable">Тросы</option>
+                    <option value="cardio">Кардио</option>
+                </select>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="cancelCustomExerciseBtn">Отмена</button>
+                <button class="btn btn-primary w-full" id="saveCustomExerciseBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal" id="createTemplateModal">
         <div class="modal-content modal-large">
             <h3 class="mb-3">Создать шаблон тренировки</h3>
@@ -1564,6 +1605,7 @@
             onboardingComplete: localStorage.getItem('onboardingComplete') === 'true',
             deferredInstallPrompt: null,
             currentMuscleFilter: 'all',
+            templateBuilderExercises: [],
             
             // Data storage
             workouts: JSON.parse(localStorage.getItem('workouts')) || [],
@@ -3123,6 +3165,42 @@
                 
                 DataStorage.showToast('Тренировка начата', 'success');
             },
+
+            resetTemplateBuilder: function(initialExercises = []) {
+                AppState.templateBuilderExercises = JSON.parse(JSON.stringify(initialExercises));
+                this.renderTemplateExercises();
+            },
+
+            renderTemplateExercises: function() {
+                const list = document.getElementById('templateExercisesList');
+                list.innerHTML = '';
+
+                if (!AppState.templateBuilderExercises.length) {
+                    list.innerHTML = '<p class="text-secondary">Добавьте упражнения в шаблон</p>';
+                    return;
+                }
+
+                AppState.templateBuilderExercises.forEach((exercise, index) => {
+                    const exerciseDiv = document.createElement('div');
+                    exerciseDiv.className = 'exercise-item mb-2';
+                    exerciseDiv.innerHTML = `
+                        <div class="flex justify-between">
+                            <span>${exercise.name}</span>
+                            <div class="flex gap-1">
+                                <span class="text-secondary text-sm">${exercise.sets?.length || 0} подходов</span>
+                                <button class="btn btn-small btn-danger" data-remove-template-exercise="${index}">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    exerciseDiv.querySelector('[data-remove-template-exercise]').addEventListener('click', () => {
+                        AppState.templateBuilderExercises.splice(index, 1);
+                        this.renderTemplateExercises();
+                    });
+                    list.appendChild(exerciseDiv);
+                });
+            },
             
             updateActiveExercises: function() {
                 const container = document.getElementById('activeExercises');
@@ -3358,23 +3436,11 @@
             },
             
             showSaveTemplateModal: function() {
-                document.getElementById('templateName').value = AppState.activeWorkout.name + ' (шаблон)';
+                const workout = AppState.activeWorkout || { name: 'Новый шаблон', exercises: [] };
+                document.getElementById('templateName').value = (workout.name || 'Новый шаблон') + ' (шаблон)';
                 document.getElementById('templateDescription').value = '';
-                document.getElementById('templateExercisesList').innerHTML = '';
                 
-                // Add current exercises to template
-                AppState.activeWorkout.exercises.forEach(exercise => {
-                    const exerciseDiv = document.createElement('div');
-                    exerciseDiv.className = 'exercise-item mb-2';
-                    exerciseDiv.innerHTML = `
-                        <div class="flex justify-between">
-                            <span>${exercise.name}</span>
-                            <span class="text-secondary">${exercise.sets.length} подходов</span>
-                        </div>
-                    `;
-                    document.getElementById('templateExercisesList').appendChild(exerciseDiv);
-                });
-                
+                this.resetTemplateBuilder(workout.exercises || []); 
                 document.getElementById('createTemplateModal').classList.add('active');
             },
             
@@ -3386,18 +3452,25 @@
                     DataStorage.showToast('Введите название шаблона', 'error');
                     return;
                 }
+
+                 if (AppState.templateBuilderExercises.length === 0) {
+                    DataStorage.showToast('Добавьте хотя бы одно упражнение', 'error');
+                    return;
+                }
                 
                 const template = {
                     id: Date.now().toString(),
                     name: name,
                     description: description,
-                    exercises: JSON.parse(JSON.stringify(AppState.activeWorkout.exercises || [])),
+                    exercises: JSON.parse(JSON.stringify(AppState.templateBuilderExercises)),
                     created: new Date().toISOString()
                 };
                 
                 AppState.templates.push(template);
                 DataStorage.save();
                 this.loadTemplates();
+
+                this.resetTemplateBuilder();
                 
                 document.getElementById('createTemplateModal').classList.remove('active');
                 DataStorage.showToast('Шаблон сохранён', 'success');
@@ -3555,6 +3628,9 @@
                 
                 // Create template button
                 document.getElementById('createTemplateBtn').addEventListener('click', () => {
+                    document.getElementById('templateName').value = '';
+                    document.getElementById('templateDescription').value = '';
+                    this.resetTemplateBuilder();
                     document.getElementById('createTemplateModal').classList.add('active');
                 });
                 
@@ -3569,18 +3645,54 @@
                         .find(e => e.id === exerciseId);
                     
                     if (exercise) {
-                        const exerciseDiv = document.createElement('div');
-                        exerciseDiv.className = 'exercise-item mb-2';
-                        exerciseDiv.innerHTML = `
-                            <div class="flex justify-between">
-                                <span>${exercise.name}</span>
-                                <button class="btn btn-small btn-danger" onclick="this.parentElement.parentElement.remove()">
-                                    <i class="mdi mdi-delete"></i>
-                                </button>
-                            </div>
-                        `;
-                        document.getElementById('templateExercisesList').appendChild(exerciseDiv);
+                        const exerciseCopy = JSON.parse(JSON.stringify(exercise));
+                        exerciseCopy.sets = exerciseCopy.sets || [];
+                        AppState.templateBuilderExercises.push(exerciseCopy);
+                        this.renderTemplateExercises();
                     }
+                });
+
+                // Custom exercise modal
+                document.getElementById('addCustomExerciseBtn').addEventListener('click', () => {
+                    document.getElementById('customExerciseName').value = '';
+                    document.getElementById('customExerciseDescription').value = '';
+                    document.getElementById('customExerciseMuscle').value = 'core';
+                    document.getElementById('customExerciseEquipment').value = 'bodyweight';
+                    document.getElementById('customExerciseModal').classList.add('active');
+                });
+
+                document.getElementById('cancelCustomExerciseBtn').addEventListener('click', () => {
+                    document.getElementById('customExerciseModal').classList.remove('active');
+                });
+
+                document.getElementById('saveCustomExerciseBtn').addEventListener('click', () => {
+                    const name = document.getElementById('customExerciseName').value.trim();
+                    const description = document.getElementById('customExerciseDescription').value.trim();
+                    const muscleGroup = document.getElementById('customExerciseMuscle').value;
+                    const equipment = document.getElementById('customExerciseEquipment').value;
+
+                    if (!name || !description) {
+                        DataStorage.showToast('Заполните название и описание упражнения', 'error');
+                        return;
+                    }
+
+                    const newExercise = {
+                        id: 'custom-' + Date.now(),
+                        name,
+                        description,
+                        muscleGroup,
+                        secondaryMuscles: [],
+                        equipment,
+                        image: null,
+                        sets: []
+                    };
+
+                    AppState.exercises.push(newExercise);
+                    DataStorage.save();
+                    this.loadExercises(AppState.currentMuscleFilter);
+                    document.getElementById('customExerciseModal').classList.remove('active');
+                    DataStorage.showToast('Упражнение добавлено в библиотеку', 'success');
+                
                 });
                 
                 // Tabs
