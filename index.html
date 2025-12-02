@@ -20,6 +20,9 @@
     <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
     
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     <style>
         :root {
             /* Light theme */
@@ -28,6 +31,7 @@
             --secondary: #10b981;
             --danger: #ef4444;
             --warning: #f59e0b;
+            --info: #3b82f6;
             --background: #ffffff;
             --surface: #f8fafc;
             --surface-alt: #f1f5f9;
@@ -35,10 +39,12 @@
             --text-secondary: #64748b;
             --border: #e2e8f0;
             --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
             --calendar-train: #10b981;
             --calendar-rest: #8b5cf6;
             --calendar-cardio: #f59e0b;
             --calendar-home: #3b82f6;
+            --success: #10b981;
         }
 
         [data-theme="dark"] {
@@ -47,6 +53,7 @@
             --secondary: #34d399;
             --danger: #f87171;
             --warning: #fbbf24;
+            --info: #60a5fa;
             --background: #0f172a;
             --surface: #1e293b;
             --surface-alt: #334155;
@@ -54,17 +61,19 @@
             --text-secondary: #cbd5e1;
             --border: #475569;
             --shadow: rgba(0, 0, 0, 0.3);
+            --shadow-lg: rgba(0, 0, 0, 0.4);
             --calendar-train: #10b981;
             --calendar-rest: #a78bfa;
             --calendar-cardio: #f59e0b;
             --calendar-home: #60a5fa;
+            --success: #34d399;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
+            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
 
         body {
@@ -140,6 +149,7 @@
             text-decoration: none;
             transition: all 0.2s ease;
             cursor: pointer;
+            user-select: none;
         }
 
         .nav-item:hover {
@@ -173,6 +183,7 @@
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.2s ease;
+            user-select: none;
         }
 
         .theme-btn.active {
@@ -194,6 +205,8 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .date-display {
@@ -212,6 +225,8 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            user-select: none;
+            outline: none;
         }
 
         .btn-primary {
@@ -223,6 +238,41 @@
             background: var(--primary-dark);
             transform: translateY(-2px);
             box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .btn-secondary {
+            background: var(--surface-alt);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
         }
 
         /* Dashboard Grid */
@@ -293,6 +343,8 @@
             position: relative;
             border: 2px solid transparent;
             transition: all 0.2s ease;
+            user-select: none;
+            font-weight: 500;
         }
 
         .calendar-day:hover {
@@ -308,12 +360,20 @@
             background: linear-gradient(135deg, var(--calendar-rest), transparent);
         }
 
+        .calendar-day.cardio {
+            background: linear-gradient(135deg, var(--calendar-cardio), transparent);
+        }
+
+        .calendar-day.home {
+            background: linear-gradient(135deg, var(--calendar-home), transparent);
+        }
+
         .calendar-day.has-training::after {
             content: '';
             position: absolute;
             bottom: 4px;
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
             border-radius: 50%;
             background: var(--primary);
         }
@@ -321,6 +381,11 @@
         .calendar-day.today {
             border-color: var(--primary);
             font-weight: bold;
+        }
+
+        .calendar-day.other-month {
+            color: var(--text-secondary);
+            opacity: 0.5;
         }
 
         /* Stats */
@@ -366,8 +431,8 @@
 
         .sets-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 0.75rem;
             margin-top: 1rem;
         }
 
@@ -376,6 +441,22 @@
             padding: 0.75rem;
             border-radius: 8px;
             text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        .set-item.active {
+            border-color: var(--primary);
+            background: var(--surface);
+        }
+
+        .set-input {
+            width: 60px;
+            padding: 0.25rem;
+            text-align: center;
+            background: var(--background);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-primary);
         }
 
         /* Timer */
@@ -385,12 +466,32 @@
             text-align: center;
             color: var(--primary);
             margin: 1rem 0;
+            font-feature-settings: "tnum";
         }
 
         .timer-controls {
             display: flex;
             gap: 1rem;
             justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .rest-timer {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow-lg);
+            z-index: 1000;
+            display: none;
+        }
+
+        .rest-timer.active {
+            display: block;
+            animation: slideIn 0.3s ease;
         }
 
         /* AI Trainer */
@@ -409,6 +510,67 @@
             margin: 1rem 0;
         }
 
+        .ai-chat {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 1rem;
+        }
+
+        .ai-message-bubble {
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.75rem;
+            max-width: 80%;
+        }
+
+        .ai-message-bubble.user {
+            background: var(--primary);
+            color: white;
+            margin-left: auto;
+        }
+
+        /* Exercise Library */
+        .exercise-library {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .exercise-card {
+            background: var(--surface-alt);
+            border-radius: 12px;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .exercise-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .muscle-group-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Progress Charts */
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 1rem 0;
+        }
+
         /* Modal */
         .modal {
             position: fixed;
@@ -420,11 +582,13 @@
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
         }
 
         .modal.active {
             display: flex;
+            animation: fadeIn 0.3s ease;
         }
 
         .modal-content {
@@ -435,6 +599,120 @@
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px var(--shadow-lg);
+        }
+
+        .modal-large {
+            max-width: 800px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--background);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            user-select: none;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: var(--surface);
+            color: var(--text-primary);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow-lg);
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            background: var(--success);
+            color: white;
+        }
+
+        .toast.error {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            height: 8px;
+            background: var(--surface-alt);
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Loading */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
         }
 
         /* Responsive */
@@ -460,6 +738,12 @@
                 top: 1rem;
                 left: 1rem;
                 z-index: 999;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                padding: 0.75rem;
+                cursor: pointer;
             }
         }
 
@@ -474,13 +758,32 @@
             
             .btn {
                 padding: 0.5rem 1rem;
+                font-size: 0.875rem;
+            }
+            
+            .timer-display {
+                font-size: 2rem;
+            }
+            
+            .modal-content {
+                padding: 1rem;
+                width: 95%;
             }
         }
 
         /* Animations */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         .fade-in {
@@ -490,6 +793,57 @@
         /* Utility */
         .hidden {
             display: none !important;
+        }
+
+        .text-secondary {
+            color: var(--text-secondary);
+        }
+
+        .text-success {
+            color: var(--success);
+        }
+
+        .text-danger {
+            color: var(--danger);
+        }
+
+        .text-warning {
+            color: var(--warning);
+        }
+
+        .mb-1 { margin-bottom: 0.5rem; }
+        .mb-2 { margin-bottom: 1rem; }
+        .mb-3 { margin-bottom: 1.5rem; }
+        .mt-1 { margin-top: 0.5rem; }
+        .mt-2 { margin-top: 1rem; }
+        .mt-3 { margin-top: 1.5rem; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .gap-1 { gap: 0.5rem; }
+        .gap-2 { gap: 1rem; }
+        .gap-3 { gap: 1.5rem; }
+        .w-full { width: 100%; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--surface-alt);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
     </style>
 </head>
@@ -551,13 +905,19 @@
             <!-- Header -->
             <header class="header">
                 <div class="date-display" id="currentDate"></div>
-                <button class="btn btn-primary" id="newWorkoutBtn">
-                    <i class="mdi mdi-plus"></i>
-                    Новая тренировка
-                </button>
+                <div class="flex gap-2">
+                    <button class="btn btn-secondary" id="quickWorkoutBtn">
+                        <i class="mdi mdi-lightning-bolt"></i>
+                        Быстрая тренировка
+                    </button>
+                    <button class="btn btn-primary" id="newWorkoutBtn">
+                        <i class="mdi mdi-plus"></i>
+                        Новая тренировка
+                    </button>
+                </div>
             </header>
 
-            <!-- Dashboard Content -->
+            <!-- Dashboard Page -->
             <div id="dashboardPage" class="page active">
                 <div class="dashboard-grid">
                     <!-- Today's Workout -->
@@ -567,8 +927,8 @@
                             <span class="mdi mdi-dumbbell" style="color: var(--primary);"></span>
                         </div>
                         <div id="todaysWorkout">
-                            <p class="text-secondary">Нет запланированных тренировок</p>
-                            <button class="btn btn-primary" style="margin-top: 1rem; width: 100%;">
+                            <p class="text-secondary mb-2">Нет запланированных тренировок</p>
+                            <button class="btn btn-primary w-full" id="startTodayWorkoutBtn">
                                 <i class="mdi mdi-play"></i>
                                 Начать тренировку
                             </button>
@@ -606,7 +966,7 @@
                         <div class="ai-message">
                             <p id="aiRecommendation">Добро пожаловать! Начните первую тренировку, и я помогу вам прогрессировать.</p>
                         </div>
-                        <button class="btn" style="background: white; color: var(--primary); width: 100%;">
+                        <button class="btn" style="background: white; color: var(--primary); width: 100%;" id="aiChatBtn">
                             <i class="mdi mdi-message-text"></i>
                             Спросить AI-тренера
                         </button>
@@ -614,10 +974,10 @@
                 </div>
 
                 <!-- Calendar Preview -->
-                <div class="card" style="margin-top: 1.5rem;">
+                <div class="card mt-3">
                     <div class="card-header">
                         <h3 class="card-title">Календарь тренировок</h3>
-                        <button class="btn" style="padding: 0.5rem 1rem;" id="viewCalendarBtn">
+                        <button class="btn btn-secondary" id="viewCalendarBtn">
                             <i class="mdi mdi-arrow-right"></i>
                             Открыть календарь
                         </button>
@@ -626,9 +986,12 @@
                 </div>
 
                 <!-- Recent Workouts -->
-                <div class="card" style="margin-top: 1.5rem;">
+                <div class="card mt-3">
                     <div class="card-header">
                         <h3 class="card-title">Последние тренировки</h3>
+                        <button class="btn btn-small btn-secondary" id="viewAllWorkoutsBtn">
+                            Все тренировки
+                        </button>
                     </div>
                     <div id="recentWorkouts">
                         <p class="text-secondary">Пока нет завершённых тренировок</p>
@@ -640,37 +1003,259 @@
             <div id="calendarPage" class="page hidden">
                 <div class="calendar">
                     <div class="calendar-header">
-                        <button class="btn" id="prevMonth">
-                            <i class="mdi mdi-chevron-left"></i>
-                        </button>
-                        <h2 id="currentMonth"></h2>
-                        <button class="btn" id="nextMonth">
-                            <i class="mdi mdi-chevron-right"></i>
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button class="btn btn-secondary" id="prevMonth">
+                                <i class="mdi mdi-chevron-left"></i>
+                            </button>
+                            <h2 id="currentMonth" class="text-2xl font-bold"></h2>
+                            <button class="btn btn-secondary" id="nextMonth">
+                                <i class="mdi mdi-chevron-right"></i>
+                            </button>
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn btn-secondary" id="todayBtn">
+                                Сегодня
+                            </button>
+                            <button class="btn btn-primary" id="addToCalendarBtn">
+                                <i class="mdi mdi-plus"></i>
+                                Добавить тренировку
+                            </button>
+                        </div>
                     </div>
                     <div id="calendarContainer"></div>
                 </div>
             </div>
 
-            <!-- Workout Page -->
+            <!-- Workouts Page -->
             <div id="workoutsPage" class="page hidden">
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">Мои тренировки</h3>
-                        <button class="btn btn-primary" id="createTemplateBtn">
-                            <i class="mdi mdi-plus"></i>
-                            Новый шаблон
-                        </button>
+                        <div class="flex gap-2">
+                            <button class="btn btn-secondary" id="importWorkoutBtn">
+                                <i class="mdi mdi-import"></i>
+                                Импорт
+                            </button>
+                            <button class="btn btn-primary" id="createTemplateBtn">
+                                <i class="mdi mdi-plus"></i>
+                                Новый шаблон
+                            </button>
+                        </div>
+                    </div>
+                    <div class="tabs">
+                        <div class="tab active" data-tab="templates">Шаблоны</div>
+                        <div class="tab" data-tab="history">История</div>
+                        <div class="tab" data-tab="plans">Планы</div>
                     </div>
                     <div id="templatesList">
-                        <div class="exercise-item" style="cursor: pointer;">
-                            <h4>День ног</h4>
-                            <p class="text-secondary">4 упражнения • 60 минут</p>
+                        <!-- Templates will be loaded here -->
+                    </div>
+                    <div id="workoutsHistory" class="hidden">
+                        <!-- History will be loaded here -->
+                    </div>
+                    <div id="workoutPlans" class="hidden">
+                        <!-- Plans will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercises Page -->
+            <div id="exercisesPage" class="page hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Библиотека упражнений</h3>
+                        <div class="flex gap-2">
+                            <input type="text" id="exerciseSearch" placeholder="Поиск упражнений..." class="form-input" style="width: 200px;">
+                            <button class="btn btn-primary" id="addCustomExerciseBtn">
+                                <i class="mdi mdi-plus"></i>
+                                Добавить своё
+                            </button>
                         </div>
-                        <div class="exercise-item" style="cursor: pointer;">
-                            <h4>Грудь и трицепс</h4>
-                            <p class="text-secondary">5 упражнений • 45 минут</p>
+                    </div>
+                    <div class="tabs mb-3">
+                        <div class="tab active" data-muscle="all">Все</div>
+                        <div class="tab" data-muscle="chest">Грудь</div>
+                        <div class="tab" data-muscle="back">Спина</div>
+                        <div class="tab" data-muscle="legs">Ноги</div>
+                        <div class="tab" data-muscle="shoulders">Плечи</div>
+                        <div class="tab" data-muscle="arms">Руки</div>
+                        <div class="tab" data-muscle="core">Пресс</div>
+                        <div class="tab" data-muscle="cardio">Кардио</div>
+                    </div>
+                    <div class="exercise-library" id="exerciseLibrary">
+                        <!-- Exercises will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Trainer Page -->
+            <div id="aiTrainerPage" class="page hidden">
+                <div class="ai-trainer-card mb-3">
+                    <div class="card-header">
+                        <h3 class="card-title" style="color: white;">Ваш персональный AI-тренер</h3>
+                        <span class="mdi mdi-robot" style="color: white; font-size: 2rem;"></span>
+                    </div>
+                    <div class="ai-message">
+                        <p id="aiMainRecommendation">Анализирую ваши тренировки... Начните первую тренировку для получения персональных рекомендаций.</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Рекомендации по прогрессу</h3>
+                            <i class="mdi mdi-trending-up" style="color: var(--primary);"></i>
                         </div>
+                        <div id="progressRecommendations">
+                            <p class="text-secondary">Заполните данные тренировок для получения рекомендаций</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">План на неделю</h3>
+                            <i class="mdi mdi-calendar-week" style="color: var(--primary);"></i>
+                        </div>
+                        <div id="weeklyPlan">
+                            <p class="text-secondary">AI создаст план после анализа ваших данных</p>
+                        </div>
+                        <button class="btn btn-primary w-full mt-2" id="generatePlanBtn">
+                            <i class="mdi mdi-robot"></i>
+                            Создать план
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h3 class="card-title">Чат с AI-тренером</h3>
+                    </div>
+                    <div class="ai-chat" id="aiChat">
+                        <div class="ai-message-bubble">
+                            Привет! Я ваш AI-тренер. Спросите меня о тренировках, технике упражнений или получите рекомендации по прогрессу.
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="aiChatInput" placeholder="Задайте вопрос..." class="form-input" style="flex: 1;">
+                        <button class="btn btn-primary" id="sendAiMessageBtn">
+                            <i class="mdi mdi-send"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Page -->
+            <div id="statsPage" class="page hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Статистика и прогресс</h3>
+                        <select id="statsPeriod" class="form-input" style="width: 150px;">
+                            <option value="week">Неделя</option>
+                            <option value="month" selected>Месяц</option>
+                            <option value="3months">3 месяца</option>
+                            <option value="year">Год</option>
+                            <option value="all">Всё время</option>
+                        </select>
+                    </div>
+                    <div class="tabs mb-3">
+                        <div class="tab active" data-stat="overview">Обзор</div>
+                        <div class="tab" data-stat="exercises">Упражнения</div>
+                        <div class="tab" data-stat="muscles">Группы мышц</div>
+                        <div class="tab" data-stat="volume">Объём</div>
+                    </div>
+                    <div id="statsOverview" class="stats-overview">
+                        <div class="chart-container">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                        <div class="stats-grid mt-3">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalWorkouts">0</div>
+                                <div class="stat-label">Всего тренировок</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalVolume">0</div>
+                                <div class="stat-label">Общий объём (кг)</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="avgWorkoutTime">0</div>
+                                <div class="stat-label">Ср. время (мин)</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="consistency">0%</div>
+                                <div class="stat-label">Консистентность</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="statsExercises" class="hidden">
+                        <!-- Exercise stats will be loaded here -->
+                    </div>
+                    <div id="statsMuscles" class="hidden">
+                        <!-- Muscle group stats will be loaded here -->
+                    </div>
+                    <div id="statsVolume" class="hidden">
+                        <!-- Volume stats will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsPage" class="page hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Настройки</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Единицы измерения</label>
+                        <select id="weightUnit" class="form-input">
+                            <option value="kg">Килограммы (кг)</option>
+                            <option value="lbs">Фунты (lbs)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Таймер отдыха по умолчанию (сек)</label>
+                        <input type="number" id="restTimerDefault" class="form-input" value="90" min="30" max="300">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Уведомления</label>
+                        <div class="flex items-center gap-2 mb-2">
+                            <input type="checkbox" id="notificationsEnabled" class="form-input" style="width: auto;">
+                            <span>Включить уведомления</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="reminderEnabled" class="form-input" style="width: auto;">
+                            <span>Напоминания о тренировках</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Автосохранение</label>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="autoSave" class="form-input" style="width: auto;" checked>
+                            <span>Автоматически сохранять данные</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Экспорт данных</label>
+                        <div class="flex gap-2">
+                            <button class="btn btn-secondary" id="exportDataBtn">
+                                <i class="mdi mdi-export"></i>
+                                Экспорт в JSON
+                            </button>
+                            <button class="btn btn-secondary" id="exportCSVBtn">
+                                <i class="mdi mdi-file-excel"></i>
+                                Экспорт в CSV
+                            </button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Импорт данных</label>
+                        <input type="file" id="importDataInput" class="form-input" accept=".json,.csv">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Сброс данных</label>
+                        <button class="btn btn-danger" id="resetDataBtn">
+                            <i class="mdi mdi-delete"></i>
+                            Сбросить все данные
+                        </button>
                     </div>
                 </div>
             </div>
@@ -678,36 +1263,31 @@
             <!-- Active Workout Session -->
             <div id="workoutSession" class="workout-session hidden">
                 <div class="card-header">
-                    <h3 class="card-title" id="workoutTitle">Активная тренировка</h3>
-                    <div class="timer-display" id="workoutTimer">00:00</div>
-                </div>
-                
-                <div class="exercise-item">
-                    <h4>Приседания со штангой</h4>
-                    <div class="sets-grid">
-                        <div class="set-item">1: 100кг × 10</div>
-                        <div class="set-item">2: 100кг × 10</div>
-                        <div class="set-item">3: <input type="text" placeholder="кг × повт" style="width: 80px; text-align: center;"></div>
-                    </div>
-                    <div class="timer-controls" style="margin-top: 1rem;">
-                        <button class="btn">
-                            <i class="mdi mdi-timer"></i>
-                            Таймер отдыха
-                        </button>
-                        <button class="btn btn-primary">
-                            <i class="mdi mdi-check"></i>
-                            Завершить подход
-                        </button>
+                    <div class="flex justify-between items-center">
+                        <h3 class="card-title" id="workoutTitle">Активная тренировка</h3>
+                        <div class="flex items-center gap-2">
+                            <div class="timer-display" id="workoutTimer">00:00</div>
+                            <button class="btn btn-secondary" id="pauseWorkoutBtn">
+                                <i class="mdi mdi-pause"></i>
+                            </button>
+                            <button class="btn btn-danger" id="endWorkoutBtn">
+                                <i class="mdi mdi-stop"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 
-                <div class="timer-controls">
-                    <button class="btn">
-                        <i class="mdi mdi-pause"></i>
-                        Пауза
+                <div id="activeExercises">
+                    <!-- Active exercises will be loaded here -->
+                </div>
+                
+                <div class="flex gap-2 mt-3">
+                    <button class="btn btn-secondary" id="addExerciseToWorkoutBtn">
+                        <i class="mdi mdi-plus"></i>
+                        Добавить упражнение
                     </button>
-                    <button class="btn btn-primary">
-                        <i class="mdi mdi-stop"></i>
+                    <button class="btn btn-primary" id="completeWorkoutBtn">
+                        <i class="mdi mdi-check-all"></i>
                         Завершить тренировку
                     </button>
                 </div>
@@ -718,124 +1298,675 @@
     <!-- Modals -->
     <div class="modal" id="newWorkoutModal">
         <div class="modal-content">
-            <h3 style="margin-bottom: 1.5rem;">Новая тренировка</h3>
-            <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <input type="text" id="workoutName" placeholder="Название тренировки" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text-primary);">
-                <select id="workoutType" style="padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--background); color: var(--text-primary);">
+            <h3 class="mb-3">Новая тренировка</h3>
+            <div class="form-group">
+                <label class="form-label">Название тренировки</label>
+                <input type="text" id="workoutName" class="form-input" placeholder="Например: День ног">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Тип тренировки</label>
+                <select id="workoutType" class="form-input">
                     <option value="gym">Зал</option>
                     <option value="home">Домашняя</option>
                     <option value="cardio">Кардио</option>
                     <option value="recovery">Восстановление</option>
                 </select>
-                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                    <button class="btn" id="cancelWorkoutBtn" style="flex: 1;">Отмена</button>
-                    <button class="btn btn-primary" id="startWorkoutBtn" style="flex: 1;">Начать</button>
-                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Использовать шаблон</label>
+                <select id="workoutTemplate" class="form-input">
+                    <option value="">Без шаблона</option>
+                </select>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="cancelWorkoutBtn">Отмена</button>
+                <button class="btn btn-primary w-full" id="startWorkoutBtn">Начать</button>
             </div>
         </div>
     </div>
 
     <div class="modal" id="dayDetailModal">
         <div class="modal-content">
-            <h3 id="dayDetailTitle" style="margin-bottom: 1.5rem;"></h3>
+            <h3 id="dayDetailTitle" class="mb-3"></h3>
             <div id="dayWorkouts"></div>
-            <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+            <button class="btn btn-primary w-full mt-2" id="addWorkoutToDayBtn">
                 <i class="mdi mdi-plus"></i>
                 Добавить тренировку
             </button>
         </div>
     </div>
 
+    <div class="modal" id="exerciseDetailModal">
+        <div class="modal-content modal-large">
+            <h3 id="exerciseDetailTitle" class="mb-3"></h3>
+            <div id="exerciseDetailContent"></div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="closeExerciseDetailBtn">Закрыть</button>
+                <button class="btn btn-primary w-full" id="addExerciseToCurrentBtn">Добавить в тренировку</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="createTemplateModal">
+        <div class="modal-content modal-large">
+            <h3 class="mb-3">Создать шаблон тренировки</h3>
+            <div class="form-group">
+                <label class="form-label">Название шаблона</label>
+                <input type="text" id="templateName" class="form-input" placeholder="Например: Силовая тренировка груди">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Описание</label>
+                <textarea id="templateDescription" class="form-input" rows="3" placeholder="Описание тренировки..."></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Добавить упражнения</label>
+                <div class="flex gap-2 mb-2">
+                    <select id="templateExerciseSelect" class="form-input" style="flex: 1;">
+                        <!-- Exercises will be loaded here -->
+                    </select>
+                    <button class="btn btn-primary" id="addExerciseToTemplateBtn">
+                        <i class="mdi mdi-plus"></i>
+                    </button>
+                </div>
+                <div id="templateExercisesList"></div>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="cancelTemplateBtn">Отмена</button>
+                <button class="btn btn-primary w-full" id="saveTemplateBtn">Сохранить шаблон</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="setDetailModal">
+        <div class="modal-content">
+            <h3 id="setDetailTitle" class="mb-3"></h3>
+            <div class="form-group">
+                <label class="form-label">Вес (<span id="weightUnitLabel">кг</span>)</label>
+                <input type="number" id="setWeight" class="form-input" step="0.5">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Повторения</label>
+                <input type="number" id="setReps" class="form-input" min="1" max="50">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Время отдыха (сек)</label>
+                <input type="number" id="setRest" class="form-input" value="90" min="30" max="300">
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="cancelSetBtn">Отмена</button>
+                <button class="btn btn-primary w-full" id="saveSetBtn">Сохранить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Rest Timer -->
+    <div class="rest-timer" id="restTimer">
+        <div class="timer-display" style="font-size: 2rem;" id="restTimerDisplay">01:30</div>
+        <div class="text-center mb-2">Отдых</div>
+        <div class="timer-controls">
+            <button class="btn btn-small btn-secondary" id="skipRestBtn">Пропустить</button>
+            <button class="btn btn-small btn-success" id="startNextSetBtn">Начать подход</button>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
     <!-- Mobile Menu Button -->
-    <button class="btn btn-primary mobile-menu-btn hidden" id="mobileMenuBtn">
+    <button class="mobile-menu-btn hidden" id="mobileMenuBtn">
         <i class="mdi mdi-menu"></i>
     </button>
 
     <script>
-        // App State
-        const state = {
+        // ==================== APP STATE ====================
+        const AppState = {
             theme: localStorage.getItem('theme') || 'light',
             currentDate: new Date(),
             currentMonth: new Date().getMonth(),
             currentYear: new Date().getFullYear(),
+            activeWorkout: null,
+            activeExercise: null,
+            activeSetIndex: 0,
+            isWorkoutActive: false,
+            isRestTimerActive: false,
+            workoutTimer: null,
+            workoutSeconds: 0,
+            restTimer: null,
+            restSeconds: 0,
+            defaultRestTime: parseInt(localStorage.getItem('restTimerDefault') || '90'),
+            
+            // Data storage
             workouts: JSON.parse(localStorage.getItem('workouts')) || [],
             templates: JSON.parse(localStorage.getItem('templates')) || [],
-            aiMessages: [
-                "Добро пожаловать! Начните первую тренировку, и я помогу вам прогрессировать.",
-                "Рекомендую увеличить вес на 2.5кг в жиме лёжа, если последние подходы давались легко.",
-                "Вы хорошо прогрессируете в приседаниях! Продолжайте в том же темпе.",
-                "Обратите внимание на время отдыха между подходами — можно сократить до 90 секунд.",
-                "Отличная работа на прошлой тренировке! Сегодня можете увеличить объём."
+            exercises: JSON.parse(localStorage.getItem('exercises')) || [],
+            settings: JSON.parse(localStorage.getItem('settings')) || {
+                weightUnit: 'kg',
+                notifications: true,
+                reminders: true,
+                autoSave: true
+            },
+            
+            // AI State
+            aiMessages: [],
+            aiRecommendations: [],
+            
+            // Initialize with zero stats
+            stats: {
+                totalWorkouts: 0,
+                totalVolume: 0,
+                totalTime: 0,
+                consistency: 0,
+                muscleGroups: {},
+                exerciseProgress: {}
+            }
+        };
+
+        // ==================== EXERCISE LIBRARY ====================
+        const ExerciseLibrary = {
+            exercises: [
+                // Chest
+                {
+                    id: 'bench-press',
+                    name: 'Жим штанги лёжа',
+                    description: 'Базовое упражнение для развития грудных мышц. Лягте на скамью, возьмите штангу на ширине плеч, опустите к груди и выжмите вверх.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: ['triceps', 'shoulders'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'incline-press',
+                    name: 'Жим штанги на наклонной скамье',
+                    description: 'Упражнение для верхней части грудных мышц.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: ['shoulders', 'triceps'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'dumbbell-fly',
+                    name: 'Разведение гантелей лёжа',
+                    description: 'Изолирующее упражнение для растяжки грудных мышц.',
+                    muscleGroup: 'chest',
+                    secondaryMuscles: [],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                
+                // Back
+                {
+                    id: 'deadlift',
+                    name: 'Становая тяга',
+                    description: 'Базовое упражнение для развития спины и ног.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['legs', 'core'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'pull-ups',
+                    name: 'Подтягивания',
+                    description: 'Упражнение для развития широчайших мышц спины.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['biceps'],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'bent-over-row',
+                    name: 'Тяга штанги в наклоне',
+                    description: 'Упражнение для толщины спины.',
+                    muscleGroup: 'back',
+                    secondaryMuscles: ['biceps'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                
+                // Legs
+                {
+                    id: 'squat',
+                    name: 'Приседания со штангой',
+                    description: 'Базовое упражнение для развития ног.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['core', 'back'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'leg-press',
+                    name: 'Жим ногами',
+                    description: 'Упражнение для квадрицепсов.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: [],
+                    equipment: 'machine',
+                    image: null
+                },
+                {
+                    id: 'lunges',
+                    name: 'Выпады',
+                    description: 'Упражнение для ног и ягодиц.',
+                    muscleGroup: 'legs',
+                    secondaryMuscles: ['glutes'],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                
+                // Shoulders
+                {
+                    id: 'overhead-press',
+                    name: 'Жим штанги стоя',
+                    description: 'Базовое упражнение для плеч.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: ['triceps'],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'lateral-raises',
+                    name: 'Подъём гантелей в стороны',
+                    description: 'Изолирующее упражнение для средних дельт.',
+                    muscleGroup: 'shoulders',
+                    secondaryMuscles: [],
+                    equipment: 'dumbbell',
+                    image: null
+                },
+                
+                // Arms
+                {
+                    id: 'bicep-curl',
+                    name: 'Сгибания рук со штангой',
+                    description: 'Упражнение для бицепса.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: [],
+                    equipment: 'barbell',
+                    image: null
+                },
+                {
+                    id: 'tricep-extension',
+                    name: 'Разгибания на трицепс',
+                    description: 'Упражнение для трицепса.',
+                    muscleGroup: 'arms',
+                    secondaryMuscles: [],
+                    equipment: 'cable',
+                    image: null
+                },
+                
+                // Core
+                {
+                    id: 'plank',
+                    name: 'Планка',
+                    description: 'Упражнение для укрепления корпуса.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: [],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                {
+                    id: 'crunches',
+                    name: 'Скручивания',
+                    description: 'Упражнение для пресса.',
+                    muscleGroup: 'core',
+                    secondaryMuscles: [],
+                    equipment: 'bodyweight',
+                    image: null
+                },
+                
+                // Cardio
+                {
+                    id: 'running',
+                    name: 'Бег',
+                    description: 'Кардио упражнение для выносливости.',
+                    muscleGroup: 'cardio',
+                    secondaryMuscles: ['legs'],
+                    equipment: 'cardio',
+                    image: null
+                },
+                {
+                    id: 'cycling',
+                    name: 'Велосипед',
+                    description: 'Низкоударное кардио упражнение.',
+                    muscleGroup: 'cardio',
+                    secondaryMuscles: ['legs'],
+                    equipment: 'cardio',
+                    image: null
+                }
             ]
         };
 
-        // DOM Elements
-        const elements = {
-            sidebar: document.getElementById('sidebar'),
-            currentDate: document.getElementById('currentDate'),
-            currentMonth: document.getElementById('currentMonth'),
-            calendarContainer: document.getElementById('calendarContainer'),
-            calendarPreview: document.getElementById('calendarPreview'),
-            newWorkoutModal: document.getElementById('newWorkoutModal'),
-            dayDetailModal: document.getElementById('dayDetailModal'),
-            aiRecommendation: document.getElementById('aiRecommendation'),
-            weeklyWorkouts: document.getElementById('weeklyWorkouts'),
-            weeklyVolume: document.getElementById('weeklyVolume'),
-            weeklyTime: document.getElementById('weeklyTime')
+        // ==================== AI TRAINER ====================
+        const AITrainer = {
+            getRecommendation: function() {
+                const workouts = AppState.workouts;
+                if (workouts.length === 0) {
+                    return "Добро пожаловать! Начните первую тренировку, и я помогу вам прогрессировать.";
+                }
+                
+                const lastWorkout = workouts[workouts.length - 1];
+                const totalWorkouts = workouts.length;
+                
+                const recommendations = [
+                    "Отличная работа! Продолжайте в том же темпе.",
+                    "Рекомендую увеличить вес на 2.5кг в основных упражнениях.",
+                    "Обратите внимание на время отдыха между подходами.",
+                    "Попробуйте добавить ещё одно упражнение на отстающую группу мышц.",
+                    "Ваша консистентность улучшается! Так держать!",
+                    "Рассмотрите возможность увеличения объёма тренировок.",
+                    "Не забывайте про восстановление - это ключ к прогрессу.",
+                    "Попробуйте варьировать количество повторений для мышечного роста."
+                ];
+                
+                // Analyze progress
+                if (totalWorkouts > 5) {
+                    const progress = this.analyzeProgress();
+                    if (progress.stagnant.length > 0) {
+                        return `Заметил, что ${progress.stagnant[0]} не прогрессирует. Попробуйте изменить подходы или технику.`;
+                    }
+                    if (progress.improving.length > 0) {
+                        return `Отлично прогрессируете в ${progress.improving[0]}! Продолжайте увеличивать нагрузку.`;
+                    }
+                }
+                
+                return recommendations[Math.floor(Math.random() * recommendations.length)];
+            },
+            
+            analyzeProgress: function() {
+                const workouts = AppState.workouts;
+                if (workouts.length < 3) {
+                    return { stagnant: [], improving: [] };
+                }
+                
+                // Simple progress analysis
+                const exerciseProgress = {};
+                
+                workouts.forEach(workout => {
+                    workout.exercises?.forEach(exercise => {
+                        if (!exerciseProgress[exercise.name]) {
+                            exerciseProgress[exercise.name] = [];
+                        }
+                        const maxWeight = Math.max(...exercise.sets.map(set => set.weight || 0));
+                        exerciseProgress[exercise.name].push(maxWeight);
+                    });
+                });
+                
+                const stagnant = [];
+                const improving = [];
+                
+                Object.entries(exerciseProgress).forEach(([exercise, weights]) => {
+                    if (weights.length < 3) return;
+                    
+                    const recentAvg = weights.slice(-3).reduce((a, b) => a + b, 0) / 3;
+                    const previousAvg = weights.slice(-6, -3).reduce((a, b) => a + b, 0) / 3 || recentAvg;
+                    
+                    if (recentAvg <= previousAvg * 1.02) { // Less than 2% improvement
+                        stagnant.push(exercise);
+                    } else {
+                        improving.push(exercise);
+                    }
+                });
+                
+                return { stagnant, improving };
+            },
+            
+            generateWeeklyPlan: function() {
+                const plan = {
+                    monday: { muscleGroup: 'Грудь', exercises: ['Жим штанги лёжа', 'Жим гантелей на наклонной', 'Разведение гантелей'] },
+                    tuesday: { muscleGroup: 'Спина', exercises: ['Подтягивания', 'Тяга штанги в наклоне', 'Гиперэкстензия'] },
+                    wednesday: { muscleGroup: 'Отдых', exercises: [] },
+                    thursday: { muscleGroup: 'Ноги', exercises: ['Приседания со штангой', 'Жим ногами', 'Сгибания ног'] },
+                    friday: { muscleGroup: 'Плечи', exercises: ['Жим штанги стоя', 'Подъём гантелей в стороны', 'Тяга к подбородку'] },
+                    saturday: { muscleGroup: 'Руки', exercises: ['Сгибания со штангой', 'Французский жим', 'Молотки'] },
+                    sunday: { muscleGroup: 'Кардио', exercises: ['Бег 30 минут'] }
+                };
+                
+                return plan;
+            },
+            
+            chatResponse: function(message) {
+                const lowerMessage = message.toLowerCase();
+                
+                if (lowerMessage.includes('привет') || lowerMessage.includes('здравствуй')) {
+                    return "Привет! Как ваши тренировки? Чем могу помочь?";
+                }
+                
+                if (lowerMessage.includes('прогресс') || lowerMessage.includes('улучшить')) {
+                    return "Для улучшения прогресса рекомендую: 1) Увеличивать вес постепенно, 2) Следить за техникой, 3) Давать мышцам время на восстановление.";
+                }
+                
+                if (lowerMessage.includes('боль') || lowerMessage.includes('травм')) {
+                    return "При болях в суставах или мышцах рекомендуется снизить нагрузку, сделать перерыв и проконсультироваться с врачом. Не тренируйтесь через боль!";
+                }
+                
+                if (lowerMessage.includes('вес') && lowerMessage.includes('увеличить')) {
+                    return "Увеличивайте вес на 2.5-5кг, когда можете выполнить все запланированные повторения с правильной техникой в последнем подходе.";
+                }
+                
+                if (lowerMessage.includes('отдых') || lowerMessage.includes('восстановление')) {
+                    return "Оптимальное время отдыха между подходами: 60-90 секунд для гипертрофии, 2-3 минуты для силы. Спите 7-9 часов в сутки.";
+                }
+                
+                if (lowerMessage.includes('питание') || lowerMessage.includes('диет')) {
+                    return "Для роста мышц: 1.6-2.2г белка на кг веса, достаточно углеводов для энергии, полезные жиры. Пейте много воды.";
+                }
+                
+                return "Я ваш AI-тренер. Задавайте вопросы о тренировках, технике упражнений или получайте рекомендации по прогрессу.";
+            }
         };
 
-        // Initialize App
-        function initApp() {
-            setTheme(state.theme);
-            updateDateDisplay();
-            setupEventListeners();
-            generateCalendar();
-            generateCalendarPreview();
-            updateStats();
-            setupServiceWorker();
-        }
-
-        // Theme Management
-        function setTheme(theme) {
-            if (theme === 'auto') {
-                theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-            }
-            document.documentElement.setAttribute('data-theme', theme);
-            state.theme = theme;
-            localStorage.setItem('theme', theme);
-            
-            // Update theme buttons
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.theme === theme) {
-                    btn.classList.add('active');
+        // ==================== DATA STORAGE ====================
+        const DataStorage = {
+            save: function() {
+                if (!AppState.settings.autoSave) return;
+                
+                try {
+                    localStorage.setItem('workouts', JSON.stringify(AppState.workouts));
+                    localStorage.setItem('templates', JSON.stringify(AppState.templates));
+                    localStorage.setItem('exercises', JSON.stringify(AppState.exercises));
+                    localStorage.setItem('settings', JSON.stringify(AppState.settings));
+                    localStorage.setItem('theme', AppState.theme);
+                    this.calculateStats();
+                } catch (error) {
+                    console.error('Error saving data:', error);
+                    this.showToast('Ошибка сохранения данных', 'error');
                 }
-            });
-        }
+            },
+            
+            calculateStats: function() {
+                const stats = {
+                    totalWorkouts: AppState.workouts.length,
+                    totalVolume: 0,
+                    totalTime: 0,
+                    consistency: 0,
+                    muscleGroups: {},
+                    exerciseProgress: {}
+                };
+                
+                // Calculate total volume and time
+                AppState.workouts.forEach(workout => {
+                    stats.totalTime += workout.duration || 0;
+                    
+                    workout.exercises?.forEach(exercise => {
+                        exercise.sets?.forEach(set => {
+                            stats.totalVolume += (set.weight || 0) * (set.reps || 0);
+                        });
+                        
+                        // Track muscle groups
+                        const muscleGroup = exercise.muscleGroup || 'other';
+                        if (!stats.muscleGroups[muscleGroup]) {
+                            stats.muscleGroups[muscleGroup] = 0;
+                        }
+                        stats.muscleGroups[muscleGroup]++;
+                        
+                        // Track exercise progress
+                        if (!stats.exerciseProgress[exercise.name]) {
+                            stats.exerciseProgress[exercise.name] = [];
+                        }
+                        const maxWeight = Math.max(...exercise.sets.map(set => set.weight || 0));
+                        stats.exerciseProgress[exercise.name].push({
+                            date: workout.date,
+                            weight: maxWeight,
+                            reps: exercise.sets.reduce((sum, set) => sum + (set.reps || 0), 0) / exercise.sets.length
+                        });
+                    });
+                });
+                
+                // Calculate consistency (workouts per week)
+                if (AppState.workouts.length > 0) {
+                    const firstDate = new Date(AppState.workouts[0].date);
+                    const lastDate = new Date(AppState.workouts[AppState.workouts.length - 1].date);
+                    const weeks = Math.max(1, (lastDate - firstDate) / (1000 * 60 * 60 * 24 * 7));
+                    stats.consistency = Math.round((AppState.workouts.length / weeks) * 100) / 100;
+                }
+                
+                AppState.stats = stats;
+                return stats;
+            },
+            
+            exportJSON: function() {
+                const data = {
+                    workouts: AppState.workouts,
+                    templates: AppState.templates,
+                    exercises: AppState.exercises,
+                    settings: AppState.settings,
+                    exported: new Date().toISOString()
+                };
+                
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `training-calendar-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.showToast('Данные экспортированы', 'success');
+            },
+            
+            exportCSV: function() {
+                let csv = 'Дата,Тренировка,Упражнение,Вес,Повторения,Объём\n';
+                
+                AppState.workouts.forEach(workout => {
+                    workout.exercises?.forEach(exercise => {
+                        exercise.sets?.forEach((set, index) => {
+                            const volume = (set.weight || 0) * (set.reps || 0);
+                            csv += `${workout.date},${workout.name},${exercise.name},${set.weight || 0},${set.reps || 0},${volume}\n`;
+                        });
+                    });
+                });
+                
+                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `training-data-${new Date().toISOString().split('T')[0]}.csv`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                this.showToast('Данные экспортированы в CSV', 'success');
+            },
+            
+            importData: function(file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    try {
+                        const data = JSON.parse(e.target.result);
+                        
+                        if (data.workouts) AppState.workouts = data.workouts;
+                        if (data.templates) AppState.templates = data.templates;
+                        if (data.exercises) AppState.exercises = data.exercises;
+                        if (data.settings) AppState.settings = { ...AppState.settings, ...data.settings };
+                        
+                        this.save();
+                        this.showToast('Данные импортированы', 'success');
+                        location.reload();
+                    } catch (error) {
+                        this.showToast('Ошибка импорта данных', 'error');
+                    }
+                };
+                reader.readAsText(file);
+            },
+            
+            resetData: function() {
+                if (confirm('Вы уверены? Все данные будут удалены без возможности восстановления.')) {
+                    localStorage.clear();
+                    AppState.workouts = [];
+                    AppState.templates = [];
+                    AppState.exercises = [];
+                    this.showToast('Все данные сброшены', 'success');
+                    location.reload();
+                }
+            },
+            
+            showToast: function(message, type = 'info') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast';
+                toast.classList.add(type);
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        };
 
-        // Date and Calendar
-        function updateDateDisplay() {
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            elements.currentDate.textContent = state.currentDate.toLocaleDateString('ru-RU', options);
-        }
-
-        function generateCalendar() {
-            const month = state.currentMonth;
-            const year = state.currentYear;
+        // ==================== UI FUNCTIONS ====================
+        const UI = {
+            init: function() {
+                this.setTheme(AppState.theme);
+                this.updateDateDisplay();
+                this.setupEventListeners();
+                this.generateCalendar();
+                this.generateCalendarPreview();
+                this.loadExercises();
+                this.loadTemplates();
+                this.updateStats();
+                this.setupServiceWorker();
+                this.updateAIRecommendation();
+            },
             
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+            setTheme: function(theme) {
+                if (theme === 'auto') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.setAttribute('data-theme', theme);
+                AppState.theme = theme;
+                localStorage.setItem('theme', theme);
+                
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === theme) {
+                        btn.classList.add('active');
+                    }
+                });
+            },
             
-            // Month header
-            const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
-                              'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-            elements.currentMonth.textContent = `${monthNames[month]} ${year}`;
+            updateDateDisplay: function() {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('currentDate').textContent = 
+                    AppState.currentDate.toLocaleDateString('ru-RU', options);
+            },
             
-            // Calendar grid
-            let calendarHTML = `
-                <div class="calendar-grid">
+            generateCalendar: function() {
+                const month = AppState.currentMonth;
+                const year = AppState.currentYear;
+                
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+                
+                // Month header
+                const monthNames = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 
+                                  'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+                document.getElementById('currentMonth').textContent = `${monthNames[month]} ${year}`;
+                
+                // Calendar grid
+                let calendarHTML = `
+                    <div class="calendar-grid">
                     <div class="calendar-day-header">Пн</div>
                     <div class="calendar-day-header">Вт</div>
                     <div class="calendar-day-header">Ср</div>
@@ -843,277 +1974,1156 @@
                     <div class="calendar-day-header">Пт</div>
                     <div class="calendar-day-header">Сб</div>
                     <div class="calendar-day-header">Вс</div>
-            `;
-            
-            // Empty cells for start of month
-            for (let i = 0; i < startDay; i++) {
-                calendarHTML += '<div class="calendar-day"></div>';
-            }
-            
-            // Days of month
-            const today = new Date();
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const isToday = date.toDateString() === today.toDateString();
-                const hasWorkout = Math.random() > 0.7; // Mock data
-                const workoutType = ['trained', 'rest-day', 'cardio'][Math.floor(Math.random() * 3)];
+                `;
                 
-                calendarHTML += `
-                    <div class="calendar-day ${hasWorkout ? 'has-training' : ''} ${isToday ? 'today' : ''}"
-                         data-date="${date.toISOString().split('T')[0]}">
-                        ${day}
-                        ${hasWorkout ? `<div class="workout-dot ${workoutType}"></div>` : ''}
-                    </div>
-                `;
-            }
-            
-            calendarHTML += '</div>';
-            elements.calendarContainer.innerHTML = calendarHTML;
-            
-            // Add click handlers
-            document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
-                day.addEventListener('click', () => showDayDetail(day.dataset.date));
-            });
-        }
-
-        function generateCalendarPreview() {
-            const today = new Date();
-            const year = today.getFullYear();
-            const month = today.getMonth();
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const daysInMonth = lastDay.getDate();
-            const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
-            
-            const monthNamesShort = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 
-                                   'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
-            
-            let previewHTML = `
-                <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 1rem;">
-            `;
-            
-            // Day headers
-            ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
-                previewHTML += `<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary); padding: 4px;">${day}</div>`;
-            });
-            
-            // Empty cells
-            for (let i = 0; i < startDay; i++) {
-                previewHTML += '<div></div>';
-            }
-            
-            // Days
-            for (let day = 1; day <= daysInMonth; day++) {
-                const date = new Date(year, month, day);
-                const isToday = date.toDateString() === today.toDateString();
-                const hasWorkout = Math.random() > 0.7;
+                // Empty cells for start of month
+                for (let i = 0; i < startDay; i++) {
+                    calendarHTML += '<div class="calendar-day other-month"></div>';
+                }
                 
-                previewHTML += `
-                    <div style="aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-                               border-radius: 8px; font-size: 0.875rem;
-                               ${isToday ? 'border: 2px solid var(--primary); font-weight: bold;' : ''}
-                               ${hasWorkout ? 'background: linear-gradient(135deg, var(--calendar-train), transparent);' : ''}">
-                        ${day}
-                    </div>
-                `;
-            }
-            
-            previewHTML += '</div>';
-            elements.calendarPreview.innerHTML = previewHTML;
-        }
-
-        function showDayDetail(dateString) {
-            const date = new Date(dateString);
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('dayDetailTitle').textContent = date.toLocaleDateString('ru-RU', options);
-            
-            // Mock workouts for the day
-            const workouts = [
-                { name: 'Силовая тренировка', type: 'gym', duration: '60 мин', exercises: 5 },
-                { name: 'Кардио сессия', type: 'cardio', duration: '30 мин', exercises: 1 }
-            ];
-            
-            let workoutsHTML = '';
-            workouts.forEach(workout => {
-                workoutsHTML += `
-                    <div class="exercise-item" style="margin-bottom: 0.75rem;">
-                        <h4>${workout.name}</h4>
-                        <p class="text-secondary">${workout.duration} • ${workout.exercises} упражнений</p>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('dayWorkouts').innerHTML = workoutsHTML || '<p class="text-secondary">Нет тренировок</p>';
-            elements.dayDetailModal.classList.add('active');
-        }
-
-        // Stats
-        function updateStats() {
-            // Mock data for demo
-            elements.weeklyWorkouts.textContent = '3';
-            elements.weeklyVolume.textContent = '15,240';
-            elements.weeklyTime.textContent = '180';
-            
-            // Random AI message
-            const randomMsg = state.aiMessages[Math.floor(Math.random() * state.aiMessages.length)];
-            elements.aiRecommendation.textContent = randomMsg;
-        }
-
-        // Navigation
-        function switchPage(pageId) {
-            document.querySelectorAll('.page').forEach(page => {
-                page.classList.add('hidden');
-            });
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-            
-            document.getElementById(pageId).classList.remove('hidden');
-            document.querySelector(`[data-page="${pageId.replace('Page', '')}"]`).classList.add('active');
-            
-            // Update page-specific content
-            if (pageId === 'calendarPage') {
-                generateCalendar();
-            }
-        }
-
-        // Event Listeners
-        function setupEventListeners() {
-            // Theme toggles
-            document.querySelectorAll('.theme-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    setTheme(btn.dataset.theme);
-                });
-            });
-            
-            // Navigation
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    switchPage(item.dataset.page + 'Page');
+                // Days of month
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = date.toISOString().split('T')[0];
+                    const isToday = date.toDateString() === today.toDateString();
                     
-                    // Close mobile menu if open
-                    if (window.innerWidth <= 1024) {
-                        elements.sidebar.classList.remove('active');
+                    // Check for workouts on this day
+                    const dayWorkouts = AppState.workouts.filter(w => w.date === dateStr);
+                    const hasWorkout = dayWorkouts.length > 0;
+                    const workoutType = hasWorkout ? dayWorkouts[0].type : null;
+                    
+                    let dayClass = 'calendar-day';
+                    if (isToday) dayClass += ' today';
+                    if (hasWorkout) {
+                        dayClass += ' has-training';
+                        if (workoutType) dayClass += ' ' + workoutType;
+                    }
+                    
+                    calendarHTML += `
+                        <div class="${dayClass}" data-date="${dateStr}">
+                            ${day}
+                        </div>
+                    `;
+                }
+                
+                calendarHTML += '</div>';
+                document.getElementById('calendarContainer').innerHTML = calendarHTML;
+                
+                // Add click handlers
+                document.querySelectorAll('.calendar-day[data-date]').forEach(day => {
+                    day.addEventListener('click', () => this.showDayDetail(day.dataset.date));
+                });
+            },
+            
+            generateCalendarPreview: function() {
+                const today = new Date();
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startDay = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+                
+                let previewHTML = `
+                    <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 1rem;">
+                `;
+                
+                // Day headers
+                ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'].forEach(day => {
+                    previewHTML += `<div style="text-align: center; font-size: 0.75rem; color: var(--text-secondary); padding: 4px;">${day}</div>`;
+                });
+                
+                // Empty cells
+                for (let i = 0; i < startDay; i++) {
+                    previewHTML += '<div></div>';
+                }
+                
+                // Days
+                const todayStr = today.toISOString().split('T')[0];
+                
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(year, month, day);
+                    const dateStr = date.toISOString().split('T')[0];
+                    const isToday = dateStr === todayStr;
+                    
+                    // Check for workouts
+                    const dayWorkouts = AppState.workouts.filter(w => w.date === dateStr);
+                    const hasWorkout = dayWorkouts.length > 0;
+                    
+                    previewHTML += `
+                        <div style="aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
+                                   border-radius: 8px; font-size: 0.875rem; font-weight: 500;
+                                   ${isToday ? 'border: 2px solid var(--primary);' : ''}
+                                   ${hasWorkout ? 'background: linear-gradient(135deg, var(--calendar-train), transparent);' : ''}">
+                            ${day}
+                        </div>
+                    `;
+                }
+                
+                previewHTML += '</div>';
+                document.getElementById('calendarPreview').innerHTML = previewHTML;
+            },
+            
+            showDayDetail: function(dateStr) {
+                const date = new Date(dateStr);
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                document.getElementById('dayDetailTitle').textContent = date.toLocaleDateString('ru-RU', options);
+                
+                const dayWorkouts = AppState.workouts.filter(w => w.date === dateStr);
+                
+                let workoutsHTML = '';
+                if (dayWorkouts.length === 0) {
+                    workoutsHTML = '<p class="text-secondary">Нет тренировок в этот день</p>';
+                } else {
+                    dayWorkouts.forEach(workout => {
+                        const totalVolume = workout.exercises?.reduce((total, exercise) => {
+                            return total + exercise.sets?.reduce((sum, set) => {
+                                return sum + ((set.weight || 0) * (set.reps || 0));
+                            }, 0) || 0;
+                        }, 0) || 0;
+                        
+                        workoutsHTML += `
+                            <div class="exercise-item mb-2">
+                                <h4 class="mb-1">${workout.name}</h4>
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-secondary">${workout.type === 'gym' ? 'Зал' : 
+                                                                   workout.type === 'home' ? 'Дом' : 
+                                                                   workout.type === 'cardio' ? 'Кардио' : 'Восстановление'}</span>
+                                    <span class="text-secondary">${workout.duration || 0} мин</span>
+                                    <span class="text-secondary">${Math.round(totalVolume)} кг</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                document.getElementById('dayWorkouts').innerHTML = workoutsHTML;
+                document.getElementById('dayDetailModal').classList.add('active');
+            },
+            
+            loadExercises: function() {
+                const exerciseLibrary = document.getElementById('exerciseLibrary');
+                const templateExerciseSelect = document.getElementById('templateExerciseSelect');
+                
+                // Clear existing options
+                exerciseLibrary.innerHTML = '';
+                templateExerciseSelect.innerHTML = '<option value="">Выберите упражнение</option>';
+                
+                // Merge default exercises with custom ones
+                const allExercises = [...ExerciseLibrary.exercises, ...AppState.exercises];
+                
+                // Group by muscle group
+                const exercisesByGroup = {};
+                allExercises.forEach(exercise => {
+                    if (!exercisesByGroup[exercise.muscleGroup]) {
+                        exercisesByGroup[exercise.muscleGroup] = [];
+                    }
+                    exercisesByGroup[exercise.muscleGroup].push(exercise);
+                });
+                
+                // Display all exercises
+                allExercises.forEach(exercise => {
+                    const exerciseCard = document.createElement('div');
+                    exerciseCard.className = 'exercise-card';
+                    exerciseCard.innerHTML = `
+                        <h4 class="mb-1">${exercise.name}</h4>
+                        <div class="mb-1">
+                            <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
+                        </div>
+                        <p class="text-secondary text-sm">${exercise.description.substring(0, 100)}...</p>
+                    `;
+                    exerciseCard.addEventListener('click', () => this.showExerciseDetail(exercise));
+                    exerciseLibrary.appendChild(exerciseCard);
+                    
+                    // Add to template select
+                    const option = document.createElement('option');
+                    option.value = exercise.id;
+                    option.textContent = exercise.name;
+                    templateExerciseSelect.appendChild(option);
+                });
+            },
+            
+            getMuscleGroupName: function(id) {
+                const names = {
+                    'chest': 'Грудь',
+                    'back': 'Спина',
+                    'legs': 'Ноги',
+                    'shoulders': 'Плечи',
+                    'arms': 'Руки',
+                    'core': 'Пресс',
+                    'cardio': 'Кардио'
+                };
+                return names[id] || id;
+            },
+            
+            showExerciseDetail: function(exercise) {
+                document.getElementById('exerciseDetailTitle').textContent = exercise.name;
+                
+                let content = `
+                    <div class="mb-3">
+                        <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
+                    </div>
+                    <p class="mb-3">${exercise.description}</p>
+                `;
+                
+                if (exercise.secondaryMuscles?.length > 0) {
+                    content += `<p class="mb-2"><strong>Дополнительные мышцы:</strong> ${exercise.secondaryMuscles.map(m => this.getMuscleGroupName(m)).join(', ')}</p>`;
+                }
+                
+                content += `<p class="mb-3"><strong>Оборудование:</strong> ${exercise.equipment === 'barbell' ? 'Штанга' : 
+                                                                           exercise.equipment === 'dumbbell' ? 'Гантели' : 
+                                                                           exercise.equipment === 'bodyweight' ? 'Собственный вес' : 
+                                                                           exercise.equipment === 'machine' ? 'Тренажёр' : 
+                                                                           exercise.equipment === 'cable' ? 'Тросы' : 'Кардио'}</p>`;
+                
+                document.getElementById('exerciseDetailContent').innerHTML = content;
+                document.getElementById('exerciseDetailModal').classList.add('active');
+            },
+            
+            loadTemplates: function() {
+                const templatesList = document.getElementById('templatesList');
+                const workoutTemplateSelect = document.getElementById('workoutTemplate');
+                
+                templatesList.innerHTML = '';
+                
+                // Clear and add default option
+                workoutTemplateSelect.innerHTML = '<option value="">Без шаблона</option>';
+                
+                if (AppState.templates.length === 0) {
+                    templatesList.innerHTML = '<p class="text-secondary">Шаблонов пока нет. Создайте первый!</p>';
+                } else {
+                    AppState.templates.forEach(template => {
+                        // Add to templates list
+                        const templateDiv = document.createElement('div');
+                        templateDiv.className = 'exercise-item';
+                        templateDiv.style.cursor = 'pointer';
+                        templateDiv.innerHTML = `
+                            <div class="flex justify-between items-center mb-1">
+                                <h4>${template.name}</h4>
+                                <span class="text-secondary text-sm">${template.exercises?.length || 0} упражнений</span>
+                            </div>
+                            <p class="text-secondary text-sm mb-2">${template.description || ''}</p>
+                            <div class="flex gap-2">
+                                <button class="btn btn-small btn-secondary use-template-btn" data-id="${template.id}">
+                                    <i class="mdi mdi-play"></i> Использовать
+                                </button>
+                                <button class="btn btn-small btn-danger delete-template-btn" data-id="${template.id}">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
+                        `;
+                        templatesList.appendChild(templateDiv);
+                        
+                        // Add to workout template select
+                        const option = document.createElement('option');
+                        option.value = template.id;
+                        option.textContent = template.name;
+                        workoutTemplateSelect.appendChild(option);
+                    });
+                }
+            },
+            
+            updateStats: function() {
+                const stats = DataStorage.calculateStats();
+                
+                // Update dashboard stats
+                document.getElementById('weeklyWorkouts').textContent = Math.floor(stats.consistency) || 0;
+                document.getElementById('weeklyVolume').textContent = Math.round(stats.totalVolume / 1000) || 0;
+                document.getElementById('weeklyTime').textContent = Math.round(stats.totalTime / 60) || 0;
+                
+                // Update stats page
+                document.getElementById('totalWorkouts').textContent = stats.totalWorkouts;
+                document.getElementById('totalVolume').textContent = Math.round(stats.totalVolume);
+                document.getElementById('avgWorkoutTime').textContent = stats.totalWorkouts > 0 ? 
+                    Math.round(stats.totalTime / stats.totalWorkouts) : 0;
+                document.getElementById('consistency').textContent = stats.consistency.toFixed(1) + '%';
+                
+                // Update recent workouts
+                this.updateRecentWorkouts();
+                
+                // Update charts
+                this.updateProgressChart();
+            },
+            
+            updateRecentWorkouts: function() {
+                const recentWorkoutsDiv = document.getElementById('recentWorkouts');
+                const recentWorkouts = AppState.workouts.slice(-5).reverse();
+                
+                if (recentWorkouts.length === 0) {
+                    recentWorkoutsDiv.innerHTML = '<p class="text-secondary">Пока нет завершённых тренировок</p>';
+                    return;
+                }
+                
+                let html = '';
+                recentWorkouts.forEach(workout => {
+                    const totalVolume = workout.exercises?.reduce((total, exercise) => {
+                        return total + exercise.sets?.reduce((sum, set) => {
+                            return sum + ((set.weight || 0) * (set.reps || 0));
+                        }, 0) || 0;
+                    }, 0) || 0;
+                    
+                    html += `
+                        <div class="exercise-item mb-2">
+                            <div class="flex justify-between items-center mb-1">
+                                <h4>${workout.name}</h4>
+                                <span class="text-secondary text-sm">${new Date(workout.date).toLocaleDateString('ru-RU')}</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-secondary">${workout.duration || 0} мин</span>
+                                <span class="text-secondary">${Math.round(totalVolume)} кг</span>
+                                <span class="text-secondary">${workout.exercises?.length || 0} упр.</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                recentWorkoutsDiv.innerHTML = html;
+            },
+            
+            updateProgressChart: function() {
+                const ctx = document.getElementById('progressChart').getContext('2d');
+                
+                // Group workouts by week
+                const weeklyData = {};
+                AppState.workouts.forEach(workout => {
+                    const date = new Date(workout.date);
+                    const week = `${date.getFullYear()}-W${Math.floor(date.getDate() / 7)}`;
+                    
+                    if (!weeklyData[week]) {
+                        weeklyData[week] = { volume: 0, workouts: 0 };
+                    }
+                    
+                    const workoutVolume = workout.exercises?.reduce((total, exercise) => {
+                        return total + exercise.sets?.reduce((sum, set) => {
+                            return sum + ((set.weight || 0) * (set.reps || 0));
+                        }, 0) || 0;
+                    }, 0) || 0;
+                    
+                    weeklyData[week].volume += workoutVolume;
+                    weeklyData[week].workouts += 1;
+                });
+                
+                const weeks = Object.keys(weeklyData).sort();
+                const volumes = weeks.map(week => weeklyData[week].volume);
+                
+                if (window.progressChart) {
+                    window.progressChart.destroy();
+                }
+                
+                if (weeks.length === 0) {
+                    document.getElementById('progressChart').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('progressChart').style.display = 'block';
+                
+                window.progressChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: weeks.map(w => `Неделя ${w.split('-W')[1]}`),
+                        datasets: [{
+                            label: 'Объём нагрузки (кг)',
+                            data: volumes,
+                            borderColor: 'var(--primary)',
+                            backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                            borderWidth: 2,
+                            fill: true,
+                            tension: 0.4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'var(--text-primary)'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: 'var(--border)'
+                                },
+                                ticks: {
+                                    color: 'var(--text-secondary)'
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: 'var(--border)'
+                                },
+                                ticks: {
+                                    color: 'var(--text-secondary)'
+                                }
+                            }
+                        }
                     }
                 });
-            });
+            },
             
-            // Calendar navigation
-            document.getElementById('prevMonth').addEventListener('click', () => {
-                state.currentMonth--;
-                if (state.currentMonth < 0) {
-                    state.currentMonth = 11;
-                    state.currentYear--;
-                }
-                generateCalendar();
-            });
+            updateAIRecommendation: function() {
+                const recommendation = AITrainer.getRecommendation();
+                document.getElementById('aiRecommendation').textContent = recommendation;
+                document.getElementById('aiMainRecommendation').textContent = recommendation;
+            },
             
-            document.getElementById('nextMonth').addEventListener('click', () => {
-                state.currentMonth++;
-                if (state.currentMonth > 11) {
-                    state.currentMonth = 0;
-                    state.currentYear++;
-                }
-                generateCalendar();
-            });
-            
-            // New workout
-            document.getElementById('newWorkoutBtn').addEventListener('click', () => {
-                elements.newWorkoutModal.classList.add('active');
-            });
-            
-            document.getElementById('startWorkoutBtn').addEventListener('click', () => {
-                const name = document.getElementById('workoutName').value || 'Новая тренировка';
-                const type = document.getElementById('workoutType').value;
+            // ==================== WORKOUT FUNCTIONS ====================
+            startWorkout: function(name, type, templateId) {
+                AppState.activeWorkout = {
+                    id: Date.now(),
+                    name: name || 'Новая тренировка',
+                    type: type || 'gym',
+                    date: new Date().toISOString().split('T')[0],
+                    startTime: Date.now(),
+                    duration: 0,
+                    exercises: [],
+                    notes: ''
+                };
                 
-                // Start workout session
-                document.getElementById('workoutTitle').textContent = name;
+                // Load template if selected
+                if (templateId) {
+                    const template = AppState.templates.find(t => t.id === templateId);
+                    if (template) {
+                        AppState.activeWorkout.exercises = JSON.parse(JSON.stringify(template.exercises || []));
+                        AppState.activeWorkout.exercises.forEach(exercise => {
+                            exercise.sets = exercise.sets || [];
+                        });
+                    }
+                }
+                
+                AppState.isWorkoutActive = true;
+                document.getElementById('workoutTitle').textContent = AppState.activeWorkout.name;
                 document.getElementById('workoutSession').classList.remove('hidden');
                 document.getElementById('dashboardPage').classList.add('hidden');
                 
                 // Start timer
-                startWorkoutTimer();
+                this.startWorkoutTimer();
+                this.updateActiveExercises();
                 
-                elements.newWorkoutModal.classList.remove('active');
-            });
+                DataStorage.showToast('Тренировка начата', 'success');
+            },
             
-            document.getElementById('cancelWorkoutBtn').addEventListener('click', () => {
-                elements.newWorkoutModal.classList.remove('active');
+            updateActiveExercises: function() {
+                const container = document.getElementById('activeExercises');
+                if (!AppState.activeWorkout || !AppState.activeWorkout.exercises) {
+                    container.innerHTML = '<p class="text-secondary">Добавьте упражнения</p>';
+                    return;
+                }
+                
+                let html = '';
+                AppState.activeWorkout.exercises.forEach((exercise, index) => {
+                    const sets = exercise.sets || [];
+                    const completedSets = sets.filter(s => s.completed).length;
+                    const totalSets = exercise.targetSets || sets.length;
+                    
+                    html += `
+                        <div class="exercise-item">
+                            <div class="flex justify-between items-center mb-2">
+                                <h4>${exercise.name}</h4>
+                                <span class="text-secondary">${completedSets}/${totalSets} подходов</span>
+                            </div>
+                            
+                            <div class="sets-grid">
+                                ${sets.map((set, setIndex) => `
+                                    <div class="set-item ${set.completed ? 'active' : ''}" 
+                                         data-exercise="${index}" 
+                                         data-set="${setIndex}"
+                                         style="cursor: pointer;">
+                                        ${set.completed ? 
+                                            `${set.weight || 0}${AppState.settings.weightUnit} × ${set.reps || 0}` :
+                                            'Добавить подход'}
+                                    </div>
+                                `).join('')}
+                                
+                                <div class="set-item" style="cursor: pointer; border-style: dashed;"
+                                     onclick="UI.addSet(${index})">
+                                    <i class="mdi mdi-plus"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="flex gap-2 mt-2">
+                                <button class="btn btn-small btn-secondary" onclick="UI.startRestTimer(${index})">
+                                    <i class="mdi mdi-timer"></i> Таймер отдыха
+                                </button>
+                                <button class="btn btn-small btn-danger" onclick="UI.removeExercise(${index})">
+                                    <i class="mdi mdi-delete"></i> Удалить
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html || '<p class="text-secondary">Добавьте упражнения</p>';
+                
+                // Add click handlers for sets
+                container.querySelectorAll('.set-item[data-exercise]').forEach(item => {
+                    item.addEventListener('click', function() {
+                        const exerciseIndex = parseInt(this.dataset.exercise);
+                        const setIndex = parseInt(this.dataset.set);
+                        UI.editSet(exerciseIndex, setIndex);
+                    });
+                });
+            },
+            
+            addExerciseToWorkout: function(exercise) {
+                if (!AppState.activeWorkout) return;
+                
+                AppState.activeWorkout.exercises.push({
+                    name: exercise.name,
+                    muscleGroup: exercise.muscleGroup,
+                    targetSets: 3,
+                    sets: []
+                });
+                
+                this.updateActiveExercises();
+                DataStorage.showToast('Упражнение добавлено', 'success');
+            },
+            
+            addSet: function(exerciseIndex) {
+                AppState.activeExercise = exerciseIndex;
+                AppState.activeSetIndex = AppState.activeWorkout.exercises[exerciseIndex].sets.length;
+                
+                document.getElementById('setDetailTitle').textContent = 
+                    `Подход ${AppState.activeSetIndex + 1} - ${AppState.activeWorkout.exercises[exerciseIndex].name}`;
+                document.getElementById('setWeight').value = '';
+                document.getElementById('setReps').value = '10';
+                document.getElementById('setRest').value = AppState.defaultRestTime;
+                document.getElementById('setDetailModal').classList.add('active');
+            },
+            
+            editSet: function(exerciseIndex, setIndex) {
+                AppState.activeExercise = exerciseIndex;
+                AppState.activeSetIndex = setIndex;
+                
+                const exercise = AppState.activeWorkout.exercises[exerciseIndex];
+                const set = exercise.sets[setIndex];
+                
+                document.getElementById('setDetailTitle').textContent = 
+                    `Подход ${setIndex + 1} - ${exercise.name}`;
+                document.getElementById('setWeight').value = set.weight || '';
+                document.getElementById('setReps').value = set.reps || '';
+                document.getElementById('setRest').value = set.restTime || AppState.defaultRestTime;
+                document.getElementById('setDetailModal').classList.add('active');
+            },
+            
+            saveSet: function() {
+                if (!AppState.activeWorkout || AppState.activeExercise === null) return;
+                
+                const weight = parseFloat(document.getElementById('setWeight').value) || 0;
+                const reps = parseInt(document.getElementById('setReps').value) || 0;
+                const restTime = parseInt(document.getElementById('setRest').value) || AppState.defaultRestTime;
+                
+                const exercise = AppState.activeWorkout.exercises[AppState.activeExercise];
+                
+                if (!exercise.sets[AppState.activeSetIndex]) {
+                    exercise.sets[AppState.activeSetIndex] = {};
+                }
+                
+                exercise.sets[AppState.activeSetIndex] = {
+                    weight: weight,
+                    reps: reps,
+                    restTime: restTime,
+                    completed: true,
+                    timestamp: Date.now()
+                };
+                
+                this.updateActiveExercises();
+                document.getElementById('setDetailModal').classList.remove('active');
+                
+                // Start rest timer if this isn't the last set
+                const totalSets = exercise.targetSets || 4;
+                if (exercise.sets.length < totalSets) {
+                    this.startRestTimer(AppState.activeExercise, restTime);
+                }
+            },
+            
+            startRestTimer: function(exerciseIndex, duration = null) {
+                if (!duration) {
+                    const exercise = AppState.activeWorkout.exercises[exerciseIndex];
+                    const lastSet = exercise.sets[exercise.sets.length - 1];
+                    duration = lastSet?.restTime || AppState.defaultRestTime;
+                }
+                
+                AppState.restSeconds = duration;
+                AppState.isRestTimerActive = true;
+                
+                const timerDisplay = document.getElementById('restTimerDisplay');
+                const restTimer = document.getElementById('restTimer');
+                
+                restTimer.classList.add('active');
+                
+                AppState.restTimer = setInterval(() => {
+                    AppState.restSeconds--;
+                    
+                    const minutes = Math.floor(AppState.restSeconds / 60);
+                    const seconds = AppState.restSeconds % 60;
+                    timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    if (AppState.restSeconds <= 0) {
+                        this.stopRestTimer();
+                        DataStorage.showToast('Время отдыха окончено!', 'success');
+                    }
+                }, 1000);
+            },
+            
+            stopRestTimer: function() {
+                clearInterval(AppState.restTimer);
+                AppState.isRestTimerActive = false;
+                document.getElementById('restTimer').classList.remove('active');
+            },
+            
+            startWorkoutTimer: function() {
+                AppState.workoutSeconds = 0;
+                clearInterval(AppState.workoutTimer);
+                
+                AppState.workoutTimer = setInterval(() => {
+                    AppState.workoutSeconds++;
+                    
+                    const minutes = Math.floor(AppState.workoutSeconds / 60);
+                    const seconds = AppState.workoutSeconds % 60;
+                    document.getElementById('workoutTimer').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            },
+            
+            stopWorkoutTimer: function() {
+                clearInterval(AppState.workoutTimer);
+            },
+            
+            completeWorkout: function() {
+                if (!AppState.activeWorkout) return;
+                
+                AppState.activeWorkout.duration = Math.floor(AppState.workoutSeconds / 60);
+                AppState.activeWorkout.endTime = Date.now();
+                AppState.workouts.push(AppState.activeWorkout);
+                
+                AppState.isWorkoutActive = false;
+                this.stopWorkoutTimer();
+                this.stopRestTimer();
+                
+                DataStorage.save();
+                this.updateStats();
+                this.updateAIRecommendation();
+                
+                document.getElementById('workoutSession').classList.add('hidden');
+                document.getElementById('dashboardPage').classList.remove('hidden');
+                
+                DataStorage.showToast('Тренировка завершена!', 'success');
+                
+                // Ask to save as template
+                if (confirm('Сохранить эту тренировку как шаблон?')) {
+                    this.showSaveTemplateModal();
+                }
+            },
+            
+            showSaveTemplateModal: function() {
+                document.getElementById('templateName').value = AppState.activeWorkout.name + ' (шаблон)';
+                document.getElementById('templateDescription').value = '';
+                document.getElementById('templateExercisesList').innerHTML = '';
+                
+                // Add current exercises to template
+                AppState.activeWorkout.exercises.forEach(exercise => {
+                    const exerciseDiv = document.createElement('div');
+                    exerciseDiv.className = 'exercise-item mb-2';
+                    exerciseDiv.innerHTML = `
+                        <div class="flex justify-between">
+                            <span>${exercise.name}</span>
+                            <span class="text-secondary">${exercise.sets.length} подходов</span>
+                        </div>
+                    `;
+                    document.getElementById('templateExercisesList').appendChild(exerciseDiv);
+                });
+                
+                document.getElementById('createTemplateModal').classList.add('active');
+            },
+            
+            saveTemplate: function() {
+                const name = document.getElementById('templateName').value.trim();
+                const description = document.getElementById('templateDescription').value.trim();
+                
+                if (!name) {
+                    DataStorage.showToast('Введите название шаблона', 'error');
+                    return;
+                }
+                
+                const template = {
+                    id: Date.now().toString(),
+                    name: name,
+                    description: description,
+                    exercises: JSON.parse(JSON.stringify(AppState.activeWorkout.exercises || [])),
+                    created: new Date().toISOString()
+                };
+                
+                AppState.templates.push(template);
+                DataStorage.save();
+                this.loadTemplates();
+                
+                document.getElementById('createTemplateModal').classList.remove('active');
+                DataStorage.showToast('Шаблон сохранён', 'success');
+            },
+            
+            // ==================== EVENT LISTENERS ====================
+            setupEventListeners: function() {
+                // Theme toggles
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.setTheme(btn.dataset.theme);
+                    });
+                });
+                
+                // Navigation
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        this.switchPage(item.dataset.page + 'Page');
+                        
+                        if (window.innerWidth <= 1024) {
+                            document.getElementById('sidebar').classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Calendar navigation
+                document.getElementById('prevMonth').addEventListener('click', () => {
+                    AppState.currentMonth--;
+                    if (AppState.currentMonth < 0) {
+                        AppState.currentMonth = 11;
+                        AppState.currentYear--;
+                    }
+                    this.generateCalendar();
+                });
+                
+                document.getElementById('nextMonth').addEventListener('click', () => {
+                    AppState.currentMonth++;
+                    if (AppState.currentMonth > 11) {
+                        AppState.currentMonth = 0;
+                        AppState.currentYear++;
+                    }
+                    this.generateCalendar();
+                });
+                
+                document.getElementById('todayBtn').addEventListener('click', () => {
+                    const now = new Date();
+                    AppState.currentMonth = now.getMonth();
+                    AppState.currentYear = now.getFullYear();
+                    this.generateCalendar();
+                });
+                
+                // New workout
+                document.getElementById('newWorkoutBtn').addEventListener('click', () => {
+                    document.getElementById('newWorkoutModal').classList.add('active');
+                });
+                
+                document.getElementById('quickWorkoutBtn').addEventListener('click', () => {
+                    this.startWorkout('Быстрая тренировка', 'gym');
+                });
+                
+                document.getElementById('startWorkoutBtn').addEventListener('click', () => {
+                    const name = document.getElementById('workoutName').value || 'Новая тренировка';
+                    const type = document.getElementById('workoutType').value;
+                    const templateId = document.getElementById('workoutTemplate').value;
+                    
+                    this.startWorkout(name, type, templateId);
+                    document.getElementById('newWorkoutModal').classList.remove('active');
+                });
+                
+                document.getElementById('cancelWorkoutBtn').addEventListener('click', () => {
+                    document.getElementById('newWorkoutModal').classList.remove('active');
+                });
+                
+                // Workout controls
+                document.getElementById('endWorkoutBtn').addEventListener('click', () => {
+                    if (confirm('Завершить тренировку?')) {
+                        this.completeWorkout();
+                    }
+                });
+                
+                document.getElementById('completeWorkoutBtn').addEventListener('click', () => {
+                    this.completeWorkout();
+                });
+                
+                document.getElementById('pauseWorkoutBtn').addEventListener('click', () => {
+                    if (AppState.workoutTimer) {
+                        clearInterval(AppState.workoutTimer);
+                        AppState.workoutTimer = null;
+                        DataStorage.showToast('Тренировка на паузе', 'info');
+                    } else {
+                        this.startWorkoutTimer();
+                        DataStorage.showToast('Тренировка продолжена', 'success');
+                    }
+                });
+                
+                // Rest timer
+                document.getElementById('skipRestBtn').addEventListener('click', () => {
+                    this.stopRestTimer();
+                });
+                
+                document.getElementById('startNextSetBtn').addEventListener('click', () => {
+                    this.stopRestTimer();
+                });
+                
+                // Add exercise to workout
+                document.getElementById('addExerciseToWorkoutBtn').addEventListener('click', () => {
+                    // Show exercise library
+                    this.switchPage('exercisesPage');
+                });
+                
+                document.getElementById('addExerciseToCurrentBtn').addEventListener('click', () => {
+                    const modal = document.getElementById('exerciseDetailModal');
+                    const exerciseId = modal.dataset.exerciseId;
+                    
+                    // Find exercise
+                    const exercise = [...ExerciseLibrary.exercises, ...AppState.exercises]
+                        .find(e => e.id === exerciseId);
+                    
+                    if (exercise) {
+                        this.addExerciseToWorkout(exercise);
+                        modal.classList.remove('active');
+                        this.switchPage('workoutSession');
+                    }
+                });
+                
+                // Set modal
+                document.getElementById('saveSetBtn').addEventListener('click', () => {
+                    this.saveSet();
+                });
+                
+                document.getElementById('cancelSetBtn').addEventListener('click', () => {
+                    document.getElementById('setDetailModal').classList.remove('active');
+                });
+                
+                // Template modal
+                document.getElementById('saveTemplateBtn').addEventListener('click', () => {
+                    this.saveTemplate();
+                });
+                
+                document.getElementById('cancelTemplateBtn').addEventListener('click', () => {
+                    document.getElementById('createTemplateModal').classList.remove('active');
+                });
+                
+                // Create template button
+                document.getElementById('createTemplateBtn').addEventListener('click', () => {
+                    document.getElementById('createTemplateModal').classList.add('active');
+                });
+                
+                // Add exercise to template
+                document.getElementById('addExerciseToTemplateBtn').addEventListener('click', () => {
+                    const select = document.getElementById('templateExerciseSelect');
+                    const exerciseId = select.value;
+                    
+                    if (!exerciseId) return;
+                    
+                    const exercise = [...ExerciseLibrary.exercises, ...AppState.exercises]
+                        .find(e => e.id === exerciseId);
+                    
+                    if (exercise) {
+                        const exerciseDiv = document.createElement('div');
+                        exerciseDiv.className = 'exercise-item mb-2';
+                        exerciseDiv.innerHTML = `
+                            <div class="flex justify-between">
+                                <span>${exercise.name}</span>
+                                <button class="btn btn-small btn-danger" onclick="this.parentElement.parentElement.remove()">
+                                    <i class="mdi mdi-delete"></i>
+                                </button>
+                            </div>
+                        `;
+                        document.getElementById('templateExercisesList').appendChild(exerciseDiv);
+                    }
+                });
+                
+                // Tabs
+                document.querySelectorAll('.tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const parent = tab.parentElement;
+                        const targetId = tab.dataset.tab || tab.dataset.muscle || tab.dataset.stat;
+                        
+                        // Update active tab
+                        parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        // Show/hide content
+                        if (tab.dataset.tab) {
+                            document.getElementById('templatesList').classList.toggle('hidden', tab.dataset.tab !== 'templates');
+                            document.getElementById('workoutsHistory').classList.toggle('hidden', tab.dataset.tab !== 'history');
+                            document.getElementById('workoutPlans').classList.toggle('hidden', tab.dataset.tab !== 'plans');
+                        }
+                        
+                        if (tab.dataset.stat) {
+                            document.getElementById('statsOverview').classList.toggle('hidden', tab.dataset.stat !== 'overview');
+                            document.getElementById('statsExercises').classList.toggle('hidden', tab.dataset.stat !== 'exercises');
+                            document.getElementById('statsMuscles').classList.toggle('hidden', tab.dataset.stat !== 'muscles');
+                            document.getElementById('statsVolume').classList.toggle('hidden', tab.dataset.stat !== 'volume');
+                        }
+                    });
+                });
+                
+                // Exercise search
+                document.getElementById('exerciseSearch').addEventListener('input', (e) => {
+                    const searchTerm = e.target.value.toLowerCase();
+                    document.querySelectorAll('.exercise-card').forEach(card => {
+                        const exerciseName = card.querySelector('h4').textContent.toLowerCase();
+                        card.style.display = exerciseName.includes(searchTerm) ? 'block' : 'none';
+                    });
+                });
+                
+                // AI Chat
+                document.getElementById('sendAiMessageBtn').addEventListener('click', () => {
+                    const input = document.getElementById('aiChatInput');
+                    const message = input.value.trim();
+                    
+                    if (!message) return;
+                    
+                    // Add user message
+                    const chat = document.getElementById('aiChat');
+                    const userBubble = document.createElement('div');
+                    userBubble.className = 'ai-message-bubble user';
+                    userBubble.textContent = message;
+                    chat.appendChild(userBubble);
+                    
+                    // Get AI response
+                    setTimeout(() => {
+                        const response = AITrainer.chatResponse(message);
+                        const aiBubble = document.createElement('div');
+                        aiBubble.className = 'ai-message-bubble';
+                        aiBubble.textContent = response;
+                        chat.appendChild(aiBubble);
+                        
+                        // Scroll to bottom
+                        chat.scrollTop = chat.scrollHeight;
+                    }, 500);
+                    
+                    input.value = '';
+                });
+                
+                document.getElementById('aiChatInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        document.getElementById('sendAiMessageBtn').click();
+                    }
+                });
+                
+                document.getElementById('aiChatBtn').addEventListener('click', () => {
+                    this.switchPage('aiTrainerPage');
+                });
+                
+                // Generate AI plan
+                document.getElementById('generatePlanBtn').addEventListener('click', () => {
+                    const plan = AITrainer.generateWeeklyPlan();
+                    let planHTML = '<div class="space-y-3">';
+                    
+                    Object.entries(plan).forEach(([day, data]) => {
+                        const dayName = {
+                            monday: 'Понедельник',
+                            tuesday: 'Вторник',
+                            wednesday: 'Среда',
+                            thursday: 'Четверг',
+                            friday: 'Пятница',
+                            saturday: 'Суббота',
+                            sunday: 'Воскресенье'
+                        }[day];
+                        
+                        planHTML += `
+                            <div class="exercise-item">
+                                <h5 class="font-semibold mb-1">${dayName}: ${data.muscleGroup}</h5>
+                                ${data.exercises.length > 0 ? 
+                                    `<ul class="text-sm text-secondary pl-4">
+                                        ${data.exercises.map(ex => `<li>• ${ex}</li>`).join('')}
+                                    </ul>` : 
+                                    '<p class="text-sm text-secondary">День отдыха</p>'}
+                            </div>
+                        `;
+                    });
+                    
+                    planHTML += '</div>';
+                    document.getElementById('weeklyPlan').innerHTML = planHTML;
+                    
+                    DataStorage.showToast('План на неделю создан AI', 'success');
+                });
+                
+                // Settings
+                document.getElementById('weightUnit').addEventListener('change', (e) => {
+                    AppState.settings.weightUnit = e.target.value;
+                    DataStorage.save();
+                    DataStorage.showToast('Настройки сохранены', 'success');
+                });
+                
+                document.getElementById('restTimerDefault').addEventListener('change', (e) => {
+                    AppState.defaultRestTime = parseInt(e.target.value);
+                    localStorage.setItem('restTimerDefault', e.target.value);
+                });
+                
+                document.getElementById('exportDataBtn').addEventListener('click', () => {
+                    DataStorage.exportJSON();
+                });
+                
+                document.getElementById('exportCSVBtn').addEventListener('click', () => {
+                    DataStorage.exportCSV();
+                });
+                
+                document.getElementById('importDataInput').addEventListener('change', (e) => {
+                    if (e.target.files[0]) {
+                        DataStorage.importData(e.target.files[0]);
+                    }
+                });
+                
+                document.getElementById('resetDataBtn').addEventListener('click', () => {
+                    DataStorage.resetData();
+                });
+                
+                // Mobile menu
+                document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+                    document.getElementById('sidebar').classList.toggle('active');
+                });
+                
+                // Modal close on outside click
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.addEventListener('click', (e) => {
+                        if (e.target === modal) {
+                            modal.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Window resize
+                window.addEventListener('resize', () => {
+                    if (window.innerWidth > 1024) {
+                        document.getElementById('sidebar').classList.remove('active');
+                        document.getElementById('mobileMenuBtn').classList.add('hidden');
+                    } else {
+                        document.getElementById('mobileMenuBtn').classList.remove('hidden');
+                    }
+                });
+                
+                // Show mobile menu button on small screens
+                if (window.innerWidth <= 1024) {
+                    document.getElementById('mobileMenuBtn').classList.remove('hidden');
+                }
+            },
+            
+            switchPage: function(pageId) {
+                document.querySelectorAll('.page').forEach(page => {
+                    page.classList.add('hidden');
+                });
+                document.querySelectorAll('.nav-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                document.getElementById(pageId).classList.remove('hidden');
+                const pageName = pageId.replace('Page', '');
+                document.querySelector(`[data-page="${pageName}"]`).classList.add('active');
+                
+                // Update page-specific content
+                if (pageId === 'calendarPage') {
+                    this.generateCalendar();
+                }
+                if (pageId === 'exercisesPage') {
+                    this.loadExercises();
+                }
+                if (pageId === 'workoutsPage') {
+                    this.loadTemplates();
+                }
+                if (pageId === 'statsPage') {
+                    this.updateStats();
+                }
+            },
+            
+            setupServiceWorker: function() {
+                if ('serviceWorker' in navigator) {
+                    navigator.serviceWorker.register('sw.js')
+                        .then(registration => {
+                            console.log('Service Worker зарегистрирован:', registration);
+                        })
+                        .catch(error => {
+                            console.log('Ошибка регистрации Service Worker:', error);
+                        });
+                }
+            }
+        };
+
+        // ==================== INITIALIZATION ====================
+        document.addEventListener('DOMContentLoaded', () => {
+            UI.init();
+            
+            // Load settings
+            const settings = AppState.settings;
+            document.getElementById('weightUnit').value = settings.weightUnit;
+            document.getElementById('weightUnitLabel').textContent = settings.weightUnit;
+            document.getElementById('notificationsEnabled').checked = settings.notifications;
+            document.getElementById('reminderEnabled').checked = settings.reminders;
+            document.getElementById('autoSave').checked = settings.autoSave;
+            
+            // Update today's workout button
+            document.getElementById('startTodayWorkoutBtn').addEventListener('click', () => {
+                UI.startWorkout('Тренировка на сегодня', 'gym');
             });
             
             // View calendar from dashboard
             document.getElementById('viewCalendarBtn').addEventListener('click', () => {
-                switchPage('calendarPage');
+                UI.switchPage('calendarPage');
             });
             
-            // Create template
-            document.getElementById('createTemplateBtn').addEventListener('click', () => {
-                alert('Создание нового шаблона тренировки');
+            // View all workouts
+            document.getElementById('viewAllWorkoutsBtn').addEventListener('click', () => {
+                UI.switchPage('workoutsPage');
+                document.querySelector('[data-tab="history"]').click();
             });
             
-            // Modal close
-            document.querySelectorAll('.modal').forEach(modal => {
-                modal.addEventListener('click', (e) => {
-                    if (e.target === modal) {
-                        modal.classList.remove('active');
+            // Add workout to day
+            document.getElementById('addWorkoutToDayBtn').addEventListener('click', () => {
+                document.getElementById('dayDetailModal').classList.remove('active');
+                document.getElementById('newWorkoutModal').classList.add('active');
+            });
+            
+            // Add to calendar button
+            document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                document.getElementById('newWorkoutModal').classList.add('active');
+            });
+            
+            // Close exercise detail
+            document.getElementById('closeExerciseDetailBtn').addEventListener('click', () => {
+                document.getElementById('exerciseDetailModal').classList.remove('active');
+            });
+            
+            // Template button events (delegated)
+            document.addEventListener('click', (e) => {
+                // Use template button
+                if (e.target.closest('.use-template-btn')) {
+                    const templateId = e.target.closest('.use-template-btn').dataset.id;
+                    const template = AppState.templates.find(t => t.id === templateId);
+                    if (template) {
+                        UI.startWorkout(template.name, 'gym', templateId);
                     }
-                });
-            });
-            
-            // Mobile menu
-            document.getElementById('mobileMenuBtn').addEventListener('click', () => {
-                elements.sidebar.classList.toggle('active');
-            });
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                if (window.innerWidth > 1024) {
-                    elements.sidebar.classList.remove('active');
-                    document.getElementById('mobileMenuBtn').classList.add('hidden');
-                } else {
-                    document.getElementById('mobileMenuBtn').classList.remove('hidden');
+                }
+                
+                // Delete template button
+                if (e.target.closest('.delete-template-btn')) {
+                    const templateId = e.target.closest('.delete-template-btn').dataset.id;
+                    if (confirm('Удалить этот шаблон?')) {
+                        AppState.templates = AppState.templates.filter(t => t.id !== templateId);
+                        DataStorage.save();
+                        UI.loadTemplates();
+                        DataStorage.showToast('Шаблон удалён', 'success');
+                    }
                 }
             });
             
-            // Show mobile menu button on small screens
-            if (window.innerWidth <= 1024) {
-                document.getElementById('mobileMenuBtn').classList.remove('hidden');
-            }
-        }
-
-        // Workout Timer
-        let workoutTimer = null;
-        let workoutSeconds = 0;
-
-        function startWorkoutTimer() {
-            workoutSeconds = 0;
-            clearInterval(workoutTimer);
+            // Prevent form submission
+            document.addEventListener('submit', (e) => {
+                e.preventDefault();
+            });
             
-            workoutTimer = setInterval(() => {
-                workoutSeconds++;
-                const minutes = Math.floor(workoutSeconds / 60);
-                const seconds = workoutSeconds % 60;
-                document.getElementById('workoutTimer').textContent = 
-                    `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }, 1000);
-        }
+            // Initialize with zero stats
+            DataStorage.calculateStats();
+        });
 
-        // Service Worker
-        function setupServiceWorker() {
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js')
-                    .then(registration => {
-                        console.log('Service Worker зарегистрирован:', registration);
-                    })
-                    .catch(error => {
-                        console.log('Ошибка регистрации Service Worker:', error);
-                    });
-            }
-        }
-
-        // Initialize on load
-        document.addEventListener('DOMContentLoaded', initApp);
+        // ==================== GLOBAL FUNCTIONS ====================
+        window.UI = UI;
+        window.DataStorage = DataStorage;
+        window.AppState = AppState;
     </script>
 </body>
 </html>
