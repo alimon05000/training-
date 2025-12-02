@@ -97,6 +97,9 @@
             --calendar-cardio: #f59e0b;
             --calendar-home: #3b82f6;
             --success: #10b981;
+            --rest-day: #f59e0b;
+            --training-day: #10b981;
+            --planned-day: #8b5cf6;
         }
 
         [data-theme="dark"] {
@@ -119,6 +122,9 @@
             --calendar-cardio: #f59e0b;
             --calendar-home: #60a5fa;
             --success: #34d399;
+            --rest-day: #fbbf24;
+            --training-day: #34d399;
+            --planned-day: #a78bfa;
         }
 
         * {
@@ -427,6 +433,7 @@
             transition: all 0.2s ease;
             user-select: none;
             font-weight: 500;
+            position: relative;
         }
 
         .calendar-day:hover {
@@ -434,20 +441,20 @@
             border-color: var(--primary);
         }
 
-        .calendar-day.trained {
-            background: linear-gradient(135deg, var(--calendar-train), transparent);
+        .calendar-day.has-training {
+            border-color: var(--training-day);
         }
 
         .calendar-day.rest-day {
-            background: linear-gradient(135deg, var(--calendar-rest), transparent);
+            background: linear-gradient(135deg, var(--rest-day), transparent);
         }
 
-        .calendar-day.cardio {
-            background: linear-gradient(135deg, var(--calendar-cardio), transparent);
+        .calendar-day.planned {
+            background: linear-gradient(135deg, var(--planned-day), transparent);
         }
 
-        .calendar-day.home {
-            background: linear-gradient(135deg, var(--calendar-home), transparent);
+        .calendar-day.completed {
+            background: linear-gradient(135deg, var(--success), transparent);
         }
 
         .calendar-day.has-training::after {
@@ -468,6 +475,27 @@
         .calendar-day.other-month {
             color: var(--text-secondary);
             opacity: 0.5;
+        }
+
+        .day-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .day-badge.rest {
+            background: var(--rest-day);
+        }
+
+        .day-badge.training {
+            background: var(--training-day);
+        }
+
+        .day-badge.planned {
+            background: var(--planned-day);
         }
 
         /* Stats */
@@ -524,6 +552,7 @@
             border-radius: 8px;
             text-align: center;
             border: 1px solid var(--border);
+            cursor: pointer;
         }
 
         .set-item.active {
@@ -628,6 +657,7 @@
             cursor: pointer;
             transition: all 0.2s ease;
             border: 1px solid transparent;
+            position: relative;
         }
 
         .exercise-card:hover {
@@ -1117,6 +1147,10 @@
                                 <i class="mdi mdi-plus"></i>
                                 Добавить тренировку
                             </button>
+                            <button class="btn btn-secondary" id="markAsRestBtn">
+                                <i class="mdi mdi-bed"></i>
+                                Отдых
+                            </button>
                         </div>
                     </div>
                     <div id="calendarContainer"></div>
@@ -1220,6 +1254,10 @@
                             <i class="mdi mdi-robot"></i>
                             Создать план
                         </button>
+                        <button class="btn btn-secondary w-full mt-2" id="saveWeeklyPlanBtn" style="display: none;">
+                            <i class="mdi mdi-content-save"></i>
+                            Сохранить план
+                        </button>
                     </div>
                 </div>
 
@@ -1281,6 +1319,9 @@
                         <div class="chart-container">
                             <canvas id="progressChart"></canvas>
                         </div>
+                        <div class="chart-container" style="height: 250px;">
+                            <canvas id="muscleChart"></canvas>
+                        </div>
                         <div class="stats-grid mt-3">
                             <div class="stat-item">
                                 <div class="stat-value" id="totalWorkouts">0</div>
@@ -1301,7 +1342,9 @@
                         </div>
                     </div>
                     <div id="statsExercises" class="hidden">
-                        <!-- Exercise stats will be loaded here -->
+                        <div class="chart-container">
+                            <canvas id="exerciseChart"></canvas>
+                        </div>
                     </div>
                     <div id="statsMuscles" class="hidden">
                         <!-- Muscle group stats will be loaded here -->
@@ -1474,10 +1517,17 @@
         <div class="modal-content">
             <h3 id="dayDetailTitle" class="mb-3"></h3>
             <div id="dayWorkouts"></div>
-            <button class="btn btn-primary w-full mt-2" id="addWorkoutToDayBtn">
-                <i class="mdi mdi-plus"></i>
-                Добавить тренировку
-            </button>
+            <div id="dayInfo"></div>
+            <div class="flex gap-2 mt-2">
+                <button class="btn btn-primary" id="startWorkoutForDayBtn">
+                    <i class="mdi mdi-play"></i>
+                    Начать тренировку
+                </button>
+                <button class="btn btn-secondary" id="addWorkoutToDayBtn">
+                    <i class="mdi mdi-plus"></i>
+                    Добавить план
+                </button>
+            </div>
         </div>
     </div>
 
@@ -1488,13 +1538,17 @@
             <div class="flex gap-2 mt-3">
                 <button class="btn btn-secondary w-full" id="closeExerciseDetailBtn">Закрыть</button>
                 <button class="btn btn-primary w-full" id="addExerciseToCurrentBtn">Добавить в тренировку</button>
+                <button class="btn btn-danger w-full" id="deleteCustomExerciseBtn" style="display: none;">
+                    <i class="mdi mdi-delete"></i>
+                    Удалить упражнение
+                </button>
             </div>
         </div>
     </div>
 
     <div class="modal" id="customExerciseModal">
         <div class="modal-content modal-large">
-            <h3 class="mb-3">Добавить своё упражнение</h3>
+            <h3 class="mb-3" id="customExerciseModalTitle">Добавить своё упражнение</h3>
             <div class="form-group">
                 <label class="form-label">Название</label>
                 <input type="text" id="customExerciseName" class="form-input" placeholder="Например: Планка на локтях">
@@ -1526,6 +1580,7 @@
                     <option value="cardio">Кардио</option>
                 </select>
             </div>
+            <input type="hidden" id="customExerciseEditId">
             <div class="flex gap-2 mt-3">
                 <button class="btn btn-secondary w-full" id="cancelCustomExerciseBtn">Отмена</button>
                 <button class="btn btn-primary w-full" id="saveCustomExerciseBtn">Сохранить</button>
@@ -1624,11 +1679,14 @@
             deferredInstallPrompt: null,
             currentMuscleFilter: 'all',
             templateBuilderExercises: [],
+            selectedDayForWorkout: null,
             
             // Data storage
             workouts: JSON.parse(localStorage.getItem('workouts')) || [],
             templates: JSON.parse(localStorage.getItem('templates')) || [],
             exercises: JSON.parse(localStorage.getItem('exercises')) || [],
+            calendarData: JSON.parse(localStorage.getItem('calendarData')) || {},
+            weeklyPlans: JSON.parse(localStorage.getItem('weeklyPlans')) || {},
             settings: JSON.parse(localStorage.getItem('settings')) || {
                 weightUnit: 'kg',
                 notifications: true,
@@ -1662,7 +1720,8 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: ['triceps', 'shoulders'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'incline-press',
@@ -1671,7 +1730,8 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: ['shoulders', 'triceps'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'dumbbell-fly',
@@ -1680,9 +1740,9 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: [],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'push-ups',
                     name: 'Отжимания',
@@ -1690,7 +1750,8 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: ['triceps', 'shoulders'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 { 
                     id: 'cable-crossover',
@@ -1699,7 +1760,8 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: ['shoulders'],
                     equipment: 'cable',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'push-up-ring',
@@ -1708,7 +1770,8 @@
                     muscleGroup: 'chest',
                     secondaryMuscles: ['shoulders', 'core'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Back
@@ -1719,7 +1782,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['legs', 'core'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'pull-ups',
@@ -1728,7 +1792,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'bent-over-row',
@@ -1737,9 +1802,9 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'lat-pulldown',
                     name: 'Тяга верхнего блока',
@@ -1747,7 +1812,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'seated-row',
@@ -1756,7 +1822,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps', 'shoulders'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'face-pull',
@@ -1765,7 +1832,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['shoulders'],
                     equipment: 'cable',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 't-bar-row',
@@ -1774,7 +1842,8 @@
                     muscleGroup: 'back',
                     secondaryMuscles: ['biceps', 'rear delts'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Legs
@@ -1785,7 +1854,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['core', 'back'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'leg-press',
@@ -1794,7 +1864,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: [],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'lunges',
@@ -1803,9 +1874,9 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['glutes'],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'romanian-deadlift',
                     name: 'Румынская тяга',
@@ -1813,7 +1884,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['glutes', 'back'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'hip-thrust',
@@ -1822,7 +1894,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['core'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'calf-raise',
@@ -1831,7 +1904,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: [],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'pistol-squat',
@@ -1840,7 +1914,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['core', 'glutes'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'step-up',
@@ -1849,7 +1924,8 @@
                     muscleGroup: 'legs',
                     secondaryMuscles: ['glutes', 'core'],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Shoulders
@@ -1860,7 +1936,8 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: ['triceps'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'lateral-raises',
@@ -1869,9 +1946,9 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: [],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'arnold-press',
                     name: 'Жим Арнольда',
@@ -1879,7 +1956,8 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: ['triceps'],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'rear-delt-fly',
@@ -1888,7 +1966,8 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: ['back'],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'upright-row',
@@ -1897,7 +1976,8 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: ['arms'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'landmine-press',
@@ -1906,7 +1986,8 @@
                     muscleGroup: 'shoulders',
                     secondaryMuscles: ['triceps', 'core'],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Arms
@@ -1917,7 +1998,8 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: [],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'tricep-extension',
@@ -1926,9 +2008,9 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: [],
                     equipment: 'cable',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'hammer-curl',
                     name: 'Молотковые сгибания',
@@ -1936,7 +2018,8 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: ['forearms'],
                     equipment: 'dumbbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'dips',
@@ -1945,7 +2028,8 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: ['chest', 'shoulders'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'skullcrusher',
@@ -1954,7 +2038,8 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: [],
                     equipment: 'barbell',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'rope-pushdown',
@@ -1963,7 +2048,8 @@
                     muscleGroup: 'arms',
                     secondaryMuscles: ['shoulders'],
                     equipment: 'cable',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Core
@@ -1974,9 +2060,9 @@
                     muscleGroup: 'core',
                     secondaryMuscles: [],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-
                 {
                     id: 'hanging-leg-raise',
                     name: 'Подъём ног в висе',
@@ -1984,7 +2070,8 @@
                     muscleGroup: 'core',
                     secondaryMuscles: ['grip'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'russian-twist',
@@ -1993,7 +2080,8 @@
                     muscleGroup: 'core',
                     secondaryMuscles: ['hips'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'back-extension',
@@ -2002,7 +2090,8 @@
                     muscleGroup: 'core',
                     secondaryMuscles: ['glutes'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'pallof-press',
@@ -2011,9 +2100,9 @@
                     muscleGroup: 'core',
                     secondaryMuscles: ['shoulders'],
                     equipment: 'cable',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
-                
                 {
                     id: 'crunches',
                     name: 'Скручивания',
@@ -2021,7 +2110,8 @@
                     muscleGroup: 'core',
                     secondaryMuscles: [],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 
                 // Cardio
@@ -2032,7 +2122,8 @@
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'rowing',
@@ -2041,7 +2132,8 @@
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['back', 'legs', 'arms'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'jump-rope',
@@ -2050,7 +2142,8 @@
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs'],
                     equipment: 'bodyweight',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'cycling',
@@ -2059,7 +2152,8 @@
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 },
                 {
                     id: 'sled-push',
@@ -2068,7 +2162,8 @@
                     muscleGroup: 'cardio',
                     secondaryMuscles: ['legs', 'core'],
                     equipment: 'machine',
-                    image: null
+                    image: null,
+                    isCustom: false
                 }
             ]
         };
@@ -2100,7 +2195,6 @@
                 const frequency = this.getMuscleFrequency();
                 const muscleOrder = ['chest', 'back', 'legs', 'shoulders', 'arms', 'core', 'cardio'];
 
-                // Avoid repeating the same muscle as the last workout if possible
                 const lastWorkout = AppState.workouts[AppState.workouts.length - 1];
                 const lastMuscle = lastWorkout?.exercises?.[0]?.muscleGroup;
 
@@ -2135,6 +2229,7 @@
                     targetSets: 3
                 }));
             },
+            
             getRecommendation: function() {
                 const workouts = AppState.workouts;
                 if (workouts.length === 0) {
@@ -2238,7 +2333,6 @@
                     };
                 });
 
-                // Добавляем один день отдыха
                 plan.wednesday = { muscleGroup: 'Восстановление', exercises: ['Растяжка 15 минут', 'Прогулка 30 минут'] };
 
                 return plan;
@@ -2374,7 +2468,6 @@
                 }
 
                 if (lowerMessage.includes('?')) {
-                    // Для вопросов, не попавших в базу знаний
                     const randomResponses = [
                         'Интересный вопрос! Для подробного ответа мне нужно больше контекста. Можете уточнить, о какой конкретно технике или программе идет речь?',
                         'Хороший вопрос! Чтобы дать максимально полезный ответ, расскажите немного о вашем тренировочном опыте и целях.',
@@ -2403,6 +2496,8 @@
                     localStorage.setItem('workouts', JSON.stringify(AppState.workouts));
                     localStorage.setItem('templates', JSON.stringify(AppState.templates));
                     localStorage.setItem('exercises', JSON.stringify(AppState.exercises));
+                    localStorage.setItem('calendarData', JSON.stringify(AppState.calendarData));
+                    localStorage.setItem('weeklyPlans', JSON.stringify(AppState.weeklyPlans));
                     localStorage.setItem('settings', JSON.stringify(AppState.settings));
                     localStorage.setItem('theme', AppState.theme);
                     this.calculateStats();
@@ -2468,6 +2563,8 @@
                     workouts: AppState.workouts,
                     templates: AppState.templates,
                     exercises: AppState.exercises,
+                    calendarData: AppState.calendarData,
+                    weeklyPlans: AppState.weeklyPlans,
                     settings: AppState.settings,
                     exported: new Date().toISOString()
                 };
@@ -2519,6 +2616,8 @@
                         if (data.workouts) AppState.workouts = data.workouts;
                         if (data.templates) AppState.templates = data.templates;
                         if (data.exercises) AppState.exercises = data.exercises;
+                        if (data.calendarData) AppState.calendarData = data.calendarData;
+                        if (data.weeklyPlans) AppState.weeklyPlans = data.weeklyPlans;
                         if (data.settings) AppState.settings = { ...AppState.settings, ...data.settings };
                         
                         this.save();
@@ -2537,6 +2636,8 @@
                     AppState.workouts = [];
                     AppState.templates = [];
                     AppState.exercises = [];
+                    AppState.calendarData = {};
+                    AppState.weeklyPlans = {};
                     this.showToast('Все данные сброшены', 'success');
                     location.reload();
                 }
@@ -2576,7 +2677,6 @@
                     updateInstallAvailability();
                     DataStorage.showToast('Приложение готово к установке!', 'success');
                     
-                    // Показать уведомление о возможности установки
                     if (!localStorage.getItem('installPromptShown')) {
                         setTimeout(() => {
                             DataStorage.showToast('Нажмите "Установить приложение" в настройках', 'info');
@@ -2603,7 +2703,6 @@
                         AppState.deferredInstallPrompt = null;
                         updateInstallAvailability();
                     } else {
-                        // Если prompt недоступен, показываем инструкции
                         this.showInstallInstructions();
                     }
                 });
@@ -2629,13 +2728,6 @@
                 }
                 
                 DataStorage.showToast(`Для установки: ${instructions}`, 'info');
-                
-                // Детальное сообщение в консоли
-                console.log('Инструкции по установке PWA:');
-                console.log('- iOS: Нажмите "Поделиться" в Safari → "На экран "Домой""');
-                console.log('- Android: Меню браузера → "Установить приложение"');
-                console.log('- Chrome Desktop: Нажмите иконку установки в адресной строке');
-                console.log('- Edge: Меню → "Приложения" → "Установить этот сайт как приложение"');
             },
             
             setupServiceWorker: function() {
@@ -2645,7 +2737,6 @@
                             .then(registration => {
                                 console.log('ServiceWorker зарегистрирован:', registration.scope);
                                 
-                                // Проверяем обновления
                                 registration.addEventListener('updatefound', () => {
                                     const newWorker = registration.installing;
                                     console.log('Найдено обновление ServiceWorker');
@@ -2665,7 +2756,6 @@
             },
             
             createManifest: function() {
-                // Динамическое создание manifest.json
                 const manifest = {
                     "name": "Тренировочный Календарь",
                     "short_name": "Тренировки",
@@ -2744,7 +2834,6 @@
                     ]
                 };
 
-                // Создаем ссылку на манифест если её нет
                 if (!document.querySelector('link[rel="manifest"]')) {
                     const link = document.createElement('link');
                     link.rel = 'manifest';
@@ -2770,6 +2859,7 @@
                 this.updateAIRecommendation();
                 this.renderAiChat();
                 this.setupAiQuickQuestions();
+                this.loadWeeklyPlans();
                 PWAInstaller.init();
                 this.showOnboardingIfNeeded();
             },
@@ -2896,16 +2986,25 @@
                     const hasWorkout = dayWorkouts.length > 0;
                     const workoutType = hasWorkout ? dayWorkouts[0].type : null;
                     
+                    // Check calendar data for this day
+                    const dayData = AppState.calendarData[dateStr] || {};
+                    
                     let dayClass = 'calendar-day';
                     if (isToday) dayClass += ' today';
                     if (hasWorkout) {
-                        dayClass += ' has-training';
-                        if (workoutType) dayClass += ' ' + workoutType;
+                        dayClass += ' has-training completed';
+                    }
+                    if (dayData.type === 'rest') {
+                        dayClass += ' rest-day';
+                    }
+                    if (dayData.type === 'planned') {
+                        dayClass += ' planned';
                     }
                     
                     calendarHTML += `
                         <div class="${dayClass}" data-date="${dateStr}">
                             ${day}
+                            ${dayData.type ? `<div class="day-badge ${dayData.type}"></div>` : ''}
                         </div>
                     `;
                 }
@@ -2950,15 +3049,27 @@
                     const dateStr = date.toISOString().split('T')[0];
                     const isToday = dateStr === todayStr;
                     
-                    // Check for workouts
+                    // Check for workouts and calendar data
                     const dayWorkouts = AppState.workouts.filter(w => w.date === dateStr);
                     const hasWorkout = dayWorkouts.length > 0;
+                    const dayData = AppState.calendarData[dateStr] || {};
+                    
+                    let dayStyle = 'aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 0.875rem; font-weight: 500;';
+                    
+                    if (isToday) {
+                        dayStyle += 'border: 2px solid var(--primary);';
+                    }
+                    
+                    if (hasWorkout) {
+                        dayStyle += 'background: linear-gradient(135deg, var(--training-day), transparent);';
+                    } else if (dayData.type === 'rest') {
+                        dayStyle += 'background: linear-gradient(135deg, var(--rest-day), transparent);';
+                    } else if (dayData.type === 'planned') {
+                        dayStyle += 'background: linear-gradient(135deg, var(--planned-day), transparent);';
+                    }
                     
                     previewHTML += `
-                        <div style="aspect-ratio: 1; display: flex; align-items: center; justify-content: center; 
-                                   border-radius: 8px; font-size: 0.875rem; font-weight: 500;
-                                   ${isToday ? 'border: 2px solid var(--primary);' : ''}
-                                   ${hasWorkout ? 'background: linear-gradient(135deg, var(--calendar-train), transparent);' : ''}">
+                        <div style="${dayStyle}">
                             ${day}
                         </div>
                     `;
@@ -3022,10 +3133,16 @@
             
             showDayDetail: function(dateStr) {
                 const date = new Date(dateStr);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const isPastDate = date < today;
+                const isToday = date.toDateString() === today.toDateString();
+                
                 const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
                 document.getElementById('dayDetailTitle').textContent = date.toLocaleDateString('ru-RU', options);
                 
                 const dayWorkouts = AppState.workouts.filter(w => w.date === dateStr);
+                const dayData = AppState.calendarData[dateStr] || {};
                 
                 let workoutsHTML = '';
                 if (dayWorkouts.length === 0) {
@@ -3054,6 +3171,25 @@
                 }
                 
                 document.getElementById('dayWorkouts').innerHTML = workoutsHTML;
+                
+                // Show day info
+                let dayInfoHTML = '';
+                if (dayData.type === 'rest') {
+                    dayInfoHTML = '<div class="ai-message mb-2">📅 <strong>День отдыха</strong><br>Запланирован восстановительный день</div>';
+                } else if (dayData.type === 'planned') {
+                    dayInfoHTML = '<div class="ai-message mb-2">📅 <strong>Запланирована тренировка</strong><br>' + (dayData.notes || '') + '</div>';
+                }
+                document.getElementById('dayInfo').innerHTML = dayInfoHTML;
+                
+                // Show/hide start workout button based on date
+                const startBtn = document.getElementById('startWorkoutForDayBtn');
+                startBtn.style.display = (isPastDate || isToday) ? 'block' : 'none';
+                startBtn.onclick = () => {
+                    AppState.selectedDayForWorkout = dateStr;
+                    document.getElementById('dayDetailModal').classList.remove('active');
+                    document.getElementById('newWorkoutModal').classList.add('active');
+                };
+                
                 document.getElementById('dayDetailModal').classList.add('active');
             },
             
@@ -3075,7 +3211,18 @@
                     .forEach(exercise => {
                         const exerciseCard = document.createElement('div');
                         exerciseCard.className = 'exercise-card';
+                        exerciseCard.dataset.id = exercise.id;
+                        exerciseCard.dataset.isCustom = exercise.isCustom || false;
+                        
+                        let deleteBtn = '';
+                        if (exercise.isCustom) {
+                            deleteBtn = `<button class="btn btn-small btn-danger" style="position: absolute; top: 0.5rem; right: 0.5rem; padding: 0.25rem 0.5rem;" onclick="event.stopPropagation(); UI.deleteCustomExercise('${exercise.id}')">
+                                <i class="mdi mdi-delete"></i>
+                            </button>`;
+                        }
+                        
                         exerciseCard.innerHTML = `
+                            ${deleteBtn}
                             <h4 class="mb-1">${exercise.name}</h4>
                             <div class="mb-1">
                                 <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
@@ -3120,10 +3267,12 @@
 
                 const modal = document.getElementById('exerciseDetailModal');
                 modal.dataset.exerciseId = exercise.id;
+                modal.dataset.isCustom = exercise.isCustom || false;
                 
                 let content = `
                     <div class="mb-3">
                         <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
+                        ${exercise.isCustom ? '<span class="muscle-group-badge" style="background: var(--warning);">Своё</span>' : ''}
                     </div>
                     <p class="mb-3">${exercise.description}</p>
                 `;
@@ -3139,7 +3288,39 @@
                                                                            exercise.equipment === 'cable' ? 'Тросы' : 'Кардио'}</p>`;
                 
                 document.getElementById('exerciseDetailContent').innerHTML = content;
+                
+                // Show/hide delete button for custom exercises
+                const deleteBtn = document.getElementById('deleteCustomExerciseBtn');
+                deleteBtn.style.display = exercise.isCustom ? 'block' : 'none';
+                deleteBtn.onclick = () => {
+                    if (confirm('Удалить это упражнение?')) {
+                        this.deleteCustomExercise(exercise.id);
+                        modal.classList.remove('active');
+                    }
+                };
+                
                 modal.classList.add('active');
+            },
+            
+            deleteCustomExercise: function(exerciseId) {
+                AppState.exercises = AppState.exercises.filter(ex => ex.id !== exerciseId);
+                DataStorage.save();
+                this.loadExercises(AppState.currentMuscleFilter);
+                DataStorage.showToast('Упражнение удалено', 'success');
+            },
+            
+            editCustomExercise: function(exerciseId) {
+                const exercise = AppState.exercises.find(ex => ex.id === exerciseId);
+                if (!exercise) return;
+                
+                document.getElementById('customExerciseModalTitle').textContent = 'Редактировать упражнение';
+                document.getElementById('customExerciseName').value = exercise.name;
+                document.getElementById('customExerciseDescription').value = exercise.description;
+                document.getElementById('customExerciseMuscle').value = exercise.muscleGroup;
+                document.getElementById('customExerciseEquipment').value = exercise.equipment;
+                document.getElementById('customExerciseEditId').value = exerciseId;
+                
+                document.getElementById('customExerciseModal').classList.add('active');
             },
             
             loadTemplates: function() {
@@ -3182,6 +3363,31 @@
                         option.textContent = template.name;
                         workoutTemplateSelect.appendChild(option);
                     });
+                    
+                    // Add event listeners for template buttons
+                    document.querySelectorAll('.use-template-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const templateId = btn.dataset.id;
+                            const template = AppState.templates.find(t => t.id === templateId);
+                            if (template) {
+                                UI.startWorkout(template.name, 'gym', templateId);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.delete-template-btn').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const templateId = btn.dataset.id;
+                            if (confirm('Удалить этот шаблон?')) {
+                                AppState.templates = AppState.templates.filter(t => t.id !== templateId);
+                                DataStorage.save();
+                                UI.loadTemplates();
+                                DataStorage.showToast('Шаблон удалён', 'success');
+                            }
+                        });
+                    });
                 }
             },
             
@@ -3205,6 +3411,8 @@
                 
                 // Update charts
                 this.updateProgressChart();
+                this.updateMuscleChart();
+                this.updateExerciseChart();
             },
             
             updateRecentWorkouts: function() {
@@ -3325,6 +3533,127 @@
                 });
             },
             
+            updateMuscleChart: function() {
+                const ctx = document.getElementById('muscleChart').getContext('2d');
+                const stats = DataStorage.calculateStats();
+                const muscleGroups = stats.muscleGroups || {};
+                
+                const labels = Object.keys(muscleGroups).map(m => UI.getMuscleGroupName(m));
+                const data = Object.values(muscleGroups);
+                
+                if (window.muscleChart) {
+                    window.muscleChart.destroy();
+                }
+                
+                if (labels.length === 0) {
+                    document.getElementById('muscleChart').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('muscleChart').style.display = 'block';
+                
+                window.muscleChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: data,
+                            backgroundColor: [
+                                '#6366f1', '#10b981', '#f59e0b', '#8b5cf6', 
+                                '#ef4444', '#3b82f6', '#f97316'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'var(--text-primary)'
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            
+            updateExerciseChart: function() {
+                const ctx = document.getElementById('exerciseChart').getContext('2d');
+                const stats = DataStorage.calculateStats();
+                const exerciseProgress = stats.exerciseProgress || {};
+                
+                // Get top 5 exercises by frequency
+                const topExercises = Object.entries(exerciseProgress)
+                    .sort((a, b) => b[1].length - a[1].length)
+                    .slice(0, 5);
+                
+                const labels = topExercises.map(([name]) => name);
+                const data = topExercises.map(([, progress]) => {
+                    if (progress.length === 0) return 0;
+                    const latest = progress[progress.length - 1].weight;
+                    const oldest = progress[0].weight;
+                    return latest - oldest;
+                });
+                
+                if (window.exerciseChart) {
+                    window.exerciseChart.destroy();
+                }
+                
+                if (labels.length === 0) {
+                    document.getElementById('exerciseChart').style.display = 'none';
+                    return;
+                }
+                
+                document.getElementById('exerciseChart').style.display = 'block';
+                
+                window.exerciseChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Прогресс в весе (кг)',
+                            data: data,
+                            backgroundColor: 'var(--primary)',
+                            borderColor: 'var(--primary-dark)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: 'var(--text-primary)'
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: 'var(--border)'
+                                },
+                                ticks: {
+                                    color: 'var(--text-secondary)',
+                                    maxRotation: 45
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: 'var(--border)'
+                                },
+                                ticks: {
+                                    color: 'var(--text-secondary)'
+                                }
+                            }
+                        }
+                    }
+                });
+            },
+            
             updateAIRecommendation: function() {
                 const recommendation = AITrainer.getRecommendation();
                 document.getElementById('aiRecommendation').textContent = recommendation;
@@ -3334,8 +3663,6 @@
                 document.getElementById('progressRecommendations').innerHTML = insights
                     .map(text => `<div class="ai-message">${text}</div>`)
                     .join('');
-
-                this.renderWeeklyPlan(AITrainer.generateWeeklyPlan());
             },
 
             renderAiChat: function() {
@@ -3352,10 +3679,46 @@
                 chat.scrollTop = chat.scrollHeight;
             },
 
-            renderWeeklyPlan: function(plan) {
+            loadWeeklyPlans: function() {
+                const plansDiv = document.getElementById('workoutPlans');
+                plansDiv.innerHTML = '';
+                
+                if (Object.keys(AppState.weeklyPlans).length === 0) {
+                    plansDiv.innerHTML = '<p class="text-secondary">Планов на неделю пока нет</p>';
+                    return;
+                }
+                
+                Object.entries(AppState.weeklyPlans).forEach(([id, plan]) => {
+                    const planDiv = document.createElement('div');
+                    planDiv.className = 'exercise-item mb-2';
+                    planDiv.innerHTML = `
+                        <div class="flex justify-between items-center mb-1">
+                            <h4>${plan.name || 'План на неделю'}</h4>
+                            <span class="text-secondary text-sm">${new Date(plan.created).toLocaleDateString('ru-RU')}</span>
+                        </div>
+                        <div class="text-sm text-secondary mb-2">
+                            Создан AI-тренером
+                        </div>
+                        <div class="flex gap-2">
+                            <button class="btn btn-small btn-secondary" onclick="UI.viewWeeklyPlan('${id}')">
+                                <i class="mdi mdi-eye"></i> Посмотреть
+                            </button>
+                            <button class="btn btn-small btn-danger" onclick="UI.deleteWeeklyPlan('${id}')">
+                                <i class="mdi mdi-delete"></i>
+                            </button>
+                        </div>
+                    `;
+                    plansDiv.appendChild(planDiv);
+                });
+            },
+            
+            viewWeeklyPlan: function(planId) {
+                const plan = AppState.weeklyPlans[planId];
+                if (!plan) return;
+                
                 let planHTML = '<div class="space-y-3">';
-
-                Object.entries(plan).forEach(([day, data]) => {
+                
+                Object.entries(plan.days || {}).forEach(([day, data]) => {
                     const dayName = {
                         monday: 'Понедельник',
                         tuesday: 'Вторник',
@@ -3365,7 +3728,7 @@
                         saturday: 'Суббота',
                         sunday: 'Воскресенье'
                     }[day];
-
+                    
                     planHTML += `
                         <div class="exercise-item">
                             <h5 class="font-semibold mb-1">${dayName}: ${data.muscleGroup}</h5>
@@ -3377,18 +3740,52 @@
                         </div>
                     `;
                 });
-
+                
                 planHTML += '</div>';
-                document.getElementById('weeklyPlan').innerHTML = planHTML;
+                
+                // Show in modal
+                const modal = document.createElement('div');
+                modal.className = 'modal active';
+                modal.innerHTML = `
+                    <div class="modal-content modal-large">
+                        <h3 class="mb-3">${plan.name || 'План на неделю'}</h3>
+                        ${planHTML}
+                        <div class="flex gap-2 mt-3">
+                            <button class="btn btn-secondary w-full" onclick="this.closest('.modal').classList.remove('active')">
+                                Закрыть
+                            </button>
+                            <button class="btn btn-danger w-full" onclick="UI.deleteWeeklyPlan('${planId}'); this.closest('.modal').classList.remove('active')">
+                                Удалить план
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('active');
+                    }
+                });
+                
+                document.body.appendChild(modal);
+            },
+            
+            deleteWeeklyPlan: function(planId) {
+                if (confirm('Удалить этот план на неделю?')) {
+                    delete AppState.weeklyPlans[planId];
+                    DataStorage.save();
+                    this.loadWeeklyPlans();
+                    DataStorage.showToast('План удалён', 'success');
+                }
             },
             
             // ==================== WORKOUT FUNCTIONS ==================== 
             startWorkout: function(name, type, templateId, preloadedExercises = []) {
                 AppState.activeWorkout = {
-                    id: Date.now(),
+                    id: Date.now().toString(),
                     name: name || 'Новая тренировка',
                     type: type || 'gym',
-                    date: new Date().toISOString().split('T')[0],
+                    date: AppState.selectedDayForWorkout || new Date().toISOString().split('T')[0],
                     startTime: Date.now(),
                     duration: 0,
                     exercises: [],
@@ -3536,7 +3933,7 @@
                 DataStorage.showToast('Упражнение добавлено', 'success');
             },
 
-        removeExercise: function(exerciseIndex) {
+            removeExercise: function(exerciseIndex) {
                 if (!AppState.activeWorkout) {
                     DataStorage.showToast('Нет активной тренировки', 'error');
                     return;
@@ -3667,8 +4064,15 @@
                     return;
                 }
                 
+                // Prevent multiple completions
+                if (AppState.activeWorkout.completed) {
+                    DataStorage.showToast('Тренировка уже завершена', 'error');
+                    return;
+                }
+                
                 AppState.activeWorkout.duration = Math.floor(AppState.workoutSeconds / 60);
                 AppState.activeWorkout.endTime = Date.now();
+                AppState.activeWorkout.completed = true;
                 AppState.workouts.push(AppState.activeWorkout);
                 
                 AppState.isWorkoutActive = false;
@@ -3711,7 +4115,7 @@
                     return;
                 }
 
-                 if (AppState.templateBuilderExercises.length === 0) {
+                if (AppState.templateBuilderExercises.length === 0) {
                     DataStorage.showToast('Добавьте хотя бы одно упражнение', 'error');
                     return;
                 }
@@ -3793,6 +4197,7 @@
                 
                 // New workout
                 document.getElementById('newWorkoutBtn').addEventListener('click', () => {
+                    AppState.selectedDayForWorkout = null;
                     document.getElementById('newWorkoutModal').classList.add('active');
                 });
                 
@@ -3821,7 +4226,6 @@
                     }
                 });
                 
-                // КНОПКА "ЗАВЕРШИТЬ ТРЕНИРОВКУ" - ДОБАВЛЕНО
                 document.getElementById('completeWorkoutBtn').addEventListener('click', () => {
                     this.completeWorkout();
                 });
@@ -3848,11 +4252,9 @@
                 
                 // Add exercise to workout
                 document.getElementById('addExerciseToWorkoutBtn').addEventListener('click', () => {
-                    // Show exercise library
                     this.switchPage('exercisesPage');
                 });
                 
-                // КНОПКА "ДОБАВИТЬ В ТРЕНИРОВКУ" - ИСПРАВЛЕНО
                 document.getElementById('addExerciseToCurrentBtn').addEventListener('click', () => {
                     const modal = document.getElementById('exerciseDetailModal');
                     const exerciseId = modal.dataset.exerciseId;
@@ -3868,7 +4270,6 @@
                     }
                 });
                 
-                // КНОПКА "ЗАКРЫТЬ" - ИСПРАВЛЕНО
                 document.getElementById('closeExerciseDetailBtn').addEventListener('click', () => {
                     document.getElementById('exerciseDetailModal').classList.remove('active');
                 });
@@ -3919,10 +4320,12 @@
 
                 // Custom exercise modal
                 document.getElementById('addCustomExerciseBtn').addEventListener('click', () => {
+                    document.getElementById('customExerciseModalTitle').textContent = 'Добавить своё упражнение';
                     document.getElementById('customExerciseName').value = '';
                     document.getElementById('customExerciseDescription').value = '';
                     document.getElementById('customExerciseMuscle').value = 'core';
                     document.getElementById('customExerciseEquipment').value = 'bodyweight';
+                    document.getElementById('customExerciseEditId').value = '';
                     document.getElementById('customExerciseModal').classList.add('active');
                 });
 
@@ -3935,28 +4338,46 @@
                     const description = document.getElementById('customExerciseDescription').value.trim();
                     const muscleGroup = document.getElementById('customExerciseMuscle').value;
                     const equipment = document.getElementById('customExerciseEquipment').value;
+                    const editId = document.getElementById('customExerciseEditId').value;
 
                     if (!name || !description) {
                         DataStorage.showToast('Заполните название и описание упражнения', 'error');
                         return;
                     }
 
-                    const newExercise = {
-                        id: 'custom-' + Date.now(),
-                        name,
-                        description,
-                        muscleGroup,
-                        secondaryMuscles: [],
-                        equipment,
-                        image: null,
-                        sets: []
-                    };
+                    if (editId) {
+                        // Edit existing exercise
+                        const exerciseIndex = AppState.exercises.findIndex(ex => ex.id === editId);
+                        if (exerciseIndex !== -1) {
+                            AppState.exercises[exerciseIndex] = {
+                                ...AppState.exercises[exerciseIndex],
+                                name,
+                                description,
+                                muscleGroup,
+                                equipment
+                            };
+                            DataStorage.showToast('Упражнение обновлено', 'success');
+                        }
+                    } else {
+                        // Add new exercise
+                        const newExercise = {
+                            id: 'custom-' + Date.now(),
+                            name,
+                            description,
+                            muscleGroup,
+                            secondaryMuscles: [],
+                            equipment,
+                            image: null,
+                            isCustom: true
+                        };
 
-                    AppState.exercises.push(newExercise);
+                        AppState.exercises.push(newExercise);
+                        DataStorage.showToast('Упражнение добавлено в библиотеку', 'success');
+                    }
+                    
                     DataStorage.save();
                     this.loadExercises(AppState.currentMuscleFilter);
                     document.getElementById('customExerciseModal').classList.remove('active');
-                    DataStorage.showToast('Упражнение добавлено в библиотеку', 'success');
                 });
                 
                 // Tabs
@@ -4035,7 +4456,6 @@
                 // AI Chat button from dashboard
                 document.getElementById('aiChatBtn').addEventListener('click', () => {
                     this.switchPage('aiTrainerPage');
-                    // Focus on input after page switch
                     setTimeout(() => {
                         document.getElementById('aiChatInput').focus();
                     }, 300);
@@ -4046,12 +4466,43 @@
                     const plan = AITrainer.generateWeeklyPlan();
                     this.renderWeeklyPlan(plan);
                     
+                    // Show save button
+                    document.getElementById('saveWeeklyPlanBtn').style.display = 'block';
+                    document.getElementById('saveWeeklyPlanBtn').onclick = () => {
+                        const planId = Date.now().toString();
+                        AppState.weeklyPlans[planId] = {
+                            id: planId,
+                            name: 'План на неделю от ' + new Date().toLocaleDateString('ru-RU'),
+                            days: plan,
+                            created: new Date().toISOString()
+                        };
+                        DataStorage.save();
+                        this.loadWeeklyPlans();
+                        document.getElementById('saveWeeklyPlanBtn').style.display = 'none';
+                        DataStorage.showToast('План сохранён', 'success');
+                    };
+                    
                     DataStorage.showToast('План на неделю создан AI', 'success');
                 });
                 
-                // КНОПКА "ОТКРЫТЬ КАЛЕНДАРЬ" - ДОБАВЛЕНО
                 document.getElementById('viewCalendarBtn').addEventListener('click', () => {
                     this.switchPage('calendarPage');
+                });
+                
+                // Mark as rest day
+                document.getElementById('markAsRestBtn').addEventListener('click', () => {
+                    const selectedDate = prompt('Введите дату в формате ГГГГ-ММ-ДД (например, 2024-01-15):');
+                    if (selectedDate) {
+                        AppState.calendarData[selectedDate] = {
+                            type: 'rest',
+                            date: selectedDate,
+                            notes: 'День отдыха'
+                        };
+                        DataStorage.save();
+                        this.generateCalendar();
+                        this.generateCalendarPreview();
+                        DataStorage.showToast('День отмечен как отдых', 'success');
+                    }
                 });
                 
                 // Settings
@@ -4123,18 +4574,34 @@
                     document.getElementById('mobileMenuBtn').classList.remove('hidden');
                 }
                 
-                // КНОПКА "ДОБАВИТЬ ТРЕНИРОВКУ" В КАЛЕНДАРЕ - ДОБАВЛЕНО
                 document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                    AppState.selectedDayForWorkout = null;
                     document.getElementById('newWorkoutModal').classList.add('active');
                 });
                 
-                // КНОПКА "ДОБАВИТЬ ТРЕНИРОВКУ" В МОДАЛКЕ ДНЯ - ДОБАВЛЕНО
                 document.getElementById('addWorkoutToDayBtn').addEventListener('click', () => {
-                    document.getElementById('dayDetailModal').classList.remove('active');
-                    document.getElementById('newWorkoutModal').classList.add('active');
+                    const modal = document.getElementById('dayDetailModal');
+                    const dateStr = modal.querySelector('#dayDetailTitle').textContent;
+                    const selectedDate = prompt('Введите дату для плана в формате ГГГГ-ММ-ДД:', 
+                        new Date().toISOString().split('T')[0]);
+                    
+                    if (selectedDate) {
+                        const notes = prompt('Введите описание плана:');
+                        if (notes) {
+                            AppState.calendarData[selectedDate] = {
+                                type: 'planned',
+                                date: selectedDate,
+                                notes: notes
+                            };
+                            DataStorage.save();
+                            this.generateCalendar();
+                            this.generateCalendarPreview();
+                            DataStorage.showToast('План добавлен в календарь', 'success');
+                        }
+                    }
+                    modal.classList.remove('active');
                 });
                 
-                // КНОПКА "ВСЕ ТРЕНИРОВКИ" - ДОБАВЛЕНО
                 document.getElementById('viewAllWorkoutsBtn').addEventListener('click', () => {
                     this.switchPage('workoutsPage');
                     document.querySelector('[data-tab="history"]').click();
@@ -4172,6 +4639,36 @@
                 if (pageId === 'aiTrainerPage') {
                     this.renderAiChat();
                 }
+            },
+            
+            renderWeeklyPlan: function(plan) {
+                let planHTML = '<div class="space-y-3">';
+
+                Object.entries(plan).forEach(([day, data]) => {
+                    const dayName = {
+                        monday: 'Понедельник',
+                        tuesday: 'Вторник',
+                        wednesday: 'Среда',
+                        thursday: 'Четверг',
+                        friday: 'Пятница',
+                        saturday: 'Суббота',
+                        sunday: 'Воскресенье'
+                    }[day];
+
+                    planHTML += `
+                        <div class="exercise-item">
+                            <h5 class="font-semibold mb-1">${dayName}: ${data.muscleGroup}</h5>
+                            ${data.exercises.length > 0 ?
+                                `<ul class="text-sm text-secondary pl-4">
+                                    ${data.exercises.map(ex => `<li>• ${ex}</li>`).join('')}
+                                </ul>` :
+                                '<p class="text-sm text-secondary">День отдыха</p>'}
+                        </div>
+                    `;
+                });
+
+                planHTML += '</div>';
+                document.getElementById('weeklyPlan').innerHTML = planHTML;
             }
         };
 
