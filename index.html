@@ -1381,6 +1381,7 @@
                             </button>
                             <button class="btn btn-danger" id="endWorkoutBtn">
                                 <i class="mdi mdi-stop"></i>
+                                Завершить
                             </button>
                         </div>
                     </div>
@@ -3563,6 +3564,7 @@
                     }
                 });
                 
+                // КНОПКА "ЗАВЕРШИТЬ ТРЕНИРОВКУ" - ДОБАВЛЕНО
                 document.getElementById('completeWorkoutBtn').addEventListener('click', () => {
                     this.completeWorkout();
                 });
@@ -3593,6 +3595,7 @@
                     this.switchPage('exercisesPage');
                 });
                 
+                // КНОПКА "ДОБАВИТЬ В ТРЕНИРОВКУ" - ИСПРАВЛЕНО
                 document.getElementById('addExerciseToCurrentBtn').addEventListener('click', () => {
                     const modal = document.getElementById('exerciseDetailModal');
                     const exerciseId = modal.dataset.exerciseId;
@@ -3606,6 +3609,11 @@
                         modal.classList.remove('active');
                         this.switchPage('workoutSession');
                     }
+                });
+                
+                // КНОПКА "ЗАКРЫТЬ" - ИСПРАВЛЕНО
+                document.getElementById('closeExerciseDetailBtn').addEventListener('click', () => {
+                    document.getElementById('exerciseDetailModal').classList.remove('active');
                 });
                 
                 // Set modal
@@ -3692,7 +3700,6 @@
                     this.loadExercises(AppState.currentMuscleFilter);
                     document.getElementById('customExerciseModal').classList.remove('active');
                     DataStorage.showToast('Упражнение добавлено в библиотеку', 'success');
-                
                 });
                 
                 // Tabs
@@ -3776,6 +3783,11 @@
                     DataStorage.showToast('План на неделю создан AI', 'success');
                 });
                 
+                // КНОПКА "ОТКРЫТЬ КАЛЕНДАРЬ" - ДОБАВЛЕНО
+                document.getElementById('viewCalendarBtn').addEventListener('click', () => {
+                    this.switchPage('calendarPage');
+                });
+                
                 // Settings
                 document.getElementById('weightUnit').addEventListener('change', (e) => {
                     AppState.settings.weightUnit = e.target.value;
@@ -3843,6 +3855,23 @@
                 if (window.innerWidth <= 1024) {
                     document.getElementById('mobileMenuBtn').classList.remove('hidden');
                 }
+                
+                // КНОПКА "ДОБАВИТЬ ТРЕНИРОВКУ" В КАЛЕНДАРЕ - ДОБАВЛЕНО
+                document.getElementById('addToCalendarBtn').addEventListener('click', () => {
+                    document.getElementById('newWorkoutModal').classList.add('active');
+                });
+                
+                // КНОПКА "ДОБАВИТЬ ТРЕНИРОВКУ" В МОДАЛКЕ ДНЯ - ДОБАВЛЕНО
+                document.getElementById('addWorkoutToDayBtn').addEventListener('click', () => {
+                    document.getElementById('dayDetailModal').classList.remove('active');
+                    document.getElementById('newWorkoutModal').classList.add('active');
+                });
+                
+                // КНОПКА "ВСЕ ТРЕНИРОВКИ" - ДОБАВЛЕНО
+                document.getElementById('viewAllWorkoutsBtn').addEventListener('click', () => {
+                    this.switchPage('workoutsPage');
+                    document.querySelector('[data-tab="history"]').click();
+                });
             },
             
             switchPage: function(pageId) {
@@ -3870,6 +3899,9 @@
                 if (pageId === 'statsPage') {
                     this.updateStats();
                 }
+                if (pageId === 'workoutSession') {
+                    this.updateActiveExercises();
+                }
             },
             
             setupServiceWorker: function() {
@@ -3896,56 +3928,6 @@
             document.getElementById('notificationsEnabled').checked = settings.notifications;
             document.getElementById('reminderEnabled').checked = settings.reminders;
             document.getElementById('autoSave').checked = settings.autoSave;
-            
-            // View calendar from dashboard
-            document.getElementById('viewCalendarBtn').addEventListener('click', () => {
-                UI.switchPage('calendarPage');
-            });
-            
-            // View all workouts
-            document.getElementById('viewAllWorkoutsBtn').addEventListener('click', () => {
-                UI.switchPage('workoutsPage');
-                document.querySelector('[data-tab="history"]').click();
-            });
-            
-            // Add workout to day
-            document.getElementById('addWorkoutToDayBtn').addEventListener('click', () => {
-                document.getElementById('dayDetailModal').classList.remove('active');
-                document.getElementById('newWorkoutModal').classList.add('active');
-            });
-            
-            // Add to calendar button
-            document.getElementById('addToCalendarBtn').addEventListener('click', () => {
-                document.getElementById('newWorkoutModal').classList.add('active');
-            });
-            
-            // Close exercise detail
-            document.getElementById('closeExerciseDetailBtn').addEventListener('click', () => {
-                document.getElementById('exerciseDetailModal').classList.remove('active');
-            });
-            
-            // Template button events (delegated)
-            document.addEventListener('click', (e) => {
-                // Use template button
-                if (e.target.closest('.use-template-btn')) {
-                    const templateId = e.target.closest('.use-template-btn').dataset.id;
-                    const template = AppState.templates.find(t => t.id === templateId);
-                    if (template) {
-                        UI.startWorkout(template.name, 'gym', templateId);
-                    }
-                }
-                
-                // Delete template button
-                if (e.target.closest('.delete-template-btn')) {
-                    const templateId = e.target.closest('.delete-template-btn').dataset.id;
-                    if (confirm('Удалить этот шаблон?')) {
-                        AppState.templates = AppState.templates.filter(t => t.id !== templateId);
-                        DataStorage.save();
-                        UI.loadTemplates();
-                        DataStorage.showToast('Шаблон удалён', 'success');
-                    }
-                }
-            });
             
             // Prevent form submission
             document.addEventListener('submit', (e) => {
