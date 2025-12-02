@@ -24,6 +24,58 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
     <style>
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .onboarding-overlay.active {
+            display: flex;
+        }
+
+        .onboarding-card {
+            background: var(--surface);
+            color: var(--text-primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 520px;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: 0 12px 32px var(--shadow-lg);
+        }
+
+        .onboarding-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .onboarding-step {
+            flex: 1;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--border);
+        }
+
+        .onboarding-step.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .install-hint {
+            background: var(--surface-alt);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+        }
+        
         :root {
             /* Light theme */
             --primary: #6366f1;
@@ -1205,6 +1257,18 @@
                         <h3 class="card-title">Настройки</h3>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Установка приложения</label>
+                        <div class="flex gap-2">
+                            <button class="btn btn-primary" id="installAppBtn">
+                                <i class="mdi mdi-cellphone-arrow-down"></i>
+                                Установить приложение
+                            </button>
+                            <div class="install-hint" style="flex:1;">
+                                Добавьте на экран дома или установите на ПК для лучшего опыта.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Единицы измерения</label>
                         <select id="weightUnit" class="form-input">
                             <option value="kg">Килограммы (кг)</option>
@@ -1293,6 +1357,24 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <div class="onboarding-overlay" id="onboarding">
+        <div class="onboarding-card">
+            <h3 class="card-title mb-2">Добро пожаловать!</h3>
+            <p class="text-secondary" id="onboardingText">Планируйте тренировки через дашборд и календарь, а упражнения ищите во вкладке «Упражнения».</p>
+
+            <div class="onboarding-steps">
+                <div class="onboarding-step active" data-step="0"></div>
+                <div class="onboarding-step" data-step="1"></div>
+                <div class="onboarding-step" data-step="2"></div>
+            </div>
+
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="skipOnboardingBtn">Пропустить</button>
+                <button class="btn btn-primary w-full" id="nextOnboardingBtn">Далее</button>
+            </div>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -1434,6 +1516,9 @@
             restTimer: null,
             restSeconds: 0,
             defaultRestTime: parseInt(localStorage.getItem('restTimerDefault') || '90'),
+            onboardingComplete: localStorage.getItem('onboardingComplete') === 'true',
+            deferredInstallPrompt: null,
+            currentMuscleFilter: 'all',
             
             // Data storage
             workouts: JSON.parse(localStorage.getItem('workouts')) || [],
@@ -2279,12 +2364,14 @@
                 this.generateCalendar();
                 this.generateCalendarPreview();
                 this.updateTodaysWorkoutCard();
-                this.loadExercises();
+                this.loadExercises(AppState.currentMuscleFilter);
                 this.loadTemplates();
                 this.updateStats();
                 this.setupServiceWorker();
                 this.updateAIRecommendation();
                 this.renderAiChat();
+                this.prepareInstallPrompt();
+                this.showOnboardingIfNeeded();
             },
             
             setTheme: function(theme) {
@@ -2301,6 +2388,429 @@
                         btn.classList.add('active');
                     }
                 });
+            },
+
+            @@ -2,50 +2,101 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тренировочный Календарь | AI-тренер</title>
+    <meta name="description" content="Продвинутый фитнес-трекер с AI-тренером для планирования и отслеживания тренировок">
+    <meta name="theme-color" content="#6366f1">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/icon-192.png">
+    <link rel="apple-touch-icon" href="images/icon-192.png">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        .onboarding-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(6px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .onboarding-overlay.active {
+            display: flex;
+        }
+
+        .onboarding-card {
+            background: var(--surface);
+            color: var(--text-primary);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-width: 520px;
+            width: 100%;
+            border: 1px solid var(--border);
+            box-shadow: 0 12px 32px var(--shadow-lg);
+        }
+
+        .onboarding-steps {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .onboarding-step {
+            flex: 1;
+            height: 6px;
+            border-radius: 999px;
+            background: var(--border);
+        }
+
+        .onboarding-step.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        .install-hint {
+            background: var(--surface-alt);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+        }
+        :root {
+            /* Light theme */
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --background: #ffffff;
+            --surface: #f8fafc;
+            --surface-alt: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.1);
+            --shadow-lg: rgba(0, 0, 0, 0.15);
+            --calendar-train: #10b981;
+            --calendar-rest: #8b5cf6;
+            --calendar-cardio: #f59e0b;
+            --calendar-home: #3b82f6;
+            --success: #10b981;
+        }
+
+        [data-theme="dark"] {
+            --primary: #818cf8;
+@@ -1182,50 +1233,62 @@
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="consistency">0%</div>
+                                <div class="stat-label">Консистентность</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="statsExercises" class="hidden">
+                        <!-- Exercise stats will be loaded here -->
+                    </div>
+                    <div id="statsMuscles" class="hidden">
+                        <!-- Muscle group stats will be loaded here -->
+                    </div>
+                    <div id="statsVolume" class="hidden">
+                        <!-- Volume stats will be loaded here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings Page -->
+            <div id="settingsPage" class="page hidden">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Настройки</h3>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Установка приложения</label>
+                        <div class="flex gap-2">
+                            <button class="btn btn-primary" id="installAppBtn">
+                                <i class="mdi mdi-cellphone-arrow-down"></i>
+                                Установить приложение
+                            </button>
+                            <div class="install-hint" style="flex:1;">
+                                Добавьте на экран дома или установите на ПК для лучшего опыта.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Единицы измерения</label>
+                        <select id="weightUnit" class="form-input">
+                            <option value="kg">Килограммы (кг)</option>
+                            <option value="lbs">Фунты (lbs)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Таймер отдыха по умолчанию (сек)</label>
+                        <input type="number" id="restTimerDefault" class="form-input" value="90" min="30" max="300">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Уведомления</label>
+                        <div class="flex items-center gap-2 mb-2">
+                            <input type="checkbox" id="notificationsEnabled" class="form-input" style="width: auto;">
+                            <span>Включить уведомления</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="checkbox" id="reminderEnabled" class="form-input" style="width: auto;">
+                            <span>Напоминания о тренировках</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Автосохранение</label>
+                        <div class="flex items-center gap-2">
+@@ -1273,50 +1336,68 @@
+                            <button class="btn btn-danger" id="endWorkoutBtn">
+                                <i class="mdi mdi-stop"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="activeExercises">
+                    <!-- Active exercises will be loaded here -->
+                </div>
+                
+                <div class="flex gap-2 mt-3">
+                    <button class="btn btn-secondary" id="addExerciseToWorkoutBtn">
+                        <i class="mdi mdi-plus"></i>
+                        Добавить упражнение
+                    </button>
+                    <button class="btn btn-primary" id="completeWorkoutBtn">
+                        <i class="mdi mdi-check-all"></i>
+                        Завершить тренировку
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="onboarding-overlay" id="onboarding">
+        <div class="onboarding-card">
+            <h3 class="card-title mb-2">Добро пожаловать!</h3>
+            <p class="text-secondary" id="onboardingText">Планируйте тренировки через дашборд и календарь, а упражнения ищите во вкладке «Упражнения».</p>
+
+            <div class="onboarding-steps">
+                <div class="onboarding-step active" data-step="0"></div>
+                <div class="onboarding-step" data-step="1"></div>
+                <div class="onboarding-step" data-step="2"></div>
+            </div>
+
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="skipOnboardingBtn">Пропустить</button>
+                <button class="btn btn-primary w-full" id="nextOnboardingBtn">Далее</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="modal" id="newWorkoutModal">
+        <div class="modal-content">
+            <h3 class="mb-3">Новая тренировка</h3>
+            <div class="form-group">
+                <label class="form-label">Название тренировки</label>
+                <input type="text" id="workoutName" class="form-input" placeholder="Например: День ног">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Тип тренировки</label>
+                <select id="workoutType" class="form-input">
+                    <option value="gym">Зал</option>
+                    <option value="home">Домашняя</option>
+                    <option value="cardio">Кардио</option>
+                    <option value="recovery">Восстановление</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Использовать шаблон</label>
+                <select id="workoutTemplate" class="form-input">
+                    <option value="">Без шаблона</option>
+                </select>
+            </div>
+            <div class="flex gap-2 mt-3">
+                <button class="btn btn-secondary w-full" id="cancelWorkoutBtn">Отмена</button>
+@@ -1412,50 +1493,53 @@
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn hidden" id="mobileMenuBtn">
+        <i class="mdi mdi-menu"></i>
+    </button>
+
+    <script>
+        // ==================== APP STATE ====================
+        const AppState = {
+            theme: localStorage.getItem('theme') || 'light',
+            currentDate: new Date(),
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            activeWorkout: null,
+            activeExercise: null,
+            activeSetIndex: 0,
+            isWorkoutActive: false,
+            isRestTimerActive: false,
+            workoutTimer: null,
+            workoutSeconds: 0,
+            restTimer: null,
+            restSeconds: 0,
+            defaultRestTime: parseInt(localStorage.getItem('restTimerDefault') || '90'),
+            onboardingComplete: localStorage.getItem('onboardingComplete') === 'true',
+            deferredInstallPrompt: null,
+            currentMuscleFilter: 'all',
+            
+            // Data storage
+            workouts: JSON.parse(localStorage.getItem('workouts')) || [],
+            templates: JSON.parse(localStorage.getItem('templates')) || [],
+            exercises: JSON.parse(localStorage.getItem('exercises')) || [],
+            settings: JSON.parse(localStorage.getItem('settings')) || {
+                weightUnit: 'kg',
+                notifications: true,
+                reminders: true,
+                autoSave: true
+            },
+            
+            // AI State
+            aiMessages: JSON.parse(localStorage.getItem('aiMessages')) || [],
+            aiRecommendations: [],
+            
+            // Initialize with zero stats
+            stats: {
+                totalWorkouts: 0,
+                totalVolume: 0,
+                totalTime: 0,
+                consistency: 0,
+                muscleGroups: {},
+                exerciseProgress: {}
+            }
+@@ -2257,73 +2341,157 @@
+                }
+            },
+            
+            showToast: function(message, type = 'info') {
+                const toast = document.getElementById('toast');
+                toast.textContent = message;
+                toast.className = 'toast';
+                toast.classList.add(type);
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        };
+
+        // ==================== UI FUNCTIONS ====================
+        const UI = {
+            init: function() {
+                this.setTheme(AppState.theme);
+                this.updateDateDisplay();
+                this.setupEventListeners();
+                this.generateCalendar();
+                this.generateCalendarPreview();
+                this.updateTodaysWorkoutCard();
+                this.loadExercises();
+                this.loadExercises(AppState.currentMuscleFilter);
+                this.loadTemplates();
+                this.updateStats();
+                this.setupServiceWorker();
+                this.updateAIRecommendation();
+                this.renderAiChat();
+                this.prepareInstallPrompt();
+                this.showOnboardingIfNeeded();
+            },
+            
+            setTheme: function(theme) {
+                if (theme === 'auto') {
+                    theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+                }
+                document.documentElement.setAttribute('data-theme', theme);
+                AppState.theme = theme;
+                localStorage.setItem('theme', theme);
+                
+                document.querySelectorAll('.theme-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.dataset.theme === theme) {
+                        btn.classList.add('active');
+                    }
+                });
+            },
+
+            prepareInstallPrompt: function() {
+                const installBtn = document.getElementById('installAppBtn');
+                const updateInstallAvailability = () => {
+                    installBtn.disabled = !AppState.deferredInstallPrompt;
+                    installBtn.innerHTML = `<i class="mdi mdi-cellphone-arrow-down"></i> ${AppState.deferredInstallPrompt ? 'Установить приложение' : 'Установка недоступна'}`;
+                };
+
+                window.addEventListener('beforeinstallprompt', (event) => {
+                    event.preventDefault();
+                    AppState.deferredInstallPrompt = event;
+                    updateInstallAvailability();
+                    DataStorage.showToast('Приложение готово к установке', 'success');
+                });
+
+                window.addEventListener('appinstalled', () => {
+                    AppState.deferredInstallPrompt = null;
+                    updateInstallAvailability();
+                    DataStorage.showToast('Приложение установлено!', 'success');
+                });
+
+                installBtn.addEventListener('click', async () => {
+                    if (AppState.deferredInstallPrompt) {
+                        AppState.deferredInstallPrompt.prompt();
+                        const { outcome } = await AppState.deferredInstallPrompt.userChoice;
+                        if (outcome === 'accepted') {
+                            DataStorage.showToast('Спасибо за установку!', 'success');
+                        }
+                        AppState.deferredInstallPrompt = null;
+                        updateInstallAvailability();
+                    } else {
+                        DataStorage.showToast('Если кнопка недоступна, добавьте страницу на экран дома через меню браузера', 'info');
+                    }
+                });
+
+                updateInstallAvailability();
+            },
+
+            showOnboardingIfNeeded: function() {
+                if (AppState.onboardingComplete) return;
+
+                const steps = [
+                    'Планируйте и смотрите тренировки через дашборд и календарь.',
+                    'Открывайте вкладку «Упражнения», чтобы добавлять подходы прямо в активную сессию.',
+                    'Используйте AI-тренера и сохранённые шаблоны для быстрого старта.',
+                ];
+
+                let currentStep = 0;
+                const overlay = document.getElementById('onboarding');
+                const text = document.getElementById('onboardingText');
+                const stepsBars = overlay.querySelectorAll('.onboarding-step');
+                const nextBtn = document.getElementById('nextOnboardingBtn');
+                const skipBtn = document.getElementById('skipOnboardingBtn');
+
+                const renderStep = () => {
+                    text.textContent = steps[currentStep];
+                    stepsBars.forEach((bar, index) => {
+                        bar.classList.toggle('active', index <= currentStep);
+                    });
+                    nextBtn.textContent = currentStep === steps.length - 1 ? 'Начать' : 'Далее';
+                };
+
+                const finishOnboarding = () => {
+                    AppState.onboardingComplete = true;
+                    localStorage.setItem('onboardingComplete', 'true');
+                    overlay.classList.remove('active');
+                };
+
+                nextBtn.addEventListener('click', () => {
+                    if (currentStep < steps.length - 1) {
+                        currentStep++;
+                        renderStep();
+                    } else {
+                        finishOnboarding();
+                    }
+                });
+
+                skipBtn.addEventListener('click', finishOnboarding);
+
+                overlay.classList.add('active');
+                renderStep();
             },
             
             updateDateDisplay: function() {
@@ -2515,7 +3025,8 @@
                 document.getElementById('dayDetailModal').classList.add('active');
             },
             
-            loadExercises: function() {
+            loadExercises: function(muscleFilter = 'all') {
+                AppState.currentMuscleFilter = muscleFilter;
                 const exerciseLibrary = document.getElementById('exerciseLibrary');
                 const templateExerciseSelect = document.getElementById('templateExerciseSelect');
                 
@@ -2526,35 +3037,37 @@
                 // Merge default exercises with custom ones
                 const allExercises = [...ExerciseLibrary.exercises, ...AppState.exercises];
                 
-                // Group by muscle group
-                const exercisesByGroup = {};
-                allExercises.forEach(exercise => {
-                    if (!exercisesByGroup[exercise.muscleGroup]) {
-                        exercisesByGroup[exercise.muscleGroup] = [];
-                    }
-                    exercisesByGroup[exercise.muscleGroup].push(exercise);
-                });
-                
-                // Display all exercises
-                allExercises.forEach(exercise => {
-                    const exerciseCard = document.createElement('div');
-                    exerciseCard.className = 'exercise-card';
-                    exerciseCard.innerHTML = `
-                        <h4 class="mb-1">${exercise.name}</h4>
-                        <div class="mb-1">
-                            <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
-                        </div>
-                        <p class="text-secondary text-sm">${exercise.description.substring(0, 100)}...</p>
-                    `;
-                    exerciseCard.addEventListener('click', () => this.showExerciseDetail(exercise));
-                    exerciseLibrary.appendChild(exerciseCard);
-                    
-                    // Add to template select
-                    const option = document.createElement('option');
-                    option.value = exercise.id;
-                    option.textContent = exercise.name;
-                    templateExerciseSelect.appendChild(option);
-                });
+                // Display filtered exercises
+                allExercises
+                    .filter(exercise => muscleFilter === 'all' || exercise.muscleGroup === muscleFilter)
+                    .forEach(exercise => {
+                        const exerciseCard = document.createElement('div');
+                        exerciseCard.className = 'exercise-card';
+                        exerciseCard.innerHTML = `
+                            <h4 class="mb-1">${exercise.name}</h4>
+                            <div class="mb-1">
+                                <span class="muscle-group-badge">${this.getMuscleGroupName(exercise.muscleGroup)}</span>
+                            </div>
+                            <p class="text-secondary text-sm">${exercise.description.substring(0, 100)}...</p>
+                        `;
+                        exerciseCard.addEventListener('click', () => this.showExerciseDetail(exercise));
+                        exerciseLibrary.appendChild(exerciseCard);
+
+                        // Add to template select
+                        const option = document.createElement('option');
+                        option.value = exercise.id;
+                        option.textContent = exercise.name;
+                        templateExerciseSelect.appendChild(option);
+                    });
+
+                // Update search filter after rebuild
+                const searchTerm = document.getElementById('exerciseSearch').value.toLowerCase();
+                if (searchTerm) {
+                    document.querySelectorAll('.exercise-card').forEach(card => {
+                        const exerciseName = card.querySelector('h4').textContent.toLowerCase();
+                        card.style.display = exerciseName.includes(searchTerm) ? 'block' : 'none';
+                    });
+                }
             },
             
             getMuscleGroupName: function(id) {
@@ -2572,6 +3085,9 @@
             
             showExerciseDetail: function(exercise) {
                 document.getElementById('exerciseDetailTitle').textContent = exercise.name;
+
+                const modal = document.getElementById('exerciseDetailModal');
+                modal.dataset.exerciseId = exercise.id;
                 
                 let content = `
                     <div class="mb-3">
@@ -2591,7 +3107,7 @@
                                                                            exercise.equipment === 'cable' ? 'Тросы' : 'Кардио'}</p>`;
                 
                 document.getElementById('exerciseDetailContent').innerHTML = content;
-                document.getElementById('exerciseDetailModal').classList.add('active');
+                modal.classList.add('active');
             },
             
             loadTemplates: function() {
@@ -2834,7 +3350,7 @@
                 document.getElementById('weeklyPlan').innerHTML = planHTML;
             },
             
-            // ==================== WORKOUT FUNCTIONS ====================
+            // ==================== WORKOUT FUNCTIONS ==================== 
             startWorkout: function(name, type, templateId, preloadedExercises = []) {
                 AppState.activeWorkout = {
                     id: Date.now(),
@@ -3312,7 +3828,6 @@
                 document.querySelectorAll('.tab').forEach(tab => {
                     tab.addEventListener('click', () => {
                         const parent = tab.parentElement;
-                        const targetId = tab.dataset.tab || tab.dataset.muscle || tab.dataset.stat;
                         
                         // Update active tab
                         parent.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -3331,6 +3846,10 @@
                             document.getElementById('statsMuscles').classList.toggle('hidden', tab.dataset.stat !== 'muscles');
                             document.getElementById('statsVolume').classList.toggle('hidden', tab.dataset.stat !== 'volume');
                         }
+
+                        if (tab.dataset.muscle) {
+                            this.loadExercises(tab.dataset.muscle);
+                        } 
                     });
                 });
                 
